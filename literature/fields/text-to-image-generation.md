@@ -1,0 +1,33 @@
+﻿---
+type: paper-field-index
+generated_on: 2026-05-29
+tags:
+  - paper-library
+---
+# Text-to-Image Generation
+
+- 总数: 16
+- 未读: 9
+- 已读: 7
+
+- Topics: [[literature/topics/text-to-image|text-to-image]], [[literature/topics/prompt-alignment|prompt-alignment]]
+
+| 论文 | 年份 | 领域 | 重要度 | 状态 | 笔记 | PDF |
+|---|---:|---|---:|---|---|---|
+| [[literature/papers/2022-cogview2-faster-and-better-text-to-image-generation-via-hierarchical-transformer\|CogView2 Faster and Better Text-to-Image Generation via Hierarchical Transformers]] | [[literature/years/2022\|2022]] | [[literature/fields/text-to-image-generation\|Text-to-Image Generation]] | 5 | unread | [[notes/2026-05-27_2022-cogview2-faster-and-better-text-to-image-generation-via-hierarchical-transformer\|CogView2 Faster and Better Text-to-Image Generation via Hierarchical Transformers]] | [[papers/2022_CogView2 Faster and Better Text-to-Image Generation via Hierarchical Transformers.pdf\|PDF]] |
+| [[literature/papers/2021-taming-transformers-for-high-resolution-image-synthesis\|Taming Transformers for High-Resolution Image Synthesis]] | [[literature/years/2021\|2021]] | [[literature/fields/text-to-image-generation\|Text-to-Image Generation]] | 5 | unread |  | [[papers/2021_Taming Transformers for High-Resolution Image Synthesis_CVPR.pdf\|PDF]] |
+| [[literature/papers/2026-prism-long-text-to-image-generation-via-compositional-prompt-decomposition\|PRISM Long-Text-to-Image Generation via Compositional Prompt Decomposition]] | [[literature/years/2026\|2026]] | [[literature/fields/text-to-image-generation\|Text-to-Image Generation]] | 4 | unread |  | [[papers/2026_PRISM_Long-Text-to-Image Generation via Compositional Prompt Decomposition_ICLR.pdf\|PDF]] |
+| [[literature/papers/2025-make-it-count-text-to-image-generation-with-an-accurate-number-of-objects\|Make It Count Text-to-Image Generation with an Accurate Number of Objects]] | [[literature/years/2025\|2025]] | [[literature/fields/text-to-image-generation\|Text-to-Image Generation]] | 4 | unread |  | [[papers/2025_Make It Count Text-to-Image Generation with an Accurate Number of Objects_CVPR.pdf\|PDF]] |
+| [[literature/papers/2021-zero-shot-text-to-image-generation\|Zero-shot text-to-image generation]] | [[literature/years/2021\|2021]] | [[literature/fields/text-to-image-generation\|Text-to-Image Generation]] | 4 | unread |  | [[papers/2021_Zero-shot text-to-image generation_PMLR.pdf\|PDF]] |
+| [[literature/papers/2022-cross-modal-contrastive-learning-for-text-to-image-generation\|Cross-Modal Contrastive Learning for Text-to-Image Generation]] | [[literature/years/2022\|2022]] | [[literature/fields/text-to-image-generation\|Text-to-Image Generation]] | 3 | unread |  | [[papers/2022_Cross-Modal Contrastive Learning for Text-to-Image Generation.pdf\|PDF]] |
+| [[literature/papers/2022-hierarchical-text-conditional-image-generation-with-clip-latent\|Hierarchical Text-Conditional Image Generation with CLIP Latent]] | [[literature/years/2022\|2022]] | [[literature/fields/text-to-image-generation\|Text-to-Image Generation]] | 3 | unread |  | [[papers/2022_Hierarchical Text-Conditional Image Generation with CLIP Latent.pdf\|PDF]] |
+| [[literature/papers/2020-df-gan-a-simple-and-effective-baseline-for-text-to-image-synthesis\|DF-GAN A Simple and Effective Baseline for Text-to-Image Synthesis]] | [[literature/years/2020\|2020]] | [[literature/fields/text-to-image-generation\|Text-to-Image Generation]] | 3 | unread |  | [[papers/2020_DF-GAN A Simple and Effective Baseline for Text-to-Image Synthesis.pdf\|PDF]] |
+| [[literature/papers/2017-attngan-fine-grained-text-to-image-generation-with-attentional-generative-advers\|AttnGAN Fine-Grained Text to Image Generation with Attentional Generative Adversarial Networks]] | [[literature/years/2017\|2017]] | [[literature/fields/text-to-image-generation\|Text-to-Image Generation]] | 3 | unread |  | [[papers/2017_AttnGAN Fine-Grained Text to Image Generation with Attentional Generative Adversarial Networks.pdf\|PDF]] |
+| [[literature/papers/2021-cogview-mastering-text-to-image-generation-via-transformers\|CogView Mastering Text-to-Image Generation via Transformers]] | [[literature/years/2021\|2021]] | [[literature/fields/text-to-image-generation\|Text-to-Image Generation]] | 5 | read |  | [[papers/2021_CogView Mastering Text-to-Image Generation via Transformers.pdf\|PDF]] |
+| [[literature/papers/2025-minority-focused-text-to-image-generation-via-prompt-optimization\|Minority-Focused Text-to-Image Generation via Prompt Optimization]] | [[literature/years/2025\|2025]] | [[literature/fields/text-to-image-generation\|Text-to-Image Generation]] | 4 | read |  | [[papers/2025_Minority-Focused Text-to-Image Generation via Prompt Optimization_CVPR.pdf\|PDF]] |
+| [[literature/papers/2025-spatial-transport-optimization-by-repositioning-attention-map-for-training-free\|Spatial Transport Optimization by Repositioning Attention Map for Training-Free Text-to-Image Synthesis]] | [[literature/years/2025\|2025]] | [[literature/fields/text-to-image-generation\|Text-to-Image Generation]] | 4 | read |  | [[papers/2025_Spatial Transport Optimization by Repositioning Attention Map for Training-Free Text-to-Image Synthesis_CVPR.pdf\|PDF]] |
+| [[literature/papers/2025-detailmaster-can-your-text-to-image-model-handle-long-prompts\|DetailMaster Can Your Text-to-Image Model Handle Long Prompts]] | [[literature/years/2025\|2025]] | [[literature/fields/text-to-image-generation\|Text-to-Image Generation]] | 3 | read |  | [[papers/2025_DetailMaster_Can Your Text-to-Image Model Handle Long Prompts.pdf\|PDF]] |
+| [[literature/papers/2022-movq-modulating-quantized-vectors-for-high-fidelity-image-generation\|MoVQ Modulating Quantized Vectors for High-Fidelity Image Generation]] | [[literature/years/2022\|2022]] | [[literature/fields/text-to-image-generation\|Text-to-Image Generation]] | 3 | read |  | [[papers/2022_MoVQ Modulating Quantized Vectors for High-Fidelity Image Generation.pdf\|PDF]] |
+| [[literature/papers/2020-attentive-normalization-for-conditional-image-generation\|Attentive Normalization for Conditional Image Generation]] | [[literature/years/2020\|2020]] | [[literature/fields/text-to-image-generation\|Text-to-Image Generation]] | 3 | read |  | [[papers/2020_Attentive Normalization for Conditional Image Generation.pdf\|PDF]] |
+| [[literature/papers/2020-attentive-normalization-for-conditional-image-generation-supplement\|Attentive Normalization for Conditional Image Generation (supplement)]] | [[literature/years/2020\|2020]] | [[literature/fields/text-to-image-generation\|Text-to-Image Generation]] | 1 | read |  | [[papers/2020_Attentive Normalization for Conditional Image Generation_supplementary material.pdf\|PDF]] |
+

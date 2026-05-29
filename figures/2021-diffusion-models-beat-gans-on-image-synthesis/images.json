@@ -1,0 +1,44 @@
+﻿[
+    {
+        "source_name":  "img-001-000.jpg",
+        "path":  "figures/2021-diffusion-models-beat-gans-on-image-synthesis/page_001_01_img-001-000.jpg",
+        "width":  "3072",
+        "page":  "1",
+        "height":  "1536"
+    },
+    {
+        "source_name":  "img-005-002.jpg",
+        "path":  "figures/2021-diffusion-models-beat-gans-on-image-synthesis/page_005_01_img-005-002.jpg",
+        "width":  "1024",
+        "page":  "5",
+        "height":  "512"
+    },
+    {
+        "source_name":  "img-005-001.jpg",
+        "path":  "figures/2021-diffusion-models-beat-gans-on-image-synthesis/page_005_02_img-005-001.jpg",
+        "width":  "1024",
+        "page":  "5",
+        "height":  "512"
+    },
+    {
+        "source_name":  "img-008-005.jpg",
+        "path":  "figures/2021-diffusion-models-beat-gans-on-image-synthesis/page_008_01_img-008-005.jpg",
+        "width":  "1024",
+        "page":  "8",
+        "height":  "2108"
+    },
+    {
+        "source_name":  "img-008-004.jpg",
+        "path":  "figures/2021-diffusion-models-beat-gans-on-image-synthesis/page_008_02_img-008-004.jpg",
+        "width":  "1024",
+        "page":  "8",
+        "height":  "2108"
+    },
+    {
+        "source_name":  "img-008-003.jpg",
+        "path":  "figures/2021-diffusion-models-beat-gans-on-image-synthesis/page_008_03_img-008-003.jpg",
+        "width":  "1024",
+        "page":  "8",
+        "height":  "2108"
+    }
+]

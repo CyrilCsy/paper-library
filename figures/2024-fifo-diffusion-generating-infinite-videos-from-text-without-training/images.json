@@ -1,0 +1,170 @@
+﻿[
+    {
+        "source_name":  "img-001-010.png",
+        "path":  "figures/2024-fifo-diffusion-generating-infinite-videos-from-text-without-training/page_001_01_img-001-010.png",
+        "width":  "512",
+        "page":  "1",
+        "height":  "320"
+    },
+    {
+        "source_name":  "img-001-009.png",
+        "path":  "figures/2024-fifo-diffusion-generating-infinite-videos-from-text-without-training/page_001_02_img-001-009.png",
+        "width":  "512",
+        "page":  "1",
+        "height":  "320"
+    },
+    {
+        "source_name":  "img-017-107.jpg",
+        "path":  "figures/2024-fifo-diffusion-generating-infinite-videos-from-text-without-training/page_017_01_img-017-107.jpg",
+        "width":  "512",
+        "page":  "17",
+        "height":  "320"
+    },
+    {
+        "source_name":  "img-017-108.jpg",
+        "path":  "figures/2024-fifo-diffusion-generating-infinite-videos-from-text-without-training/page_017_02_img-017-108.jpg",
+        "width":  "512",
+        "page":  "17",
+        "height":  "320"
+    },
+    {
+        "source_name":  "img-018-141.jpg",
+        "path":  "figures/2024-fifo-diffusion-generating-infinite-videos-from-text-without-training/page_018_01_img-018-141.jpg",
+        "width":  "512",
+        "page":  "18",
+        "height":  "320"
+    },
+    {
+        "source_name":  "img-018-140.jpg",
+        "path":  "figures/2024-fifo-diffusion-generating-infinite-videos-from-text-without-training/page_018_02_img-018-140.jpg",
+        "width":  "512",
+        "page":  "18",
+        "height":  "320"
+    },
+    {
+        "source_name":  "img-019-176.jpg",
+        "path":  "figures/2024-fifo-diffusion-generating-infinite-videos-from-text-without-training/page_019_01_img-019-176.jpg",
+        "width":  "512",
+        "page":  "19",
+        "height":  "320"
+    },
+    {
+        "source_name":  "img-019-175.jpg",
+        "path":  "figures/2024-fifo-diffusion-generating-infinite-videos-from-text-without-training/page_019_02_img-019-175.jpg",
+        "width":  "512",
+        "page":  "19",
+        "height":  "320"
+    },
+    {
+        "source_name":  "img-020-214.jpg",
+        "path":  "figures/2024-fifo-diffusion-generating-infinite-videos-from-text-without-training/page_020_01_img-020-214.jpg",
+        "width":  "512",
+        "page":  "20",
+        "height":  "320"
+    },
+    {
+        "source_name":  "img-020-213.jpg",
+        "path":  "figures/2024-fifo-diffusion-generating-infinite-videos-from-text-without-training/page_020_02_img-020-213.jpg",
+        "width":  "512",
+        "page":  "20",
+        "height":  "320"
+    },
+    {
+        "source_name":  "img-021-254.jpg",
+        "path":  "figures/2024-fifo-diffusion-generating-infinite-videos-from-text-without-training/page_021_01_img-021-254.jpg",
+        "width":  "576",
+        "page":  "21",
+        "height":  "320"
+    },
+    {
+        "source_name":  "img-021-253.jpg",
+        "path":  "figures/2024-fifo-diffusion-generating-infinite-videos-from-text-without-training/page_021_02_img-021-253.jpg",
+        "width":  "576",
+        "page":  "21",
+        "height":  "320"
+    },
+    {
+        "source_name":  "img-022-287.jpg",
+        "path":  "figures/2024-fifo-diffusion-generating-infinite-videos-from-text-without-training/page_022_01_img-022-287.jpg",
+        "width":  "512",
+        "page":  "22",
+        "height":  "512"
+    },
+    {
+        "source_name":  "img-022-288.jpg",
+        "path":  "figures/2024-fifo-diffusion-generating-infinite-videos-from-text-without-training/page_022_02_img-022-288.jpg",
+        "width":  "512",
+        "page":  "22",
+        "height":  "512"
+    },
+    {
+        "source_name":  "img-023-328.jpg",
+        "path":  "figures/2024-fifo-diffusion-generating-infinite-videos-from-text-without-training/page_023_01_img-023-328.jpg",
+        "width":  "512",
+        "page":  "23",
+        "height":  "320"
+    },
+    {
+        "source_name":  "img-023-327.jpg",
+        "path":  "figures/2024-fifo-diffusion-generating-infinite-videos-from-text-without-training/page_023_02_img-023-327.jpg",
+        "width":  "512",
+        "page":  "23",
+        "height":  "320"
+    },
+    {
+        "source_name":  "img-024-369.jpg",
+        "path":  "figures/2024-fifo-diffusion-generating-infinite-videos-from-text-without-training/page_024_01_img-024-369.jpg",
+        "width":  "512",
+        "page":  "24",
+        "height":  "320"
+    },
+    {
+        "source_name":  "img-024-368.jpg",
+        "path":  "figures/2024-fifo-diffusion-generating-infinite-videos-from-text-without-training/page_024_02_img-024-368.jpg",
+        "width":  "512",
+        "page":  "24",
+        "height":  "320"
+    },
+    {
+        "source_name":  "img-025-409.jpg",
+        "path":  "figures/2024-fifo-diffusion-generating-infinite-videos-from-text-without-training/page_025_01_img-025-409.jpg",
+        "width":  "512",
+        "page":  "25",
+        "height":  "320"
+    },
+    {
+        "source_name":  "img-025-408.jpg",
+        "path":  "figures/2024-fifo-diffusion-generating-infinite-videos-from-text-without-training/page_025_02_img-025-408.jpg",
+        "width":  "512",
+        "page":  "25",
+        "height":  "320"
+    },
+    {
+        "source_name":  "img-026-449.jpg",
+        "path":  "figures/2024-fifo-diffusion-generating-infinite-videos-from-text-without-training/page_026_01_img-026-449.jpg",
+        "width":  "512",
+        "page":  "26",
+        "height":  "320"
+    },
+    {
+        "source_name":  "img-026-448.jpg",
+        "path":  "figures/2024-fifo-diffusion-generating-infinite-videos-from-text-without-training/page_026_02_img-026-448.jpg",
+        "width":  "512",
+        "page":  "26",
+        "height":  "320"
+    },
+    {
+        "source_name":  "img-027-464.png",
+        "path":  "figures/2024-fifo-diffusion-generating-infinite-videos-from-text-without-training/page_027_01_img-027-464.png",
+        "width":  "571",
+        "page":  "27",
+        "height":  "420"
+    },
+    {
+        "source_name":  "img-027-463.png",
+        "path":  "figures/2024-fifo-diffusion-generating-infinite-videos-from-text-without-training/page_027_02_img-027-463.png",
+        "width":  "571",
+        "page":  "27",
+        "height":  "420"
+    }
+]

@@ -1,0 +1,177 @@
+﻿[
+    {
+        "source_name":  "img-001-002.png",
+        "path":  "figures/2022-high-resolution-image-synthesis-with-latent-diffusion-models/page_001_01_img-001-002.png",
+        "width":  "2095",
+        "page":  "1",
+        "height":  "2097"
+    },
+    {
+        "source_name":  "img-001-003.png",
+        "path":  "figures/2022-high-resolution-image-synthesis-with-latent-diffusion-models/page_001_02_img-001-003.png",
+        "width":  "2095",
+        "page":  "1",
+        "height":  "2097"
+    },
+    {
+        "source_name":  "img-014-106.jpg",
+        "path":  "figures/2022-high-resolution-image-synthesis-with-latent-diffusion-models/page_014_01_img-014-106.jpg",
+        "width":  "1024",
+        "page":  "14",
+        "height":  "608"
+    },
+    {
+        "source_name":  "img-014-104.jpg",
+        "path":  "figures/2022-high-resolution-image-synthesis-with-latent-diffusion-models/page_014_02_img-014-104.jpg",
+        "width":  "1024",
+        "page":  "14",
+        "height":  "512"
+    },
+    {
+        "source_name":  "img-015-110.jpg",
+        "path":  "figures/2022-high-resolution-image-synthesis-with-latent-diffusion-models/page_015_01_img-015-110.jpg",
+        "width":  "1024",
+        "page":  "15",
+        "height":  "384"
+    },
+    {
+        "source_name":  "img-015-107.jpg",
+        "path":  "figures/2022-high-resolution-image-synthesis-with-latent-diffusion-models/page_015_02_img-015-107.jpg",
+        "width":  "1024",
+        "page":  "15",
+        "height":  "384"
+    },
+    {
+        "source_name":  "img-018-119.jpg",
+        "path":  "figures/2022-high-resolution-image-synthesis-with-latent-diffusion-models/page_018_01_img-018-119.jpg",
+        "width":  "512",
+        "page":  "18",
+        "height":  "512"
+    },
+    {
+        "source_name":  "img-018-116.jpg",
+        "path":  "figures/2022-high-resolution-image-synthesis-with-latent-diffusion-models/page_018_02_img-018-116.jpg",
+        "width":  "512",
+        "page":  "18",
+        "height":  "512"
+    },
+    {
+        "source_name":  "img-002-012.jpg",
+        "path":  "figures/2022-high-resolution-image-synthesis-with-latent-diffusion-models/page_002_01_img-002-012.jpg",
+        "width":  "863",
+        "page":  "2",
+        "height":  "673"
+    },
+    {
+        "source_name":  "img-020-126.jpg",
+        "path":  "figures/2022-high-resolution-image-synthesis-with-latent-diffusion-models/page_020_01_img-020-126.jpg",
+        "width":  "1024",
+        "page":  "20",
+        "height":  "512"
+    },
+    {
+        "source_name":  "img-020-125.jpg",
+        "path":  "figures/2022-high-resolution-image-synthesis-with-latent-diffusion-models/page_020_02_img-020-125.jpg",
+        "width":  "1024",
+        "page":  "20",
+        "height":  "512"
+    },
+    {
+        "source_name":  "img-021-155.jpg",
+        "path":  "figures/2022-high-resolution-image-synthesis-with-latent-diffusion-models/page_021_01_img-021-155.jpg",
+        "width":  "256",
+        "page":  "21",
+        "height":  "256"
+    },
+    {
+        "source_name":  "img-021-154.jpg",
+        "path":  "figures/2022-high-resolution-image-synthesis-with-latent-diffusion-models/page_021_02_img-021-154.jpg",
+        "width":  "256",
+        "page":  "21",
+        "height":  "256"
+    },
+    {
+        "source_name":  "img-022-169.jpg",
+        "path":  "figures/2022-high-resolution-image-synthesis-with-latent-diffusion-models/page_022_01_img-022-169.jpg",
+        "width":  "562",
+        "page":  "22",
+        "height":  "301"
+    },
+    {
+        "source_name":  "img-022-170.jpg",
+        "path":  "figures/2022-high-resolution-image-synthesis-with-latent-diffusion-models/page_022_02_img-022-170.jpg",
+        "width":  "404",
+        "page":  "22",
+        "height":  "301"
+    },
+    {
+        "source_name":  "img-023-176.jpg",
+        "path":  "figures/2022-high-resolution-image-synthesis-with-latent-diffusion-models/page_023_01_img-023-176.jpg",
+        "width":  "1024",
+        "page":  "23",
+        "height":  "1024"
+    },
+    {
+        "source_name":  "img-023-175.jpg",
+        "path":  "figures/2022-high-resolution-image-synthesis-with-latent-diffusion-models/page_023_02_img-023-175.jpg",
+        "width":  "1024",
+        "page":  "23",
+        "height":  "1024"
+    },
+    {
+        "source_name":  "img-030-180.jpg",
+        "path":  "figures/2022-high-resolution-image-synthesis-with-latent-diffusion-models/page_030_01_img-030-180.jpg",
+        "width":  "1024",
+        "page":  "30",
+        "height":  "1024"
+    },
+    {
+        "source_name":  "img-030-181.jpg",
+        "path":  "figures/2022-high-resolution-image-synthesis-with-latent-diffusion-models/page_030_02_img-030-181.jpg",
+        "width":  "1024",
+        "page":  "30",
+        "height":  "1024"
+    },
+    {
+        "source_name":  "img-031-195.jpg",
+        "path":  "figures/2022-high-resolution-image-synthesis-with-latent-diffusion-models/page_031_01_img-031-195.jpg",
+        "width":  "512",
+        "page":  "31",
+        "height":  "512"
+    },
+    {
+        "source_name":  "img-031-196.jpg",
+        "path":  "figures/2022-high-resolution-image-synthesis-with-latent-diffusion-models/page_031_02_img-031-196.jpg",
+        "width":  "512",
+        "page":  "31",
+        "height":  "512"
+    },
+    {
+        "source_name":  "img-032-263.jpg",
+        "path":  "figures/2022-high-resolution-image-synthesis-with-latent-diffusion-models/page_032_01_img-032-263.jpg",
+        "width":  "512",
+        "page":  "32",
+        "height":  "512"
+    },
+    {
+        "source_name":  "img-032-262.jpg",
+        "path":  "figures/2022-high-resolution-image-synthesis-with-latent-diffusion-models/page_032_02_img-032-262.jpg",
+        "width":  "512",
+        "page":  "32",
+        "height":  "512"
+    },
+    {
+        "source_name":  "img-033-292.jpg",
+        "path":  "figures/2022-high-resolution-image-synthesis-with-latent-diffusion-models/page_033_01_img-033-292.jpg",
+        "width":  "512",
+        "page":  "33",
+        "height":  "512"
+    },
+    {
+        "source_name":  "img-033-293.jpg",
+        "path":  "figures/2022-high-resolution-image-synthesis-with-latent-diffusion-models/page_033_02_img-033-293.jpg",
+        "width":  "512",
+        "page":  "33",
+        "height":  "512"
+    }
+]

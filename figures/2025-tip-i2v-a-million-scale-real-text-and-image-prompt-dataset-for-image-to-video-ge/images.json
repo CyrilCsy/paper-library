@@ -1,0 +1,170 @@
+﻿[
+    {
+        "source_name":  "img-001-001.png",
+        "path":  "figures/2025-tip-i2v-a-million-scale-real-text-and-image-prompt-dataset-for-image-to-video-ge/page_001_01_img-001-001.png",
+        "width":  "3500",
+        "page":  "1",
+        "height":  "700"
+    },
+    {
+        "source_name":  "img-001-000.jpg",
+        "path":  "figures/2025-tip-i2v-a-million-scale-real-text-and-image-prompt-dataset-for-image-to-video-ge/page_001_02_img-001-000.jpg",
+        "width":  "3500",
+        "page":  "1",
+        "height":  "700"
+    },
+    {
+        "source_name":  "img-014-480.jpg",
+        "path":  "figures/2025-tip-i2v-a-million-scale-real-text-and-image-prompt-dataset-for-image-to-video-ge/page_014_01_img-014-480.jpg",
+        "width":  "1152",
+        "page":  "14",
+        "height":  "640"
+    },
+    {
+        "source_name":  "img-014-482.jpg",
+        "path":  "figures/2025-tip-i2v-a-million-scale-real-text-and-image-prompt-dataset-for-image-to-video-ge/page_014_02_img-014-482.jpg",
+        "width":  "1216",
+        "page":  "14",
+        "height":  "576"
+    },
+    {
+        "source_name":  "img-015-504.jpg",
+        "path":  "figures/2025-tip-i2v-a-million-scale-real-text-and-image-prompt-dataset-for-image-to-video-ge/page_015_01_img-015-504.jpg",
+        "width":  "1152",
+        "page":  "15",
+        "height":  "640"
+    },
+    {
+        "source_name":  "img-015-500.jpg",
+        "path":  "figures/2025-tip-i2v-a-million-scale-real-text-and-image-prompt-dataset-for-image-to-video-ge/page_015_02_img-015-500.jpg",
+        "width":  "1152",
+        "page":  "15",
+        "height":  "576"
+    },
+    {
+        "source_name":  "img-016-576.jpg",
+        "path":  "figures/2025-tip-i2v-a-million-scale-real-text-and-image-prompt-dataset-for-image-to-video-ge/page_016_01_img-016-576.jpg",
+        "width":  "720",
+        "page":  "16",
+        "height":  "480"
+    },
+    {
+        "source_name":  "img-016-579.jpg",
+        "path":  "figures/2025-tip-i2v-a-million-scale-real-text-and-image-prompt-dataset-for-image-to-video-ge/page_016_02_img-016-579.jpg",
+        "width":  "720",
+        "page":  "16",
+        "height":  "480"
+    },
+    {
+        "source_name":  "img-003-012.jpg",
+        "path":  "figures/2025-tip-i2v-a-million-scale-real-text-and-image-prompt-dataset-for-image-to-video-ge/page_003_01_img-003-012.jpg",
+        "width":  "1152",
+        "page":  "3",
+        "height":  "640"
+    },
+    {
+        "source_name":  "img-003-013.png",
+        "path":  "figures/2025-tip-i2v-a-million-scale-real-text-and-image-prompt-dataset-for-image-to-video-ge/page_003_02_img-003-013.png",
+        "width":  "1550",
+        "page":  "3",
+        "height":  "154"
+    },
+    {
+        "source_name":  "img-005-304.jpg",
+        "path":  "figures/2025-tip-i2v-a-million-scale-real-text-and-image-prompt-dataset-for-image-to-video-ge/page_005_01_img-005-304.jpg",
+        "width":  "576",
+        "page":  "5",
+        "height":  "1216"
+    },
+    {
+        "source_name":  "img-005-303.jpg",
+        "path":  "figures/2025-tip-i2v-a-million-scale-real-text-and-image-prompt-dataset-for-image-to-video-ge/page_005_02_img-005-303.jpg",
+        "width":  "960",
+        "page":  "5",
+        "height":  "704"
+    },
+    {
+        "source_name":  "img-007-305.jpg",
+        "path":  "figures/2025-tip-i2v-a-million-scale-real-text-and-image-prompt-dataset-for-image-to-video-ge/page_007_01_img-007-305.jpg",
+        "width":  "1581",
+        "page":  "7",
+        "height":  "1054"
+    },
+    {
+        "source_name":  "img-007-309.jpg",
+        "path":  "figures/2025-tip-i2v-a-million-scale-real-text-and-image-prompt-dataset-for-image-to-video-ge/page_007_02_img-007-309.jpg",
+        "width":  "1072",
+        "page":  "7",
+        "height":  "720"
+    },
+    {
+        "source_name":  "img-001-003.png",
+        "path":  "figures/2025-tip-i2v-a-million-scale-real-text-and-image-prompt-dataset-for-image-to-video-ge/page_001_03_img-001-003.png",
+        "width":  "1506",
+        "page":  "1",
+        "height":  "1156"
+    },
+    {
+        "source_name":  "img-001-002.png",
+        "path":  "figures/2025-tip-i2v-a-million-scale-real-text-and-image-prompt-dataset-for-image-to-video-ge/page_001_04_img-001-002.png",
+        "width":  "1506",
+        "page":  "1",
+        "height":  "1156"
+    },
+    {
+        "source_name":  "img-001-006.png",
+        "path":  "figures/2025-tip-i2v-a-million-scale-real-text-and-image-prompt-dataset-for-image-to-video-ge/page_001_05_img-001-006.png",
+        "width":  "1464",
+        "page":  "1",
+        "height":  "1156"
+    },
+    {
+        "source_name":  "img-001-007.png",
+        "path":  "figures/2025-tip-i2v-a-million-scale-real-text-and-image-prompt-dataset-for-image-to-video-ge/page_001_06_img-001-007.png",
+        "width":  "1464",
+        "page":  "1",
+        "height":  "1156"
+    },
+    {
+        "source_name":  "img-001-004.png",
+        "path":  "figures/2025-tip-i2v-a-million-scale-real-text-and-image-prompt-dataset-for-image-to-video-ge/page_001_07_img-001-004.png",
+        "width":  "837",
+        "page":  "1",
+        "height":  "1156"
+    },
+    {
+        "source_name":  "img-001-005.png",
+        "path":  "figures/2025-tip-i2v-a-million-scale-real-text-and-image-prompt-dataset-for-image-to-video-ge/page_001_08_img-001-005.png",
+        "width":  "837",
+        "page":  "1",
+        "height":  "1156"
+    },
+    {
+        "source_name":  "img-001-009.jpg",
+        "path":  "figures/2025-tip-i2v-a-million-scale-real-text-and-image-prompt-dataset-for-image-to-video-ge/page_001_09_img-001-009.jpg",
+        "width":  "1228",
+        "page":  "1",
+        "height":  "684"
+    },
+    {
+        "source_name":  "img-007-308.jpg",
+        "path":  "figures/2025-tip-i2v-a-million-scale-real-text-and-image-prompt-dataset-for-image-to-video-ge/page_007_03_img-007-308.jpg",
+        "width":  "1072",
+        "page":  "7",
+        "height":  "720"
+    },
+    {
+        "source_name":  "img-007-307.jpg",
+        "path":  "figures/2025-tip-i2v-a-million-scale-real-text-and-image-prompt-dataset-for-image-to-video-ge/page_007_04_img-007-307.jpg",
+        "width":  "1072",
+        "page":  "7",
+        "height":  "720"
+    },
+    {
+        "source_name":  "img-007-311.jpg",
+        "path":  "figures/2025-tip-i2v-a-million-scale-real-text-and-image-prompt-dataset-for-image-to-video-ge/page_007_05_img-007-311.jpg",
+        "width":  "1072",
+        "page":  "7",
+        "height":  "720"
+    }
+]

@@ -1,0 +1,170 @@
+﻿[
+    {
+        "source_name":  "img-001-000.jpg",
+        "path":  "figures/2025-autoregressive-video-generation-without-vector-quantization/page_001_01_img-001-000.jpg",
+        "width":  "924",
+        "page":  "1",
+        "height":  "525"
+    },
+    {
+        "source_name":  "img-001-003.jpg",
+        "path":  "figures/2025-autoregressive-video-generation-without-vector-quantization/page_001_02_img-001-003.jpg",
+        "width":  "512",
+        "page":  "1",
+        "height":  "512"
+    },
+    {
+        "source_name":  "img-010-145.jpg",
+        "path":  "figures/2025-autoregressive-video-generation-without-vector-quantization/page_010_01_img-010-145.jpg",
+        "width":  "3864",
+        "page":  "10",
+        "height":  "480"
+    },
+    {
+        "source_name":  "img-010-146.jpg",
+        "path":  "figures/2025-autoregressive-video-generation-without-vector-quantization/page_010_02_img-010-146.jpg",
+        "width":  "3864",
+        "page":  "10",
+        "height":  "480"
+    },
+    {
+        "source_name":  "img-004-034.jpg",
+        "path":  "figures/2025-autoregressive-video-generation-without-vector-quantization/page_004_01_img-004-034.jpg",
+        "width":  "480",
+        "page":  "4",
+        "height":  "480"
+    },
+    {
+        "source_name":  "img-004-035.png",
+        "path":  "figures/2025-autoregressive-video-generation-without-vector-quantization/page_004_02_img-004-035.png",
+        "width":  "480",
+        "page":  "4",
+        "height":  "480"
+    },
+    {
+        "source_name":  "img-008-055.jpg",
+        "path":  "figures/2025-autoregressive-video-generation-without-vector-quantization/page_008_01_img-008-055.jpg",
+        "width":  "1024",
+        "page":  "8",
+        "height":  "1024"
+    },
+    {
+        "source_name":  "img-008-056.jpg",
+        "path":  "figures/2025-autoregressive-video-generation-without-vector-quantization/page_008_02_img-008-056.jpg",
+        "width":  "1024",
+        "page":  "8",
+        "height":  "1024"
+    },
+    {
+        "source_name":  "img-009-107.jpg",
+        "path":  "figures/2025-autoregressive-video-generation-without-vector-quantization/page_009_01_img-009-107.jpg",
+        "width":  "768",
+        "page":  "9",
+        "height":  "480"
+    },
+    {
+        "source_name":  "img-009-106.jpg",
+        "path":  "figures/2025-autoregressive-video-generation-without-vector-quantization/page_009_02_img-009-106.jpg",
+        "width":  "768",
+        "page":  "9",
+        "height":  "480"
+    },
+    {
+        "source_name":  "img-008-058.jpg",
+        "path":  "figures/2025-autoregressive-video-generation-without-vector-quantization/page_008_03_img-008-058.jpg",
+        "width":  "1024",
+        "page":  "8",
+        "height":  "1024"
+    },
+    {
+        "source_name":  "img-008-059.jpg",
+        "path":  "figures/2025-autoregressive-video-generation-without-vector-quantization/page_008_04_img-008-059.jpg",
+        "width":  "1024",
+        "page":  "8",
+        "height":  "1024"
+    },
+    {
+        "source_name":  "img-008-054.jpg",
+        "path":  "figures/2025-autoregressive-video-generation-without-vector-quantization/page_008_05_img-008-054.jpg",
+        "width":  "1024",
+        "page":  "8",
+        "height":  "1024"
+    },
+    {
+        "source_name":  "img-008-037.jpg",
+        "path":  "figures/2025-autoregressive-video-generation-without-vector-quantization/page_008_06_img-008-037.jpg",
+        "width":  "1024",
+        "page":  "8",
+        "height":  "1024"
+    },
+    {
+        "source_name":  "img-008-051.jpg",
+        "path":  "figures/2025-autoregressive-video-generation-without-vector-quantization/page_008_07_img-008-051.jpg",
+        "width":  "1024",
+        "page":  "8",
+        "height":  "1024"
+    },
+    {
+        "source_name":  "img-008-063.jpg",
+        "path":  "figures/2025-autoregressive-video-generation-without-vector-quantization/page_008_08_img-008-063.jpg",
+        "width":  "1024",
+        "page":  "8",
+        "height":  "1024"
+    },
+    {
+        "source_name":  "img-008-064.jpg",
+        "path":  "figures/2025-autoregressive-video-generation-without-vector-quantization/page_008_09_img-008-064.jpg",
+        "width":  "1024",
+        "page":  "8",
+        "height":  "1024"
+    },
+    {
+        "source_name":  "img-008-062.jpg",
+        "path":  "figures/2025-autoregressive-video-generation-without-vector-quantization/page_008_10_img-008-062.jpg",
+        "width":  "1024",
+        "page":  "8",
+        "height":  "1024"
+    },
+    {
+        "source_name":  "img-008-060.jpg",
+        "path":  "figures/2025-autoregressive-video-generation-without-vector-quantization/page_008_11_img-008-060.jpg",
+        "width":  "1024",
+        "page":  "8",
+        "height":  "1024"
+    },
+    {
+        "source_name":  "img-008-061.jpg",
+        "path":  "figures/2025-autoregressive-video-generation-without-vector-quantization/page_008_12_img-008-061.jpg",
+        "width":  "1024",
+        "page":  "8",
+        "height":  "1024"
+    },
+    {
+        "source_name":  "img-008-038.jpg",
+        "path":  "figures/2025-autoregressive-video-generation-without-vector-quantization/page_008_13_img-008-038.jpg",
+        "width":  "1024",
+        "page":  "8",
+        "height":  "1024"
+    },
+    {
+        "source_name":  "img-008-045.jpg",
+        "path":  "figures/2025-autoregressive-video-generation-without-vector-quantization/page_008_14_img-008-045.jpg",
+        "width":  "1024",
+        "page":  "8",
+        "height":  "1024"
+    },
+    {
+        "source_name":  "img-008-044.jpg",
+        "path":  "figures/2025-autoregressive-video-generation-without-vector-quantization/page_008_15_img-008-044.jpg",
+        "width":  "1024",
+        "page":  "8",
+        "height":  "1024"
+    },
+    {
+        "source_name":  "img-008-046.jpg",
+        "path":  "figures/2025-autoregressive-video-generation-without-vector-quantization/page_008_16_img-008-046.jpg",
+        "width":  "1024",
+        "page":  "8",
+        "height":  "1024"
+    }
+]

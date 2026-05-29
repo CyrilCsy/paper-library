@@ -1,0 +1,1387 @@
+﻿--- Page 1 ---
+MEVG: Multi-event Video Generation with
+Text-to-Video Models
+Gyeongrok Oh1 , Jaehwan Jeong1 , Sieun Kim1 , Wonmin Byeon2 ,
+Jinkyu Kim1 , Sungwoong Kim1 , and Sangpil Kim1
+
+arXiv:2312.04086v2 [cs.CV] 16 Jul 2024
+
+1
+
+Korea University
+
+2
+
+NVIDIA
+
+Abstract. We introduce a novel diffusion-based video generation method,
+generating a video showing multiple events given multiple individual sentences from the user. Our method does not require a large-scale video
+dataset since our method uses a pre-trained diffusion-based text-to-video
+generative model without a fine-tuning process. Specifically, we propose
+a last frame-aware diffusion process to preserve visual coherence between
+consecutive videos where each video consists of different events by initializing the latent and simultaneously adjusting noise in the latent to
+enhance the motion dynamic in a generated video. Furthermore, we find
+that the iterative update of latent vectors by referring to all the preceding frames maintains the global appearance across the frames in a
+video clip. To handle dynamic text input for video generation, we utilize
+a novel prompt generator that transfers course text messages from the
+user into the multiple optimal prompts for the text-to-video diffusion
+model. Extensive experiments and user studies show that our proposed
+method is superior to other video-generative models in terms of temporal
+coherency of content and semantics. Video examples are available on our
+project page: https://kuai-lab.github.io/eccv2024mevg.
+Keywords: Multi-event video generation · Training-free · Diffusion model
+
+1
+
+Introduction
+
+Deep generative models in the computer vision community gain a significant
+spotlight due to their unprecedented performance. Especially, text-to-image generation model (T2I) [8, 14, 24, 33–35] has successfully produced high-quality images with complex text descriptions. However, the complexity of spatial-temporal
+relations for modeling motion dynamics, light conditions, and scene transitions
+for video generation with deep generative models requires huge computational
+resources and large-scale text-video paired datasets. Despite these challenges,
+recent methods [2, 16, 21–23, 25, 36] for text-to-video generation achieve data
+and cost-efficient training by leveraging the pre-trained text-to-image generative models [8, 34]. Although spatial-temporal modeling aided by prior knowledge from text-image pairs helps to generate high-quality frames and capture
+semantically complex descriptions, it falls short in addressing real-world video
+comprehensively.
+
+--- Page 2 ---
+2
+
+G. Oh et al.
+“Santa Claus goes snowboarding on a snowy mountain.”
+→ “Santa Claus rides his sleigh through the snow in the mountain.”
+
+“Santa Claus rides his sleigh through the snow in the mountain.”
+→ “Santa Claus walks through the forest to a frozen lake.”
+
+“Santa Claus walks through the forest to a frozen lake.” → “Santa Claus has fun skating on the ice.”
+
+Fig. 1: An example of multi-event video generation. MEVG produces impressive output
+that corresponds to the given prompts and consists of chronologically continuous events.
+
+In essence, videos in the wild consist of consecutive events with dynamic
+movements, backgrounds, objects, and viewpoint changes over time. However,
+existing approaches mainly generate a video with a single prompt that disregards
+semantic transitions from event to event and restrictively expresses the entire
+story when the story consists of multiple events. Multi-event-based video generation requires three significant criteria: 1) smooth transition between each video
+clip, 2) semantic alignment between the prompt from the user and the generated
+video, and 3) ensuring diversity of the content and motion in the video.
+Recently, some studies [11, 40] have made progress in embracing the multiple descriptions that contain chronological sequence events. Despite this breakthrough, substantial training efforts are necessary using extensive text-video
+datasets because they present the additional networks to make multi-prompt
+video generation. The concurrent work [43] leverages the pre-trained text-tovideo generation model (T2V). However, the overlapped denoised process on the
+consecutive distinct prompts induces visual degradation and significant inconsistency between the background and objects. Moreover, traditional long-term T2V
+methods [2, 11, 22, 36, 52] hierarchically generate a video by bridging the gap between each keyframe, followed by generating keyframes given a single description.
+This hierarchical video generation process makes it challenging to incorporate
+the multiple-time variant prompts since it comprehensively generates the global
+video content in the beginning.
+Our method, multi-event video generation method (MEVG), is delicately
+designed to generate a video clip consisting of multiple events without any
+
+--- Page 3 ---
+MEVG: Multi-event Video Generation with Text-to-Video Models
+
+3
+
+video data nor fine-tuning process. MEVG successively enforces the temporal
+coherence between independently generated video clips given multiple event descriptions. By building upon the publicly released diffusion-based video generation model, we effectively utilize the pre-trained single-prompt T2V generative
+model1 to generate complex scenario videos. Specifically, to preserve the visual
+coherence between time variable prompts in video generation while producing realistic and diverse motion, we introduce two novel techniques: a last frame-aware
+latent vector initialization method and a structure-guided sampling strategy for
+the diffusion-based generative model. First, the last frame-aware latent vector
+initialization stage includes (i) dynamic noise, which diversifies motion across
+frames, and (ii) last frame-aware inversion, which guides to generate consistent
+contents between prompts. Structure-guided sampling further improves the visual consistency by progressively updating the latent code during the sampling
+process. In addition, to incorporate sequentially structured prompts, we leverage the Large Language Model (LLM) as a prompt generator. Since a single
+story has sequentially incorporated events within one sentence, LLM separates
+a complex story into multiple prompts, each having only one event.
+From our extensive experiments and user studies, we demonstrate that our
+proposed methods generate realistic videos that include three representative
+types of change: object motion, background, and complex content changes. Moreover, we examine the effectiveness and legitimacy of each proposed method by
+conducting ablation studies. To summarize, our main contributions are as follows:
+– Our proposed diffusion-based video generation method generates a video
+consisting of multiple events without requiring any training or additional
+video data.
+– We present a last-frame aware initialization method and dynamic noise adjustment strategy for the latent vector that enhances temporal and semantic
+consistency between individual videos where each video shows a different
+event.
+– We present a novel prompt generator that transforms course text inputs
+into optimal text instructions for a text-to-video generative model, ensuring
+coherence of semantic transitions in the generated video.
+– We show that our proposed video generation method outperforms the other
+zero-shot video generation methods in reflecting multiple events while maintaining visually coherent content for video generation.
+
+2
+
+Related Work
+
+Text-to-Video Generation. Text-to-video (T2V) generation has shown remarkable progress. Three primary methodologies are utilized in the field of computer vision. A Generative Adversarial Network (GAN) [3, 37, 39, 42, 44, 51] is
+1
+
+We used [16]. From our experiments, our proposed method can be applied to any
+kind of diffusion-based T2V pre-trained model.
+
+--- Page 4 ---
+4
+
+G. Oh et al.
+
+a well-known algorithm to generate diverse video from a noise vector utilizing
+a generator and discriminator. Another approach is auto-regressive transformers [11, 22, 45–47, 50] that leverage discrete representation to depict the motion
+dynamics. Recently, diffusion-based methods [1, 2, 6, 10, 12, 16, 18, 20, 36, 41, 53]
+have shown significant progress in learning data distribution while iteratively
+removing noise from the initial gaussian noise.
+Long-term video generation has recently been a popular topic in the computer
+vision community. Auto-regressive approaches [11, 22, 27] leveraging transformer
+architecture show plausible results in long-term video generation. However, they
+require massive training costs and datasets. Furthermore, although TATS [11]
+and Phenaki [40] can generate videos driven by a sequence of prompts, accumulated errors over time cause drastic changes in video content and visual quality degradation due to the auto-regressive property. Several works [2, 12, 36, 41,
+52] based on the diffusion model leverage temporal interpolation networks and
+masked strategies for generating smoother videos. VidRD [13] directly utilizes
+the previous initial latent code to expand the video.
+Note that most previous works focused on video generation from a single
+prompt or an event. However, in this work, we tackle the multi-event video generation task, which consists of consecutive events in a long-term video. AnimateA-Story [15] utilizes abundant real-world video corresponding to each story for
+natural motion. Moreover, SEINE [7] focuses on the transition from short to
+long video generation models by utilizing millions of datasets. Gen-L-Video [43],
+another approach, uses overlapped frames between two successive prompts. Although this strategy makes the outcomes more realistic, undesirable contents
+occur due to the overlapping denoising process.
+Zero-shot approach. FateZero [30] and INFUSION [26] edit video by leveraging the pre-trained image diffusion models while ensuring temporal consistency.
+These methods utilize attention maps and spatial features to preserve the structure and temporal coherence over the frame. In the generation field, Text2VideoZero [25] synthesizes the video to keep the global structure across the sequence
+of frames without video data while encoding the motion dynamics to provide
+diverse movement. To encode the movement, latent codes enclose the motion
+dynamics with direction parameters. Free-bloom [23] and DirecT2V [21] are
+distinct approaches employing the text-to-image models while sharing a similar
+conceptual framework. Both utilize the Large Language Model (LLM) in order to
+maintain the semantic information for each generated frame. DirecT2V leverages
+self-attention to preserve the appearance of the video; in addition, Free-bloom
+leverages joint distribution to sample the initial code for consistent frames.
+Inspired by these approaches, we leverage a pre-trained text-to-video (T2V)
+generation model to extend a short, monotonous video into an exciting video
+containing variable events. To pursue the naturalness of results, challenges exist
+in maintaining visual coherence and guaranteeing diversity. Therefore, we adjust
+the latent code near the preceding video and grant dynamic changes through
+gradual perturbation.
+
+--- Page 5 ---
+MEVG: Multi-event Video Generation with Text-to-Video Models
+
+5
+
+Overall Pipeline
+“Prompt # p”
+
+“Prompt # p-1”
+𝑇 steps
+
+𝑇 steps
+
+T2V
+
+𝑇 steps
+T2V
+
+T2V
+
+𝒱 !"#
+
+𝒱!
+Structure-guided Sampling
+
+Last Frame-aware Latent Initialization
+
+…
+
+Dynamic Noise
+
+…
+
+…
+Last Frame
+Aware Inversion
+
+Latent
+Update
+
+…
+"#$!
+
+Denoised Observation 𝑥$!
+
+Fig. 2: MEVG synthesizes the consecutive video clips corresponding to distinct
+prompts. The overall pipeline comprises two major components: last frame-aware latent initialization and structure-guided sampling. First, in the last frame-aware latent
+initialization, the pre-trained text-to-video generation model adopts the repeated frame
+as an input to invert into the initial latent code with two novel techniques: dynamic
+noise and last frame-aware inversion. Second, structure-guided sampling enforces continuity within a video clip by updating the latent code.
+
+3
+
+Method
+
+We propose a novel pipeline to generate a temporally and semantically coherent
+video conditioned on multiple event-based prompts. Specifically, our goal is to
+generate multiple video clips without disturbing the natural flow and recurrent
+video pattern across the semantic transitions in the given prompts. In this section, we first provide the introductory diffusion model that is the basis for our
+research and an overview of our proposed pipeline (see Sec. 3.1 and Sec. 3.2).
+Next, we present the technical details of our two main components: (i) last frameaware latent initialization, (ii) structure-guided sampling, in Sec. 3.3 and Sec. 3.4.
+Finally, we introduce the prompt generator, harnessing the powerful ability of
+Large Language Model (LLM) to handle a complex story containing multiple
+meaningful events (Sec. 3.5).
+
+3.1
+
+Preliminaries
+
+DDPM. The diffusion probabilistic model [19] has two components: a forward
+diffusion process and a backward diffusion process. In the forward process, data
+distribution transforms into noise distribution by adding noise iteratively. For
+every timestep t, noise ϵ ∼ N (0, I) diffract the original data x utilizing the
+variance schedule βt as follows:
+x_t = \sqrt {\bar {\alpha }_t}x + \sqrt {1-\bar {\alpha }_t}\epsilon ,
+
+(1)
+
+--- Page 6 ---
+6
+
+G. Oh et al.
+
+Qt
+where αt = 1 − βt and ᾱt = i=0 αi . In training time, the diffusion model
+predicts noise during every step to reconstruct the original data distribution.
+This reverse process q(xt−1 |xt ) is parameterized as follows:
+p_{\theta }(x_{t-1}|x_{t}) := \mathcal {N}{(x_{t-1};\mu _{\theta }(x_{t}, t),\Sigma _{\theta }(x_{t}, t)}). \label {eq:reverse_process}
+
+(2)
+
+DDIM. DDIM [38] is a variant of DDPM that leverages the non-Markovian
+manner instead of the Markov chain. DDIM sampling strategy makes the diffusion process to be deterministic, which can be written as follows:
+\begin {aligned} x_{t-1}= \sqrt {\bar {\alpha }_{t-1}}\underbrace {\bigg {(}{{x_{t}-\sqrt {1-\bar {\alpha }_t}\epsilon _\theta (x_t,t)}\over {\sqrt {\bar {\alpha }_t}}}\bigg {)}}_{\hat {x}_{t}} \\ +\sqrt {1-\bar {\alpha }_{t-1}-\sigma _t^2}\underbrace {\cdot \epsilon _\theta (x_t,t)}_{\epsilon _t} -\sigma _t n_t\;, \label {eq:ddim} \end {aligned}
+(3)
+
+where x̂t indicates the denoised observation of x0 at each diffusion step t, ϵt
+denotes the predicted noise at each time step t and σ controls whether the
+model is stochastic or deterministic. In this paper, we use the modified DDIM
+Inversion to strengthen the naturalness of the video, maintaining overall visual
+consistency despite the semantic changes along the temporal axis in the given
+prompts.
+3.2
+
+MEVG pipeline
+
+We outline our proposed MEVG
+…
+𝑇 steps
+𝑡=𝑇
+that utilizes the former video clip
+…
+to generate subsequent video clips
+REPEAT
+T2V
+considering the given prompts
+(see Fig. 2). Our method is built
+Noise Scheduling
+Update Latent
+upon the latent video diffusion
+…
+…
+model [16], which leverages the
+low-dimensional latent space x ∈
+RF ×c×h×w , where c, h, and w deFig. 3: Last Frame-aware Latent Initialnote latent space dimension and
+ization Initial latent code is crucial for mainF indicates the total number of taining global geometric structure. We apply
+frames. The video output V ∈ two techniques performing different roles: (i)
+RF ×3×H×W are obtained by pass- dynamic noise tailors flexibility differentially
+ing the latent code x through the across each frame, and (ii) last frame-aware indecoder D, where H × W is the version restricts the model to minimize the divergence of the entire frames from the content
+resolution of the frame.
+To get the final result V = of the preceding video clip.
+{V p }P−1
+p=0 , where P denotes the
+number of given prompts, we first sample the video conditioned on the first
+prompt. An initial video clip is created by Gaussian distribution xT ∼ N (0, I)
+as well as a static image as conditional guidance to capture the essential visual
+)
+
+𝑥(
+
+"#$%
+
+𝑥/
+
+"#$%
+
+𝜖!
+
+𝑇 − 1 step
+…
+
+select
+𝑡 step
+
+t step
+…
+
+0 step
+
+*+, %-.
+
+𝑥"!
+
+Last Frame-aware Inversion
+Dynamic Noise
+
+𝑥̂ !"#$ [0]
+
+&'#
+
+𝜖!
+
+"#$%
+
+𝑥"!
+
+"#$%
+
+𝜖!
+
+--- Page 7 ---
+MEVG: Multi-event Video Generation with Text-to-Video Models
+
+7
+
+content corresponding to user intention. After generating the initial video clip,
+we extend a preceding video in accordance with the semantic context of the
+subsequent prompt, driven by two major elements: last frame-aware latent initialization and structure-guided sampling. Last frame-aware latent initialization
+is the initialization process of the noise latent that helps to preserve the spatial
+information while generating more diverse contents. Structure-guided sampling
+then enforces motion consistency between frames during the backward diffusion
+process.
+3.3
+
+Last Frame-aware Latent Initialization
+
+The inversion technique, which reconstructs the initial latent code from the visual
+input (e.g., image or video), is used in real-world applications [9, 28, 49], where
+accurate spatial layout or visual content reconstruction is important. Video generation should have visual coherence across the entire sequence of frames while
+adapting the movement of objects and the background transition. To achieve this
+goal, we aim to find the optimal latent code that helps preserve global coherence
+between the generated videos for the previous and next prompts and maintains
+an ability to adapt to the changes. However, the existing approaches [13, 43]
+present repetitive video patterns (e.g., similar camera movement and object position) and awkward scene transition caused by overlapped content in a single
+frame.
+To solve these challenges, we
+Algorithm 1: Last Frame-aware Latent Initialization
+reuse the generated video (essen- Input: latent code of the the previous prompt xp−1
+,
+0
+denoised observation of the last frame from
+tially the last frame) from the
+sam
+−1
+the previous prompt {x̂t
+[−1]}Tt=0
+, noise
+previous prompt to generate the
+scheduling function F(·), and pre-trained T2V
+frames for the new prompt. Bamodel T2V(·)
+sically, the last frame of the pre- Result: Initial latent code xpT of next prompt p
+T = Number of diffusion steps
+viously generated video is copied //
+// N = Number of frames
+over the entire sequence as an ini- // p = Index of next prompt
+inv
+1 x0
+← REPEAT(x0 [−1])
+tial conditioning input. We then
+2 for t in 0, ..., T − 1 do
+propose dynamic noise to enforce
+inv
+inv
+3
+ϵt
+← T2V(xt , t)
+the diversity of the generated
+// Dynamic Noise
+4
+for n in 0, ..., N − 1 do
+video. This process preserves the
+5
+κn ← F(n)
+overall visual contents, such as an
+1
+6
+ϵdyn
+∼ N (0, 1+κ
+I)
+t
+object and background across the
+inv
+inv
+κ
+7
+ϵt [n] ← √
+ϵ
+[n] + ϵdyn
+t
+1+κ t
+video, and also improves the gen8
+end
+eration diversity.
+√
+√
+inv
+inv
+inv
+9
+x̂t
+← (xt
+− 1 − ᾱt ϵt )/ ᾱt
+Dynamic Noise. To generate di// Last Frame-aware Inversion
+inv
+[−1] − x̂t [0]||22
+verse motion of the object and 10 LLFAI = ||x̂sam
+t
+inv
+inv
+smooth transition of the back- 11 x̂t ← x̂√t − δLFAI ∇√x̂ LLFAI
+inv
+inv
+inv
+ground given prompts, we add 12 xt+1 ← ᾱt+1 x̂t + 1 − ᾱt+1 ϵt
+13 end
+the video noise prior similar to
+inv
+p
+14 xT = xT
+[12]. Essentially, the noise vector
+1
+ϵdyn
+∼ N (0, 1+κ
+2 I) is added to
+t
+p−1
+
+p−1
+
+p
+
+p
+
+p
+
+2
+n
+
+p
+
+p
+
+n
+
+2
+n
+
+p
+
+p
+
+p
+
+p−1
+
+p
+
+p
+
+p
+
+t
+
+p
+
+p
+
+p
+
+p
+
+--- Page 8 ---
+8
+
+G. Oh et al.
+inv
+
+the predicted noise ϵt p during inversion stage for next prompt p. κ regulates
+the dynamics and variability of the frames within a single video segment; κ → 0
+increases video variations.
+Since the beginning of the new video should be similar to the preceding
+video clip, and then more changes occur toward the end of the video, we design
+a noise scheduling function F = exp(−x) that monotonically decreases the κ.
+κn corresponding to the frame index n is determined by:
+\kappa _n = \mathcal {F}(n),\quad 0 \leq n<N,
+
+(4)
+
+where N is the total number of frames within one video clip. Finally, the preinv
+dicted noise ϵt p is obtained as follows:
+\epsilon _t^{inv_p}[n] = {\kappa _n\over {\sqrt {1+\kappa _n^2}}}\epsilon _{t}^{inv_p}[n]+\epsilon _{t}^{dyn}, \quad 0 \leq n<N,
+
+(5)
+
+where [·] denotes the index of frame.
+Last Frame-aware Inversion. While dynamic noise helps to generate diverse
+video contents, they cause a temporal inconsistency problem between individual
+video clips conditioned on consecutive prompts. Last frame-aware inversion coerces to maintain a visual correlation between different video clips guided by the
+denoised observation x̂t . Since the denoised observation x̂t is the predicted noisefree latent at diffusion step t (see Eq. 3), it contains a sketchy spatial layout and
+inv
+video context. We regularize the initial frame of the current video clip x̂t p [0]
+samp−1
+[−1] from the previous
+using the denoised observation of the last frame x̂t
+clip. This process ensures the visual consistency between two video clips. We
+minimize the objective LLFAI using L2 loss as follows:
+\mathcal {L}_{\text {LFAI}} = ||\hat {x}_{t}^{sam_{p-1}}[-1]-\hat {x}_{t}^{inv_p}[0]||_{2}^{2}.
+
+(6)
+
+It basically aligns the denoised observations between the sampling process for
+the previous prompt and the inversion process for the next prompt at each
+inv
+diffusion step t. After all, we update the x̂t p , the denoised observation during
+the inversion procedure, along the direction that minimizes the LLFAI and δLFAI
+controls the guidance strength.
+Consequently, through this procedure, we maintain the flexibility allowed by
+the dynamic noise and regularize the overall visual content by employing the
+denoised observation x̂t . We present the procedure of last frame-aware latent
+initialization in Alg. 1 to facilitate understanding, and the overall procedure are
+illustrated in Fig. 3.
+3.4
+
+Structure-guided Sampling
+
+The video clip is generated for the next prompt using the initial latent xpT produced at the previous step. Although the video clip for the new prompt should
+preserve the appearance of the previous video clip by using the last frame-aware
+initial latent, undesirable variation in scene texture and object placement often
+
+--- Page 9 ---
+MEVG: Multi-event Video Generation with Text-to-Video Models
+
+9
+
+occurs due to the stochastic nature of the sampling process. To improve the
+visual consistency within a video clip, we progressively update the predicted
+sam
+original x̂t p of the current video clip in the sampling process. Specifically, we
+formulate the objective as follows:
+\label {eq:sgs_object} \mathcal {L}_{\text {SGS}} = ||\hat {x}_{t}^{sam_p}[1:n]-\hat {x}_{t}^{sam_p}[:n-1]||_{2}^{2},
+
+(7)
+
+where n ∈ {1, ..., N}. Note that for the first frame (n = 0), we compute LSGS
+using the denoised observation of the last frame from the previous prompt
+sam
+sam
+−1
+. Finally, we update x̂t p as follows:
+{x̂t p−1 [−1]}Tt=0
+\label {eq:sgs_total} \hat {x}_{t}^{sam_p}\leftarrow \hat {x}_{t}^{sam_p}-\delta _{\text {SGS}}\nabla _{\hat {x}_{t}}\mathcal {L}_{\text {SGS}},
+
+(8)
+
+where δSGS is responsible for guidance scale. Eq. 7 and Eq. 8 are iteratively
+conducted frame-by-frame at each diffusion step. Guidance on the denoised observation leads to a similar global geometric structure between frames within a
+single video clip.
+
+3.5
+
+Prompt Generator
+
+In real-world scenarios, multiple sequential events can be described in one sentence or paragraph. For instance, “The dog runs across the wide field, then comes
+to a halt, yawns softly, and lies down.". However, existing long-video generation
+models [11, 16, 22] are designed to generate only a single event. Therefore, the
+generated video does not reflect the entire text when the prompt contains multiple events. To address this issue, the Large Language Model (LLM) has been
+utilized to generate an appropriate input for the pre-trained T2V models. We
+introduce a prompt generator to segment the comprehensive description into the
+prescribed textual format. We put the exemplar and guidelines in the supplementary materials.
+
+4
+
+Experiments
+
+4.1
+
+Implementation Details
+
+We directly leverage the released pre-trained text-to-video generation model [16]
+to generate a multi-text conditioned video. In our experiments, we generate
+multi-text conditioned video, and each video clip consists of 16 frames with
+256×256 resolution. Moreover, we employ ChatGPT [29], which is a Large Language Model, to separate the complex scenarios into individual prompts that
+comprise the sequence of events. We set each guidance weight δLFAI and δSGS
+to 1000 and 7 in our experiments. All experiments are performed on a single
+NVIDIA GeForce RTX 3090.
+
+--- Page 10 ---
+10
+
+G. Oh et al.
+PROMPTS:
+A man rides a bicycle on a beautiful tropical beach at sunset of 4k high resolution.
+A man walks on a beautiful tropical beach at sunset of 4k high resolution.
+A man reads a book on a beautiful tropical beach at sunset of 4k high resolution.
+Prompt #2
+
+Prompt #3
+
+Ours
+
+Gen-L-Video
+
+VidRD
+
+T2V-Zero
+
+DirecT2V
+
+Prompt #1
+
+Fig. 4: Generation results on given prompts by our method and baseline models. T2VZero and DirecT2V build upon the T2I pre-trained model. In contrast, VidRD and
+Gen-L-Video leverage the same foundation model utilized in our experiments.
+Table 1: Compared with baseline methods in terms of two primary categories: automatic metric and human evaluation. Note that we use bold to highlight the best
+scores, and underline indicates the second-best scores.
+Automatic Metric
+Method
+T2V-Zero [25]
+DirecT2V [21]
+Gen-L-Video [43]
+VidRD [13]
+Ours
+
+4.2
+
+Human Evaluation
+
+CLIP-Text ↑ CLIP-Image ↑ Temporal ↑ Semantic ↑ Realism ↑ Preference ↑
+0.322
+0.301
+0.308
+0.287
+0.309
+
+0.808
+0.898
+0.953
+0.951
+0.957
+
+3.61
+2.96
+3.35
+3.40
+3.82
+
+3.59
+3.04
+3.38
+3.43
+3.71
+
+3.45
+3.01
+3.37
+3.56
+3.68
+
+3.47
+3.30
+3.05
+3.14
+3.68
+
+Qualitative Results
+
+We provide qualitative comparisons along with other recent multi-prompts video
+generation methods [13,43], including zero-shot video generation methods [21,25]
+which leveraging frame-level descriptions. In the supplementary material and the
+project page, we provide additional videos for frame-level and video-level comparison to show more qualitative examples. As shown in Fig. 4, our proposed
+method achieves better video quality, especially in two points: naturalness and
+temporal coherence. First, compared with T2V-Zero [25] and DirecT2V [21], we
+
+--- Page 11 ---
+MEVG: Multi-event Video Generation with Text-to-Video Models
+
+11
+
+observe that only leveraging the image-based model fails to generate reasonable
+video flow in terms of naturalness; thus, utilizing the video-based approaches is
+necessary. Second, generated videos by our method show a strong visual relation
+between each video segment without the recurrent video pattern. To be more
+specific, visual examples of VidRD [13] exhibit recurrent video patterns between
+two distinct video clips; e.g., the movement pattern of a man within each video
+segment mirrors the previous one. Additionally, although Gen-L-Video [43] generates more diverse movement, they can not preserve the structure coherence of
+objects, and the background is not stable across the entire frame. On the other
+hand, our method not only smoothly bridges the gap between two individual
+video clips but also maintains the overall temporal coherence of the content.
+4.3
+
+Quantitative Results
+Frame 11
+
+Frame 13
+
+Frame 15
+
+PROMPTS:
+There is a beach where there is no one.
+The waves hit the deserted beach.
+
+Ours
+( w DN, LFAI, SGS )
+
+with
+DN, LFAI
+
+with
+DN
+
+with
+LFAI
+
+DDIM
+Inversion
+
+Automatic Metrics. We report the
+Frame 15
+Frame 17
+Frame 19
+Frame 21
+Frame 23
+Frame 25
+CLIP-Text score [17, 32] that represents the alignment between given
+prompts and outputs, and CLIPImage score [4, 10, 30, 48] that shows
+the similarity between two consecutive frames. We measure the metrics over the 30 scenarios, each consisting of multiple prompts. For a
+fair evaluation, we randomly sampled
+20 videos per scenario. As shown in
+Tab. 1, our method generally outperforms the other state-of-the-art methods. Among the baseline, the generated video of Text2Video-Zero (T2V- Fig. 5: Generated video clips with and
+Zero) aligns well with the semantics without proposed our modules. The red arof given prompts as this approach row and yellow box highlight the visual
+yields a single frame corresponding changes between distinct video clips.
+to a prompt of the same video segments. However, they fail to generate temporally coherent video. In contrast,
+DirecT2V [21], which utilizes the frame-specific descriptions sharing high-level
+stories, shows a higher CLIP-Image score, whereas we observe a decrease in
+performance for the CLIP-Text score. Comparison with text-to-video-based approaches exhibits a relatively low difference in all metrics due to the common
+foundation model [16]. The CLIP-Text score of VidRD [13] is notably lower than
+the baselines. The visual content is substantially maintained without a significant performance drop in CLIP-Image score since the VidRD directly utilizes the
+latent code of the previous video clip with minimal deviations from the sampling
+step. Gen-L-Video [43] performs well in capturing the meaning of the prompts.
+However, the global content variations during the sampling process caused by
+overlapping prompts lead to a decrease in similarity between consecutive frames.
+
+--- Page 12 ---
+12
+
+G. Oh et al.
+
+Human Evaluation. We recruited 100 participants through Amazon Mechanical Turk (AMT) to evaluate five models: T2V-Zero [25], DirecT2V [21], Gen-LVideo [43], VidRD [13], and our method. We employ a Likert scale ranging from
+1 (low quality) to 5 (high quality). Participants score each method considering
+temporal consistency, semantic alignment, realism, and preference over 30 videos
+generated by different scenarios. As clearly indicated in Tab. 1, generated videos
+from our method significantly outperform other state-of-the-art approaches in
+all four criteria, regardless of individual frame quality. In particular, based on
+human evaluation results, we observe that preserving the identity of the object
+and background is crucial for human preference. When compared with text-tovideo-based methods, temporal inconsistency between each video clip caused
+by the semantic transition of given prompts results in lower human evaluation
+scores in spite of the same foundation model as ours.
+4.4
+
+Ablation Studies
+
+Effectiveness of Proposed Methods. We qualitatively show the effectiveness
+of last frame-aware inversion (LFAI), dynamic noise (DN), and structure-guided
+sampling (SGS), as shown in Fig. 5. We utilize the basic inversion strategy [38]
+as a base model. Although basic DDIM inversion somewhat preserves the overall structure of visual content between each video clip, the detailed texture and
+background show severe changes. DN model relaxes this problem but shows
+the disconnection between two video clips since the DN module gives flexibility to the model by using the i.i.d noise in the inversion procedure. Combining
+two modules, LFAI and DN, generates natural-looking videos since LFAI module preserves the structure of the content in the previous frame. However, we
+find that the stochastic characteristics of the sampling process introduce slight
+fluctuations in the videos, and iterative update of latent code (SGS) during the
+sampling process is beneficial in enhancing the realism of video content, as shown
+in the fifth row at Fig. 5. Moreover, as reflected in Tab. 2, we provide an additional human evaluation to validate the impact of our proposed module by
+human judges.
+Analysis on Dynamic Noise.
+Fig. 6 indicates that κ controls the Table 2: We report user study results on
+flexibility of the frame sequence. We ablation studies using four different criteria:
+modify the noise scheduling function Temporal, Semantics, Realism, and PreferF into the static value to validate ence. Note that we use bold to highlight
+the effectiveness of our method. When the best scores, and underline indicates the
+second-best scores.
+κ applies to the entire frames as a
+Method
+Human Evaluation
+smaller value, we figure out that the
+LFAI DN SGS Temporal ↑ Semantics ↑ Realism ↑ Preference ↑
+latter frames can not preserve the
+3.42
+3.40
+3.45
+2.89
+✓
+3.48
+3.40
+3.50
+2.93
+geometric structure. However, frozen
+✓ 3.53
+3.46
+3.63
+2.51
+video is observed when kappa is set to
+✓ ✓ 3.61
+3.58
+3.58
+2.78
+✓ ✓ ✓
+3.70
+3.47
+3.69
+3.27
+a high value. As a result, we achieve
+the smooth transition and flexibility
+
+--- Page 13 ---
+MEVG: Multi-event Video Generation with Text-to-Video Models
+Frame 9
+
+13
+Frame 12
+
+Frame 15
+
+PROMPTS:
+A shark swims with colorful fish in the sea.
+A shark swims with scuba divers in the sea.
+
+PROMPTS:
+The sky through the window. → cloudy → thunder
+Frame 12
+
+Frame 20
+
+Frame 28
+
+Frame 36
+
+Frame 15
+
+Frame 44
+
+Frame 18
+
+Frame 21
+
+Frame 24
+
+Frame 27
+
+Frame 30
+
+Fig. 6: Ablation study for validating the
+noise schedule. Note that the first and
+second-row leverage constant value over
+the entire frames.
+
+Ours
+
+Ours
+
+LFAI
+( 4 frame )
+
+𝜅 = 0.001
+
+LFAI
+( 8frame )
+
+𝜅 = 10
+
+LFAI
+( 16 frame)
+
+Frame 4
+
+Fig. 7: Effectiveness of adjusting the
+number of influenced frames.
+
+between consecutive video clips by adopting the scheduling function F, which
+decrease steadily.
+Analysis on Last Frame-aware Inversion. We introduce the last frameaware inversion to prevent the visual inconsistency in terms of object spatial
+location and scene texture driven by the Dynamic Noise. In the LFAI process,
+we guide the first frame to adjust the initial latent code that is correlated to
+the geometric structure of the previous video clip. Here, we explore the influence
+of the number of frames that offer guidance by the last frame of the previous
+video clip. As shown in Fig. 7, we observe that only the first frame is sufficient
+to maintain the visual structure at the beginning of the frames. On the contrary,
+the increase in the number of affected frames makes the stationary movement in
+objects; e.g., the shark only moves on the right side. Conversely, the restriction of
+the affected frame as only a single one gives increased flexibility to the subsequent
+frames. This flexibility enhances their ability to effectively convey the meaning
+of the subsequent prompts and generate a diverse range of movement.
+4.5
+
+Applications
+
+Video Generation with Large Language Model (LLM). In real-world
+scenarios, more intricate descriptions are generally used, which have the timevariant events in a single narrative. Prompt generator (see Sec. 3.5) to separate
+into the individual prompts for handling the consecutive events. As shown in
+Fig. 8 (left), the visual examples indicate the entire frame ensures temporal
+consistency while reflecting the overall storyline.
+Image and Multi-event-based Video Generation. Our proposed MEVG is
+capable of generating video with a given image and multi-text, multi-text-imageto-video generation (MTI2V). For generating video, we first encode the seeding
+image using the encoder into the latent vector and duplicate it as the number
+of frames. Then, we follow MEVG pipeline. Fig. 8 (right) demonstrates that the
+
+--- Page 14 ---
+14
+
+G. Oh et al.
+MTI2V ( Multi-text + Image)
+“A single white flower gradually blooms from a single green flower bud.”
+“The single white flower is blooming.”
+“A lovely fully blossomed single white flower.”
+
+“Albert Einstein is walking in the forest in the morning.”
+“People walks on the beach at night.”
+“There are sand castles on the beach under the fireworks at night.”
+“Very few people remain on the beach at night and they gradually fade away.”
+
+“Albert Einstein reads a book under a tree.”
+
+“Albert Einstein walks from the forest towards the lake as night falls.”
+
+Frame 4
+
+Frame 12
+
+Frame 20
+
+Frame 28
+
+Frame 36
+
+Frame 44
+
+Fig. 8: (Left) Example that leverages the Large Language Model (LLM). Given the
+complex scenario, our prompt generator split into each individual prompt using the predefined instructions. (Right) Example of our results conditioned on multiple prompts
+and given image.
+
+generated video successfully preserves the visual appearance and structure of
+the object in the reference image and shows temporal coherence along the given
+prompts.
+
+5
+
+Conclusion
+
+We introduced a novel method that generates multi-text-based videos by taking
+temporally consecutive descriptions. Specifically, we propose two techniques, last
+frame-aware latent initialization and structure-guided sampling, to preserve the
+visual and temporal consistency in the generated video. Our proposed method
+can generate much more natural and temporally coherent videos than the other
+state-of-the-art methods with qualitative and quantitative results. Our pipeline
+also handles a single story containing time-variant events by utilizing the Large
+Language Model (LLM). In addition, our proposed method can generate videos
+conditioned on both the multi-prompts and a reference image and can be used
+in various applications.
+Limitation and Future Work Although our proposed method yields promising outcomes in preserving visual consistency and generation diversity over the
+distinct prompts, there exists potential for future works as listed: 1) Our method
+requires a certain text format as our model inherits the characteristics of a pretrained single-prompt video generator and 2) The absence of benchmark datasets
+for multi-text video generation makes it hard to conduct a quantitative evaluation. Video generation with diverse input conditions and curating multi-prompts
+video datasets are promising future directions.
+
+--- Page 15 ---
+MEVG: Multi-event Video Generation with Text-to-Video Models
+
+15
+
+Acknowledgements
+This research was supported by Culture, Sports and Tourism R&D Program
+through the Korea Creative Content Agency grant funded by the Ministry of
+Culture, Sports and Tourism in 2024((International Collaborative Research and
+Global Talent Development for the Development of Copyright Management
+and Protection Technologies for Generative AI, RS-2024-00345025, 25%),(Research on neural watermark technology for copyright protection of generative
+AI 3D content, RS-2024-00348469, 25%),(Development of sketch-based semantic 3D modeling technology for creating user-centric Metaverse content spaces
+for indoor spaces, RS-2023-00227409, 10%))), Institute of Information & communications Technology Planning & Evaluation (IITP) grant funded by the Korea government(MSIT)(RS-2019-II190079, 10%), Artificial intelligence industrial
+convergence cluster development project funded by the Ministry of Science and
+ICT(MSIT, Korea)& Gwangju Metropolitan City(contribution rate: 15%), and
+IITP under the Leading Generative AI Human Resources Development(IITP2024-RS-2024-00397085, 15%) grant funded by the Korea government(MSIT).
+
+References
+1. Bar-Tal, O., Chefer, H., Tov, O., Herrmann, C., Paiss, R., Zada, S., Ephrat, A.,
+Hur, J., Li, Y., Michaeli, T., et al.: Lumiere: A space-time diffusion model for video
+generation. arXiv preprint arXiv:2401.12945 (2024)
+2. Blattmann, A., Rombach, R., Ling, H., Dockhorn, T., Kim, S.W., Fidler, S., Kreis,
+K.: Align your latents: High-resolution video synthesis with latent diffusion models.
+In: Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern
+Recognition. pp. 22563–22575 (2023)
+3. Brooks, T., Hellsten, J., Aittala, M., Wang, T.C., Aila, T., Lehtinen, J., Liu, M.Y.,
+Efros, A., Karras, T.: Generating long videos of dynamic scenes. Advances in Neural
+Information Processing Systems 35, 31769–31781 (2022)
+4. Ceylan, D., Huang, C.H.P., Mitra, N.J.: Pix2video: Video editing using image
+diffusion. In: Proceedings of the IEEE/CVF International Conference on Computer
+Vision (ICCV). pp. 23206–23217 (October 2023)
+5. Chen, H., Xia, M., He, Y., Zhang, Y., Cun, X., Yang, S., Xing, J., Liu, Y., Chen,
+Q., Wang, X., et al.: Videocrafter1: Open diffusion models for high-quality video
+generation. arXiv preprint arXiv:2310.19512 (2023)
+6. Chen, H., Zhang, Y., Cun, X., Xia, M., Wang, X., Weng, C., Shan, Y.:
+Videocrafter2: Overcoming data limitations for high-quality video diffusion models. In: Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern
+Recognition. pp. 7310–7320 (2024)
+7. Chen, X., Wang, Y., Zhang, L., Zhuang, S., Ma, X., Yu, J., Wang, Y., Lin, D., Qiao,
+Y., Liu, Z.: Seine: Short-to-long video diffusion model for generative transition and
+prediction. In: The Twelfth International Conference on Learning Representations
+(2023)
+8. Ding, M., Zheng, W., Hong, W., Tang, J.: Cogview2: Faster and better text-toimage generation via hierarchical transformers. Advances in Neural Information
+Processing Systems 35, 16890–16902 (2022)
+
+--- Page 16 ---
+16
+
+G. Oh et al.
+
+9. Dong, W., Xue, S., Duan, X., Han, S.: Prompt tuning inversion for text-driven
+image editing using diffusion models. arXiv preprint arXiv:2305.04441 (2023)
+10. Esser, P., Chiu, J., Atighehchian, P., Granskog, J., Germanidis, A.: Structure
+and content-guided video synthesis with diffusion models. In: Proceedings of the
+IEEE/CVF International Conference on Computer Vision. pp. 7346–7356 (2023)
+11. Ge, S., Hayes, T., Yang, H., Yin, X., Pang, G., Jacobs, D., Huang, J.B., Parikh, D.:
+Long video generation with time-agnostic vqgan and time-sensitive transformer. In:
+European Conference on Computer Vision. pp. 102–118. Springer (2022)
+12. Ge, S., Nah, S., Liu, G., Poon, T., Tao, A., Catanzaro, B., Jacobs, D., Huang,
+J.B., Liu, M.Y., Balaji, Y.: Preserve your own correlation: A noise prior for video
+diffusion models. In: Proceedings of the IEEE/CVF International Conference on
+Computer Vision. pp. 22930–22941 (2023)
+13. Gu, J., Wang, S., Zhao, H., Lu, T., Zhang, X., Wu, Z., Xu, S., Zhang, W., Jiang,
+Y.G., Xu, H.: Reuse and diffuse: Iterative denoising for text-to-video generation.
+arXiv preprint arXiv:2309.03549 (2023)
+14. Gu, S., Chen, D., Bao, J., Wen, F., Zhang, B., Chen, D., Yuan, L., Guo, B.:
+Vector quantized diffusion model for text-to-image synthesis. In: Proceedings of the
+IEEE/CVF Conference on Computer Vision and Pattern Recognition. pp. 10696–
+10706 (2022)
+15. He, Y., Xia, M., Chen, H., Cun, X., Gong, Y., Xing, J., Zhang, Y., Wang, X.,
+Weng, C., Shan, Y., et al.: Animate-a-story: Storytelling with retrieval-augmented
+video generation. arXiv preprint arXiv:2307.06940 (2023)
+16. He, Y., Yang, T., Zhang, Y., Shan, Y., Chen, Q.: Latent video diffusion models for high-fidelity video generation with arbitrary lengths. arXiv preprint
+arXiv:2211.13221 (2022)
+17. Hessel, J., Holtzman, A., Forbes, M., Bras, R.L., Choi, Y.: Clipscore: A referencefree evaluation metric for image captioning. arXiv preprint arXiv:2104.08718 (2021)
+18. Ho, J., Chan, W., Saharia, C., Whang, J., Gao, R., Gritsenko, A., Kingma, D.P.,
+Poole, B., Norouzi, M., Fleet, D.J., et al.: Imagen video: High definition video
+generation with diffusion models. arXiv preprint arXiv:2210.02303 (2022)
+19. Ho, J., Jain, A., Abbeel, P.: Denoising diffusion probabilistic models. Advances in
+neural information processing systems 33, 6840–6851 (2020)
+20. Ho, J., Salimans, T., Gritsenko, A., Chan, W., Norouzi, M., Fleet, D.J.: Video
+diffusion models (2022)
+21. Hong, S., Seo, J., Hong, S., Shin, H., Kim, S.: Large language models are frame-level
+directors for zero-shot text-to-video generation. arXiv preprint arXiv:2305.14330
+(2023)
+22. Hong, W., Ding, M., Zheng, W., Liu, X., Tang, J.: Cogvideo: Large-scale pretraining for text-to-video generation via transformers. arXiv preprint arXiv:2205.15868
+(2022)
+23. Huang, H., Feng, Y., SibeiYang, C.L.J.: Free-bloom: Zero-shot text-to-video generator with llm director and ldm animator. arXiv preprint arXiv:2309.14494 3
+(2023)
+24. Kang, M., Zhu, J.Y., Zhang, R., Park, J., Shechtman, E., Paris, S., Park, T.: Scaling
+up gans for text-to-image synthesis. In: Proceedings of the IEEE/CVF Conference
+on Computer Vision and Pattern Recognition. pp. 10124–10134 (2023)
+25. Khachatryan, L., Movsisyan, A., Tadevosyan, V., Henschel, R., Wang, Z.,
+Navasardyan, S., Shi, H.: Text2video-zero: Text-to-image diffusion models are zeroshot video generators. arXiv preprint arXiv:2303.13439 (2023)
+
+--- Page 17 ---
+MEVG: Multi-event Video Generation with Text-to-Video Models
+
+17
+
+26. Khandelwal, A.: Infusion: Inject and attention fusion for multi concept zero-shot
+text-based video editing. In: Proceedings of the IEEE/CVF International Conference on Computer Vision. pp. 3017–3026 (2023)
+27. Liang, J., Wu, C., Hu, X., Gan, Z., Wang, J., Wang, L., Liu, Z., Fang, Y., Duan,
+N.: Nuwa-infinity: Autoregressive over autoregressive generation for infinite visual
+synthesis. Advances in Neural Information Processing Systems 35, 15420–15432
+(2022)
+28. Nguyen, T., Li, Y., Ojha, U., Lee, Y.J.: Visual instruction inversion: Image editing
+via visual prompting. arXiv preprint arXiv:2307.14331 (2023)
+29. Ouyang, L., Wu, J., Jiang, X., Almeida, D., Wainwright, C., Mishkin, P., Zhang, C.,
+Agarwal, S., Slama, K., Ray, A., et al.: Training language models to follow instructions with human feedback. Advances in Neural Information Processing Systems
+35, 27730–27744 (2022)
+30. Qi, C., Cun, X., Zhang, Y., Lei, C., Wang, X., Shan, Y., Chen, Q.: Fatezero: Fusing
+attentions for zero-shot text-based video editing. arXiv:2303.09535 (2023)
+31. Qiu, H., Xia, M., Zhang, Y., He, Y., Wang, X., Shan, Y., Liu, Z.: Freenoise: Tuningfree longer video diffusion via noise rescheduling. arXiv preprint arXiv:2310.15169
+(2023)
+32. Radford, A., Kim, J.W., Hallacy, C., Ramesh, A., Goh, G., Agarwal, S., Sastry, G.,
+Askell, A., Mishkin, P., Clark, J., et al.: Learning transferable visual models from
+natural language supervision. In: International conference on machine learning. pp.
+8748–8763. PMLR (2021)
+33. Ramesh, A., Dhariwal, P., Nichol, A., Chu, C., Chen, M.: Hierarchical textconditional image generation with clip latents. arXiv preprint arXiv:2204.06125
+(2022)
+34. Rombach, R., Blattmann, A., Lorenz, D., Esser, P., Ommer, B.: High-resolution
+image synthesis with latent diffusion models. In: Proceedings of the IEEE/CVF
+conference on computer vision and pattern recognition. pp. 10684–10695 (2022)
+35. Saharia, C., Chan, W., Saxena, S., Li, L., Whang, J., Denton, E.L., Ghasemipour,
+K., Gontijo Lopes, R., Karagol Ayan, B., Salimans, T., et al.: Photorealistic textto-image diffusion models with deep language understanding. Advances in Neural
+Information Processing Systems 35, 36479–36494 (2022)
+36. Singer, U., Polyak, A., Hayes, T., Yin, X., An, J., Zhang, S., Hu, Q., Yang, H.,
+Ashual, O., Gafni, O., et al.: Make-a-video: Text-to-video generation without textvideo data. arXiv preprint arXiv:2209.14792 (2022)
+37. Skorokhodov, I., Tulyakov, S., Elhoseiny, M.: Stylegan-v: A continuous video generator with the price, image quality and perks of stylegan2. In: Proceedings of the
+IEEE/CVF Conference on Computer Vision and Pattern Recognition. pp. 3626–
+3636 (2022)
+38. Song, J., Meng, C., Ermon, S.: Denoising diffusion implicit models. arXiv preprint
+arXiv:2010.02502 (2020)
+39. Tian, Y., Ren, J., Chai, M., Olszewski, K., Peng, X., Metaxas, D.N., Tulyakov,
+S.: A good image generator is what you need for high-resolution video synthesis.
+arXiv preprint arXiv:2104.15069 (2021)
+40. Villegas, R., Babaeizadeh, M., Kindermans, P.J., Moraldo, H., Zhang, H., Saffar,
+M.T., Castro, S., Kunze, J., Erhan, D.: Phenaki: Variable length video generation
+from open domain textual description. arXiv preprint arXiv:2210.02399 (2022)
+41. Voleti, V., Jolicoeur-Martineau, A., Pal, C.: Mcvd-masked conditional video diffusion for prediction, generation, and interpolation. Advances in Neural Information
+Processing Systems 35, 23371–23385 (2022)
+
+--- Page 18 ---
+18
+
+G. Oh et al.
+
+42. Vondrick, C., Pirsiavash, H., Torralba, A.: Generating videos with scene dynamics.
+Advances in neural information processing systems 29 (2016)
+43. Wang, F.Y., Chen, W., Song, G., Ye, H.J., Liu, Y., Li, H.: Gen-l-video: Multi-text to
+long video generation via temporal co-denoising. arXiv preprint arXiv:2305.18264
+(2023)
+44. Wang, Y., Bilinski, P., Bremond, F., Dantcheva, A.: G3an: Disentangling appearance and motion for video generation. In: Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition. pp. 5264–5273 (2020)
+45. Weissenborn, D., Täckström, O., Uszkoreit, J.: Scaling autoregressive video models.
+arXiv preprint arXiv:1906.02634 (2019)
+46. Wu, C., Huang, L., Zhang, Q., Li, B., Ji, L., Yang, F., Sapiro, G., Duan, N.:
+Godiva: Generating open-domain videos from natural descriptions. arXiv preprint
+arXiv:2104.14806 (2021)
+47. Wu, C., Liang, J., Ji, L., Yang, F., Fang, Y., Jiang, D., Duan, N.: Nüwa: Visual
+synthesis pre-training for neural visual world creation. In: European conference on
+computer vision. pp. 720–736. Springer (2022)
+48. Wu, J.Z., Ge, Y., Wang, X., Lei, S.W., Gu, Y., Shi, Y., Hsu, W., Shan, Y., Qie,
+X., Shou, M.Z.: Tune-a-video: One-shot tuning of image diffusion models for textto-video generation. In: Proceedings of the IEEE/CVF International Conference
+on Computer Vision. pp. 7623–7633 (2023)
+49. Xing, X., Wang, C., Zhou, H., Hu, Z., Li, C., Xu, D., Yu, Q.: Inversion-by-inversion:
+Exemplar-based sketch-to-photo synthesis via stochastic differential equations
+without training. arXiv preprint arXiv:2308.07665 (2023)
+50. Yan, W., Zhang, Y., Abbeel, P., Srinivas, A.: Videogpt: Video generation using
+vq-vae and transformers. arXiv preprint arXiv:2104.10157 (2021)
+51. Yu, S., Tack, J., Mo, S., Kim, H., Kim, J., Ha, J.W., Shin, J.: Generating videos
+with dynamics-aware implicit generative adversarial networks. arXiv preprint
+arXiv:2202.10571 (2022)
+52. Zhang, D.J., Wu, J.Z., Liu, J.W., Zhao, R., Ran, L., Gu, Y., Gao, D., Shou, M.Z.:
+Show-1: Marrying pixel and latent diffusion models for text-to-video generation.
+arXiv preprint arXiv:2309.15818 (2023)
+53. Zhou, D., Wang, W., Yan, H., Lv, W., Zhu, Y., Feng, J.: Magicvideo: Efficient video
+generation with latent diffusion models. arXiv preprint arXiv:2211.11018 (2022)
+
+--- Page 19 ---
+Supplemental Material to:
+MEVG: Multi-event Video Generation with
+Text-to-Video Models
+
+Overview
+This supplementary material introduces experiment details, details of prompt
+generator, additional analysis, test set, and further qualitative results.
+– Section A provides more experiment details about the baseline, metrics, and
+human evaluation.
+– Section B presents the usage of prompt generator, including full descriptions used to generate individual prompts from the scenario containing the
+sequence of events.
+– Section C provides an additional analysis of computational cost and hyperparameters.
+– Section D provides details of evaluation including test set.
+– Section E provides more qualitative results in diverse domains. We provide
+more comparison results between state-of-the-art models and qualitative results. Furthermore, we also present more generated videos conditioning on
+image and multi-text and examples generated by the prompt generator.
+
+A. Experiment Details
+Baselines. To demonstrate the effectiveness of our proposed MEVG, we compare the outcomes with several existing baselines. We select baselines that enable synthesizing the videos with multiple prompts without any training or finetuning. DirecT2V [21] and Text2Video-Zero (T2V-Zero) [25] leverage Stable Diffusion [34] trained on only text-image pairs. These models utilize the frame-level
+descriptions to create individual frames constituting the video content. Furthermore, two text-to-video-based methods, Gen-L-Video [43] and VidRD [13], are
+used to compare with ours. We use LVDM [16] as the foundation model for our
+experiment to be a fair comparison.
+Metrics. We report CLIP Similarity (“CLIP-Text") [17,32] and temporal consistency (“CLIP Image") [4,10,30,48] to evaluate our proposed MEVG. CLIPText is a commonly employed metric to measure the correlation between two
+different modalities, image and text. We compute the cosine similarity over all
+frames corresponding to each prompt to present how well the outcomes reflect
+the meaning of given conditions. Additionally, CLIP-Image is used to measure
+the correlation of frame. We compute the cosine similarity between two consecutive frames and take the average value over all frames. Furthermore, we
+
+--- Page 20 ---
+20
+
+G. Oh et al.
+
+conduct a human evaluation to measure four properties of outcomes: temporal
+consistency, semantic alignment, realism, and preference.
+Human Evaluation. We conduct a human evaluation study to measure four
+properties of outcomes: temporal consistency, semantic alignment, realism, and
+preference. Specifically, we request all participants assign a score on a scale 1 (low
+quality) to 5 (high quality) for the following set of four questions. First,“How
+smoothly the content of videos changes in response to the given prompts." indicates how each video clip is smoothly connected between the distinct prompts
+(Temporal Consistency). Second,“How well does the video correspond with the
+prompts." evaluates how well the generated video reflects a given sequence of
+prompts (Semantic Alignment). Third, “How natural and real does this video
+look, considering the consistency of the background and the objects." evaluates
+the realism of the generated video concerning the background and object consistency (Realism). Finally, “Considering the three questions above, please rank
+the overall video quality." leads to participants ranking their preference over the
+generated video based on comprehensive perspective (Preference).
+
+B. Details of Prompt Generator
+In this section, we provide additional information of prompt generator that is
+described in our main paper (see Sec. 3.5). Our prompt generator can naturally
+split a single scenario containing multiple events into distinct prompts with a
+prescribed textural format.
+Instruction for prompt generator The key point of the prompt generator
+is that each prompt has a single event while maintaining the comprehensive
+content of the scenario. Inspired by the Free-Bloom [23] and DirecT2V [21], we
+devise adequate instruction following the five concrete rules (see Fig. 1).
+
+I would like you to play the role of the long sentence separator that breaks down long sentences into { The Number of
+Prompt } concise short sentences, focusing on { The Number of Prompt } main action verbs.
+A long sentence is { Scenario } and there are { The Number of Prompt } short sentences.
+First, consider the context of a given long sentence and then change the pronoun to a specific noun given in the long sentence
+with an indefinite article.
+Second, you break down modified long sentences into { The Number of Prompt } concise short sentences, focusing on { The
+Number of Prompt } main action verbs by following the five rules.
+There are some rules as follow:
+First, Each short sentence will contain only one action verb and action verb's tenses and forms in each short sentence should
+match those mentioned in the long sentence.
+Second, Each short sentence must be self-contained, following the order of subject, verb, and background.
+Third, Each short sentence should contain all background information related to the main verb of a short sentence.
+Fourth, Each Short sentence should not include any verbs other than the { The Number of Prompt } main verbs.
+Fifth, Each short sentence maintains the present tense, present progressive tense, and present participle as expressed in the long
+sentence.
+Scenario : { user input }, The Number of Prompt : { user input }
+
+Fig. 1: This instruction follows the five guidelines to create individual prompts based
+on a given scenario and the number of prompts by the user.
+
+--- Page 21 ---
+MEVG: Multi-event Video Generation with Text-to-Video Models
+
+21
+
+C. Additional Analysis
+Analysis on Additional Cost. We have analyzed additional computation costs over the
+three prompts on a single NVIDIA GeForce
+RTX 3090. As shown in Fig. 2, we figure
+out that our method exhibits a marginal increase in memory usage (×1.02) and inference
+time (×1.41) in comparison to the base model,
+LVDM [16]. However, Gen-L-Video [43], which
+uses the same base model, requires signifiFig. 2: Analysis on additional cost
+cantly greater resources (×3.05 / ×1.81). Furthermore, despite T2V-Zero [25] generating only 8 frames per prompt instead of
+16 frames, our approach demonstrates comparable speed.
+Hyper-parameter Analysis. We present the analysis on the hyper-parameters
+δLFAI and δSGS as shown in Tab. 1. We report the automatic metrics (e.g. CLIPText and CLIP-Image) according to the variation of hyper-parameters, measured
+by five samples per scenario. Essentially, we observe that high values of δLFAI and
+δSGS demonstrate strong visual coherence but a decline in semantic alignment.
+Table 1: Effect of two independent hyper-parameters δLFAI and δSGS .
+
+δLFAI CLIP-Text CLIP-Image
+
+δSGS CLIP-Text CLIP-Image
+
+1
+10
+100
+500
+1000
+
+0.01
+0.1
+7
+15
+50
+
+30.399
+30.397
+30.275
+30.600
+30.674
+
+0.938
+0.939
+0.941
+0.944
+0.945
+
+30.836
+30.870
+30.674
+30.530
+30.102
+
+0.933
+0.935
+0.945
+0.941
+0.954
+
+D. Details of Evaluation
+Test Set Since there are no evaluation datasets for multi-text-based video
+generation reflecting multiple events, we construct a test set by referring to
+generative model literature communities. Some prompts are derived from the
+existing works [23, 25, 31]. To evaluate the quality of the generated videos, we
+design complex scenarios consisting of multiple prompts. Each scenario is divided
+into three categories: background transitions, object movements, and complex
+content changes. Scenarios consist of two, three, or four prompts while containing
+diverse objects and backgrounds in different domains. The test set is listed as
+follows:
+Background Transition
+– Scenario 1.
+1. The teddy bear goes under water in San Francisco.
+
+--- Page 22 ---
+22
+
+G. Oh et al.
+
+2. The teddy bear keeps swimming under the water with colorful fishes.
+3. A teddy bear is swimming under water.
+– Scenario 2.
+1. An astronaut in a white uniform is snowboarding in the snowy hill.
+2. An astronaut in a white uniform is surfing in the sea.
+3. An astronaut in a white uniform is surfing in the desert.
+– Scenario 3.
+1. A white butterfly sits on a purple flower.
+2. The color of the purple flower where the white butterfly sits turns red.
+3. A white butterfly is sitting on a red flower.
+– Scenario 4.
+1. The caterpillar is on the leaves.
+2. The caterpillar eats the leaves.
+3. The caterpillar ate all the leaves.
+– Scenario 5.
+1. The teddy bear is swimming under the sea.
+2. The teddy bear is playing with colorful fishes while swimming under the
+sea.
+3. The teddy bear is resting quietly among the coral reefs under the sea.
+4. Suddenly a shark appeared next to the teddy bear under the sea.
+– Scenario 6.
+1. A man runs the starry night road in Van Gogh style.
+2. A man runs the starry night road in Monet style.
+3. A man runs the starry night road in Picasso style.
+4. A man runs the starry night road in Da Vinci style.
+– Scenario 7.
+1. The whole beautiful night view of the city is shown.
+2. Heavy rain flood the city with beautiful night scenery and flood.
+3. The day dawns over the flooded city.
+– Scenario 8.
+1. Cherry blossoms bloom around the Japanese-style castle.
+2. Leaves fall around the Japanese-style castle.
+3. Snow falls around the Japanese-style castle.
+
+--- Page 23 ---
+MEVG: Multi-event Video Generation with Text-to-Video Models
+
+23
+
+4. Snow builds up in trees around the Japanese-style castle.
+– Scenario 9.
+1. The dog is standing on Times Square Street.
+2. The dog is standing on the Japanese street.
+3. The dog is standing on the China town.
+4. The dog is standing on the street in Korea.
+– Scenario 10.
+1. In spring, a white butterfly sit on a flower.
+2. In summer, a white butterfly sit on flower.
+3. In autumn, a white butterfly sit on flower.
+4. In winter, a white butterfly sit on flower.
+Object Motion
+– Scenario 11.
+1. Two men play tennis in the green gym.
+2. Two men playing tennis swing a racket in the green gym.
+3. A tennis ball passes between tw

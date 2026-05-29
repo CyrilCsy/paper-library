@@ -1,0 +1,1129 @@
+﻿--- Page 1 ---
+LivePhoto: Real Image Animation with Text-guided Motion Control
+Xi Chen1 Zhiheng Liu2 Mengting Chen2 Yutong Feng2
+Yu Liu2 Yujun Shen3 Hengshuang Zhao1
+
+arXiv:2312.02928v1 [cs.CV] 5 Dec 2023
+
+1
+
+2
+
+The University of Hong Kong
+
+Alibaba Group
+
+3
+
+Ant Group
+
+Reference Image
+
+“Kung Fu Panda is practicing Tai Chi.”
+
+Reference Image “Scenery of the Louvre, camera zooms in.”
+
+Reference Image
+
+“Pouring water into the glass.”
+
+Reference Image
+
+“Lightning and thunder in the night sky.”
+
+Reference Image
+
+“A Shiba Inu is running fast.”
+
+Reference Image
+
+“A Shiba Inu is wagging its tail.”
+
+Reference Image
+
+“This man gives a thumbs-up.” Intensity: 3
+
+Reference Image
+
+“This man gives a thumbs-up.” Intensity: 7
+
+Figure 1. Zero-shot real image animation with text control. Besides adequately decoding motion descriptions like actions and camera
+movements (row 1), LivePhoto could also conjure new contents from thin air (row 2). Meanwhile, LivePhoto is highly controllable,
+supporting users to customize the animation by inputting various texts (row 3) and adjusting the degree of motion intensity (row 4).
+
+Abstract
+
+considering the facts that (1) text can only describe motions
+roughly (e.g., regardless of the moving speed) and (2)
+text may include both content and motion descriptions,
+we introduce a motion intensity estimation module as well
+as a text re-weighting module to reduce the ambiguity of
+text-to-motion mapping. Empirical evidence suggests that
+our approach is capable of well decoding motion-related
+textual instructions into videos, such as actions, camera
+movements, or even conjuring new contents from thin air
+(e.g., pouring water into an empty glass). Interestingly,
+thanks to the proposed intensity learning mechanism, our
+system offers users an additional control signal (i.e., the
+motion intensity) besides text for video customization. The
+page of this project is here.
+
+Despite the recent progress in text-to-video generation,
+existing studies usually overlook the issue that only spatial
+contents but not temporal motions in synthesized videos are
+under the control of text. Towards such a challenge, this
+work presents a practical system, named LivePhoto, which
+allows users to animate an image of their interest with
+text descriptions. We first establish a strong baseline that
+helps a well-learned text-to-image generator (i.e., Stable
+Diffusion) take an image as a further input. We then equip
+the improved generator with a motion module for temporal modeling and propose a carefully designed training
+pipeline to better link texts and motions. In particular,
+1
+
+--- Page 2 ---
+1. Introduction
+
+conveniently. Another issue arises from the fact that the
+text contains both content and motion descriptions. The
+content descriptions translated by stable diffusion may not
+perfectly align with the reference image, while the image
+is prioritized for content control. Consequently, when
+the content descriptions are learned to be suppressed to
+mitigate conflicts, motion descriptions are simultaneously
+under-weighted. To address this concern, we propose
+text re-weighting, which learns to accentuate the motion
+descriptions, enabling the text to work compatibly with the
+image for better motion control.
+As shown in Fig. 1, equipped with motion intensity guidance and text re-weighting, LivePhoto demonstrates impressive abilities for text-guided motion control. LivePhoto
+is able to deal with real images from versatile domains and
+subjects, and adequately decodes the motion descriptions
+like actions and camera movements. Besides, it shows
+fantastic capacities of conjuring new contents from thin air,
+like “pouring water into a glass” or simulating “lightning
+and thunder”. In addition, with motion intensity guidance,
+LivePhoto supports users to customize the motion with the
+desired intensity.
+
+Image and video content synthesis has become a burgeoning topic with significant attention and broad real-world
+applications. Fueled by the diffusion model and extensive
+training data, image generation has witnessed notable advancements through powerful text-to-image models [4, 35,
+37, 46] and controllable downstream applications [6, 18, 23,
+24, 28, 36, 49]. In the realm of video generation, a more
+complex task requiring spatial and temporal modeling,
+text-to-video has steadily improved [2, 10, 19, 40, 47].
+Various works [3, 8, 22, 43, 45] also explore enhancing
+controllability with sequential inputs like optical flows,
+motion vectors, depth maps, etc.
+This work explores utilizing a real image as the initial
+frame to guide the “content” and employ the text to control
+the “motion” of the video. This topic holds promising
+potential for a wide range of applications, including meme
+generation, production advertisement, film making, etc.
+Previous image-to-video methods [5, 9, 15, 17, 25, 41, 48]
+mainly focus on specific subjects like humans or could only
+animate synthetic images. GEN-2 [34] and Pikalabs [33]
+animate real images with an optional text input, however,
+an overlooked issue is that the text could only enhance the
+content but usually fails to control the motions.
+Facing this challenge, we propose LivePhoto, an image
+animation framework that truly listens to the text instructions. We first establish a powerful image-to-video baseline.
+The initial step is to equip a text-to-image model (i,e.,
+Stable Diffusion) with the ability to refer to a real image.
+Specifically, we concatenate the image latent with input
+noise to provide pixel-level guidance. In addition, a content
+encoder is employed to extract image patch tokens, which
+are injected via cross-attention to guide the global identity.
+During inference, a noise inversion of the reference image
+is introduced to offer content priors. Afterward, following
+the contemporary methods [2, 10, 45], we freeze stable
+diffusion models and insert trainable motion layers to model
+the inter-frame temporal relations.
+Although the text branch is maintained in this strong
+image-to-video baseline, the model seldom listens to the
+text instructions. The generated videos usually remain
+nearly static, or sometimes exhibit overly intense movements, deviating from the text. We identify two key issues
+for the problem: firstly, the text is not sufficient to describe
+the desired motion. Phrases like “shaking the head” or
+“camera zooms in” lack important information like moving
+speed or action magnitude. Thus, a starting frame and
+a text may correspond to diverse motions with varying
+intensities. This ambiguity leads to difficulties in linking
+text and motion. Facing this challenge, we parameterize the
+motion intensity using a single coefficient, offering a supplementary condition. This approach eases the optimization
+and allows users to adjust motion intensity during inference
+
+2. Related Work
+Image animation. To realize content controllable video
+synthesis, image animation takes a reference image as content guidance. Most of the previous works [7, 38, 39, 50, 51]
+depend on another video as a source of motion, transferring
+the motion to the image with the same subject. Other works
+focus on specific categories like fluide [13, 26, 29] or nature
+objects [16, 21]. Make-it-Move [15] uses text control but it
+only manipulates simple geometries like cones and cubes.
+Recently, human pose transfer methods [5, 17, 42, 48]
+convert the human images to videos with extra controls
+like dense poses, depth maps, etc. VideoComposer [43]
+could take image and text as controls, however, the text
+shows limited controllability for the motion and it usually
+requires more controls like sketches and motion vectors.
+In general, existing work either requires more controls
+than text or focuses on a specific subject. In this work,
+we explore constructing a generalizable framework for
+universal domains and use the most flexible control (text)
+to customize the generated video.
+Text-to-video generation. Assisted by the diffusion
+model [11], the field of text-to-video has progressed rapidly.
+Early attempts [12, 40, 47] train the entire parameters,
+making the task resource-intensive. Recently, researchers
+have turned to leveraging the frozen weights of pre-trained
+text-to-image models tapping into robust priors. Tune-AVideo [45] inflates the text-to-video model and tuning attention modules to construct an inter-frame relationship with
+a one-shot setting. Align-Your-Lantens [2] inserts newly
+designed temporal layers into frozen text-to-image models
+2
+
+--- Page 3 ---
+Content Encoder
+
+ℰ
+Reference Image
+
+Reference Latent
+
+Pick First Frame
+
+Noise Latent
+Prior Inversion
+
+ℰ
+
+Concat
+
+Frame Embed
+Intensity Embed
+
+Noise Latent
+Motion
+Estimation
+Training Procedure Only
+
+B, F, C = 4, H, W
+
+Motion Intensity
+
+𝒟
+
+Reference Latent
+
+ℰ
+
+B, F, C = 10, H, W
+
+1 / 2 / 3 /…/ 10
+“A little boy in green
+clenches his fists."
+
+Text Encoder
+
+𝒟
+
+Latent Encoder
+Latent Decoder
+Stable Diffusion
+Motion Module
+
+Text Re-weight
+
+Figure 2. Overall pipeline of LivePhoto. Besides taking the reference image and text as input, LivePhoto leverages the motion intensity
+as a supplementary condition. The image and the motion intensity (from level 1 to 10) are obtained from the ground truth video during
+training and customized by users during inference. The reference latent is first extracted as local content guidance. We concatenate it
+with the noise latent, a frame embedding, and the intensity embedding. This 10-channel tensor is fed into the UNet for denoising. During
+inference, we use the inversion of the reference latent instead of the pure Gaussian to provide content priors. At the top, a content encoder
+extracts the visual tokens to provide global content guidance. At the bottom, we introduce text re-weighting, which learns to emphasize
+the motion-related part of the text embedding for better text-motion mapping. The visual and textual tokens are injected into the UNet via
+cross-attention. For the UNet, we freeze the pre-trained stable diffusion and insert motion modules to capture the inter-frame relations.
+Symbols of flames and snowflakes denote trainable and frozen parameters respectively.
+
+where the noise ϵ ∼ U([0, 1]), and ᾱt is a cumulative
+products of the noise coefficient αt at each step. Afterward,
+it learns to predict the added noise as:
+
+to make video generation. AnimateDiff [10] proposes to
+freeze the stable diffusion [35] blocks and add learnable
+motion modules, enabling the model to incorporate with
+subject-specific LoRAs [14] to make customized generation. A common issue is that the text could only control
+the spatial content of the video but exert limited effect for
+controlling the motions.
+
+Ez,c,ϵ,t (∥ϵθ (zt , c, t) − ϵ∥22 ).
+
+t is the diffusion timestep, c is the condition of text prompts.
+During inference, Stable Diffusion is able to recover an
+image from Gaussian noise step by step by predicting the
+noise added for each step. The denoising results are fed into
+a latent decoder to recover the colored images from latent
+representations as x̂0 = D(ẑ0 ).
+
+3. Method
+We first give a brief introduction to the preliminary knowledge for diffusion-based image generation in Sec. 3.1.
+Following that, our comprehensive pipeline is outlined in
+Sec. 3.2. Afterward, Sec. 3.3 delves into image content
+guidance to make the model refer to the image. In Sec. 3.4
+and Sec. 3.5, we elaborate on the novel designs of motion
+intensity guidance and text re-weighting to better align the
+text conditions with the video motion.
+
+3.2. Overall Pipeline
+The framework of LivePhoto is demonstrated in Fig. 2.
+The model takes a reference image, a text, and the motion
+intensity as input to synthesize the desired video. When the
+ground truth video is provided during training, the reference
+image is picked from the first frame, and the motion
+intensity is estimated from the video. During inference,
+users could customize the motion intensity or directly use
+the default level. LivePhoto utilizes a 4-channel tensor of
+zB×F ×C×H×W to represent the noise latent of the video,
+where the dimensions mean batch, frame, channel, height,
+and width, respectively. The reference latent is extracted
+by VAE encoder [20] to provide local content guidance.
+Meanwhile, the motion intensity is transformed to a 1channel intensity embedding. We concatenate the noise
+latent, the reference latent, the intensity embedding, and a
+frame embedding to form a 10-channel tensor for the input
+of UNet. At the same time, we use a content encoder to
+
+3.1. Preliminaries
+Text-to-image with diffusion models. Diffusion models [11] show promising abilities for both image and video
+generation. In this work, we opt for the widely used
+Stable Diffusion [35] as the base model, which adapts
+the denoising procedure in the latent space with lower
+computations. It initially employs VQ-VAE [20] as the
+latent encoder to transform an image x0 into the latent
+space: z0 = E(x0 ). During training, Stable Diffusion
+transforms the latent into Gaussian noise as follows:
+zt =
+
+√
+
+ᾱt z0 +
+
+√
+
+1 − ᾱt ϵ,
+
+(2)
+
+(1)
+3
+
+--- Page 4 ---
+extract the visual tokens of the reference image and inject
+them via cross-attention. A text re-weighting module is
+added after the text encoder [32], which learns to assign
+different weights to each part of the text to accentuate the
+motion descriptions of the text. Following modern text-tovideo models [2, 10]. We freeze the stable diffusion [35]
+blocks and add learnable motion modules [10] at each stage
+to capture the inter-frame relationships.
+
+parameterize the motion intensity using a single coefficient.
+Thus, the users could adjust the intensity conveniently by
+sliding a bar or directly using the default value.
+In our pursuit of parameterizing motion intensity, we
+experimented with various methods, such as calculating
+optical flow magnitude, computing mean square error between adjacent frames, and leveraging CLIP/DINO similarity between frames. Ultimately, we found that Structural
+Similarity (SSIM) [44] produces results the most aligned
+with human perceptions. Concretely, given a training video
+clip Xn with n frames, we determine its motion intensity I
+by computing the average value for the SSIM [44] between
+each adjacent frame as in Eq. (4) and Eq. (5):
+
+3.3. Image Content Guidance
+The most essential step is enabling LivePhoto to keep the
+identity of the reference image. Thus, we collect local
+guidance by concatenating the reference latent at the input.
+Moreover, we employ a content encoder to extract image
+tokens for global guidance. Additionally, we introduce the
+image inversion in the initial noise to offer content priors.
+Reference latent. We extract the reference latent and
+incorporate it at the UNet input to provide pixel-level
+guidance. Simultaneously, a frame embedding is introduced
+to impart temporal awareness to each frame. Thus, the first
+frame could totally trust the reference latent. Subsequent
+frames make degenerative references and exhibit distinct
+behavior. The frame embedding is represented as a 1channel map, with values linearly interpolated from zero
+(first frame) to one (last frame).
+Content encoder. The reference latent effectively guides
+the initial frames due to their higher pixel similarities.
+However, as content evolves in subsequent frames, understanding the image and providing high-level guidance
+becomes crucial. Drawing inspiration from [6], we employ
+a frozen DINOv2 [30] to extract patch tokens from the
+reference image. We add a learnable linear layer after
+DINOv2 to project these tokens, which are then injected
+into the UNet through newly added cross-attention layers.
+Prior inversion. Previous methods [19, 25, 27, 41, 45]
+prove that using an inverted noise of the reference image,
+rather than a pure Gaussian noise, could effectively provide
+appearance priors. During inference, we add the inversion
+of the reference latent r0 to the noise latent znT of frame n
+at the initial denoising step (T), following Eq. (3).
+z̃nT = αn · Inv(r0 ) + (1 − αn ) · znT ,
+
+n−2
+
+I(Xn ) =
+
+1X
+SSIM(xi , xi+1 ).
+n i=0
+
+SSIM(x, y) = l(x, y)α · c(x, y)β · s(x, y)γ .
+
+(4)
+(5)
+
+The structure similarity considers the luminance (l), contrast (c), and structure (s) differences between two images.
+By default, α, β, and γ are set as 1.
+We compute the motion intensity on the training data to
+determine the overall distribution and categorize the values
+into 10 levels. We create a 1-channel map filled with the
+level numbers and concatenate it with the input of UNet.
+During inference, users can utilize level 5 as the default
+intensity or adjust it between levels 1 to 10. Throughout
+this paper, unless specified, we use level 5 as the default.
+
+3.5. Text Re-weighting
+Another challenge in instructing video motions arises from
+the fact that the text prompt encompasses both “content
+descriptions” and “motion descriptions”. The “content
+descriptions”, translated by the frozen Stable Diffusion,
+often fail to perfectly align with the reference images. When
+we expect the text prompts to guide the motion, the “content
+descriptions” are inherently accentuated simultaneously.
+However, as the reference image provides superior content
+guidance, the effect of the whole text would be suppressed
+when content conflicts appear.
+To accentuate the part related to the “motion descriptions”, we explore manipulating the CLIP text embeddings. Recognizing that directly tuning the text encoder
+on limited samples might impact generalization, we assign
+different weights for each embedding without disrupting the
+CLIP feature space. Concretely, we add three trainable
+transformer layers and a linear projection layer after the
+CLIP text embeddings. Afterward, the predicted weights
+are normed from 0 to 1 with a sigmoid function. These
+weights are then multiplied with the corresponding text
+embeddings, thereby providing guidance that focuses on
+directing the motions. The comprehensive structure of the
+text re-weighting module and actual examples are depicted
+
+(3)
+
+where αn is a descending coefficient from the first frame
+to the last frame. We set αn as a linear interpolation from
+0.033 to 0.016 by default.
+
+3.4. Motion Intensity Estimation
+It is challenging to align the motion coherently with the
+text. We analyze the core issue is that the text lacks
+descriptions for the motion speed and magnitude. Thus,
+the same text leads to various motion intensities, creating
+ambiguity in the optimization process. To address this, we
+leverage the motion intensity as an additional condition. We
+4
+
+--- Page 5 ---
+Text Embeddings
+…
+
+The bear is dancing.
+0.52
+
+Transformer Encoder Layer
+Transformer Encoder Layer
+Transformer Encoder Layer
+
+0.79
+
+0.83
+
+0.85
+
+A Shiba Inu is sitting down on the ground.
+0.52
+
+0.65
+
+0.82
+
+0.86
+
+0.82
+
+0.59
+
+0.62
+
+0.61
+
+The hair of the woman flies in the wind.
+
+Linear
+
+0.50
+
+Sigmoid
+…
+
+0.69
+
+0.60
+
+0.55
+
+0.59
+
+0.73
+
+0.69 0.58
+
+Reference Latent
+
+0.72
+
+The little boy in red opens his mouth.
+0.52
+
+0.51
+
+0.60
+
+0.59 0.70
+
+0.78
+
+0.70
+
+0.76
+
+Multiplication
+
+Figure 3. Demonstrations for text re-weighting. We use three
+transformer encoder layers and a frame-specific linear layer to
+predict the weight for each text token. Examples are given on the
+right. In cases where multiple tokens correspond to a single word,
+we calculate the average weight for better visualization. The words
+with the maximum weight are underlined.
+
+Reference Latent + Content Encoder
+
+Reference Latent + Content Encoder + Prior Inversion
+
+Ref Image
+
+in Fig. 3. The numerical results prove that the module
+successfully learns to emphasize the “motion descriptions”.
+This allows signals from images and texts to integrate more
+effectively, resulting in stronger text-to-motion control.
+
+“The man is smiling.”
+
+Figure 4. Ablations for the image content guidance. Only
+concatenating the reference latent with the model input meets
+challenges in preserving the identity. The content encoder and
+prior inversion gradually enhance the performance.
+
+4. Experiments
+
+Table 1. Quatitative analysis for image content guidance. We
+assess frame consistency using DINO and CLIP scores. The
+content encoder and prior inversion bring steady improvements.
+
+4.1. Implementation Details
+Training configurations. We implement LivePhoto based
+on the frozen Stable Diffusion v1.5 [35]. The structure
+of our Motion Module aligns with AnimateDiff [10]. Our
+model is trained on the WebVID [1] dataset employing 8
+A100 GPUs. We sample training videos with 16 frames,
+perform center-cropping, and resize each frame to 256 ×
+256 pixels. For classifier-free guidance, we utilize a 0.5
+probability of dropping the text prompt during training. We
+only use a simple MSE loss to train the model.
+Evaluation protocols. We conduct user studies to compare
+our approach with previous methods and analyze our newly
+designed modules. To validate the generalization ability,
+we gather images from various domains encompassing
+real images and cartoons including humans, animals, still
+objects, natural sceneries, etc. For quantitative assessment,
+we utilize the validation set of WebVID [1]. The first
+frame and prompt are used as controls to generate videos.
+We measure the average CLIP similarity [32] and DINO
+similarity [30] between adjacent frames to evaluate the
+frame consistency following previous works [8, 43].
+
+Method
+Reference Latent
++ Content Encoder
+++ Prior Inversion
+
+DINO Score (↑)
+
+CLIP Score (↑)
+
+82.3
+85.9
+90.8
+
+91.7
+93.2
+95.2
+
+holistic identity information. Besides, the prior inversion
+further assists the generation of details. In Fig. 4, we
+illustrate the step-by-step integration of these elements. In
+row 1, the reference latent could only keep the identity
+for the starting frames as the contents are similar to the
+reference image. After adding the content encoder in
+row 2, the identity for the subsequent frames could be
+better preserved but the generation quality for the details
+is not satisfactory. With the inclusion of prior inversion, the
+overall quality sees further improvement. The quantitative
+results in Tab. 1 consistently confirm the effectiveness of
+each module. These three strategies serve as the core of our
+strong baseline for real image animation.
+Motion intensity guidance. As introduced in Sec. 3.4, we
+parameterize the motion intensity as a coefficient, and use
+it to indicate the motion speed and ranges. We carry out
+ablation studies in Fig. 5. The absence of motion intensity
+guidance often leads to static or erratic video outputs, as
+depicted in the first row. However, with the introduction
+of intensity guidance, the subsequent rows display varying
+motion levels, allowing for the production of high-quality
+videos with different motion ranges. Notably, lower levels
+like level 2 generate almost static videos, while higher levels
+like 10 occasionally produce overly vigorous motions.
+Users could directly use the default value (level 5) or tailor
+the intensity according to specific preferences.
+
+4.2. Ablation Studies
+In this section, we thoroughly analyze each of our proposed
+modules to substantiate their effectiveness. We first analyze
+how to add content guidance with the reference image,
+which is an essential part of our framework. Following that,
+we delve into the specifics of our newly introduced motion
+intensity guidance and text re-weighting.
+Image content guidance. As introduced in Sec. 3.2, we
+concatenate the reference latent with the input as the pixelwise guidance and use a content encoder to provide the
+5
+
+--- Page 6 ---
+Ref Image
+
+w/o Motion Intensity Guidance
+
+Ref Image
+
+w/o Motion Intensity Guidance
+
+Ref Image
+
+Motion Intensity Level: 2
+
+Ref Image
+
+Motion Intensity Level: 5
+
+Ref Image
+
+Motion Intensity Level: 7
+
+Ref Image
+
+Motion Intensity Level: 10
+
+Figure 5. Illustrations of motion intensity guidance. The prompt is “The bear is dancing”. Without intensity guidance, the generated
+video tends to either keep still or quickly become blurry. With the option to set varying intensity levels, users can finely control the motion
+range and speed. It should be noted that excessively high intensity levels might induce motion blur, as observed in the last case.
+Table 2. Quatitative analysis for novel modules. Frame
+consistency is measured by DINO and CLIP scores. Motion
+intensity guidance and text re-weighting both make contributions.
+Method
+
+w/o Text Re-weighting. Does not follow the text.
+
+LivePhoto
+w/o Motion Intensity
+w/o Text Re-weighting
+w/o Text Re-weighting. Becomes a “baby”.
+
+0.50
+
+0.57
+
+0.65
+
+0.70
+
+0.82
+
+0.87
+
+95.2
+94.8
+93.9
+
+4.3. Comparisons with Existing Alternatives
+
+w/ Text Re-weighting. Emphasizes “waving its hand.”
+The little yellow baby dinosaur is waving its hand.
+0.49
+
+CLIP Score (↑)
+
+90.8
+90.3
+90.1
+
+As visualized in the bottom of Fig. 6, text re-weighting
+elevates emphasis on motion descriptions like “waving its
+hand”. This approach enables our model to faithfully follow
+text-based instructions for motion details while upholding
+image-consistent content with the reference image.
+The quantitative results are listed in Tab. 2. The motion
+intensity guidance and text re-weighting both contribute to
+the frame consistency.
+
+w/o Text Re-weighting. Becomes a “dinosaur”.
+
+Ref Image
+
+DINO Score (↑)
+
+We compare LivePhoto with other works that support image
+animation with text control. VideoComposer [43] is a
+strong compositional generator covering various conditions
+including image and text. GEN-2 [34] and Pikalabs [33]
+are famous products that support image and text input.
+I2VGEN-XL [9], AnimateDiff-I2V [25], Talesofai [41] are
+open-source projects claiming similar abilities.
+Qualitative analysis. In Fig. 7, we compare LivePhoto
+with VideoComposer [43], Pikalabs [33], and GEN-2 [34]
+with representative examples. The selected examples cover
+animals, humans, cartoons, and natural scenarios. To reduce the randomness, we ran each method 8 times to select
+the best result for more fair comparisons. VideoComposer
+demonstrates proficiency in creating videos with significant
+motion. However, as not specifically designed for photo
+animation, the identity-keeping ability is not satisfactory.
+The identities of the reference images are lost, especially for
+
+0.57 0.86
+
+Figure 6. Ablation for text re-weighting. Without re-weighting,
+the model tends to either disregard the text entirely or fixate
+on content-related descriptions like “baby dinosaur”. When reweighting is applied, content descriptions are suppressed while
+motion-related details like “waving its hand” gain emphasis. The
+predicted weights of text re-weighting are marked at the bottom.
+
+Text re-weighting. In Fig. 6, we demonstrate the efficacy
+of text re-weighting. In the given examples, the content description “baby dinosaur” would conflict with the reference
+image. In the first three rows, without the assistance of reweighting, the frozen Stabel Diffusion tends to synthesize
+the content through its understanding of the text. Thus,
+the produced video tends to ignore the text and follow the
+reference image as in row 1. In other cases, it has risks
+of becoming a “baby” (row 2) or a “dinosaur” (row 3).
+6
+
+--- Page 7 ---
+VideoComp
+Pikalabs
+
+VideoComp
+
+GEN-2
+
+Pikalabs
+
+Ours
+
+GEN-2
+Ours
+
+“The bear is waving its hand.”
+
+Example 3
+
+“Baymax kicks the ball.”
+
+Example 5
+
+“Fire burns on the grass stack.”
+
+Example 2
+
+“The woman with her hair flying in the wind.”
+
+Example 4
+
+“The little yellow baby dinosaur is waving its hand.”
+
+Example 6
+
+“The volcano emits thick smoke from its crater.”
+
+Ours
+
+Ours
+
+GEN-2
+
+GEN-2
+
+Pikalabs
+
+Pikalabs
+
+VideoComp
+
+VideoComp
+
+Ours
+
+Ours
+
+GEN-2
+
+GEN-2
+
+Pikalabs
+
+Pikalabs
+
+VideoComp
+
+VideoComp
+
+Example 1
+
+Figure 7. Comparison results with other methods. We compare our LivePhoto with VideoComposer [43], Pikalabs [33], and GEN2 [34]. We select representative cases covering animal, human, cartoon, and natural scenery. To ensure a fair evaluation, we executed
+each method 8 times, presenting the most optimal outcomes for comparison. In each example, the reference image is displayed on the left,
+accompanied by the text prompt indicated at the bottom.
+
+7
+
+--- Page 8 ---
+VideoComposr [43]
+Pikalabs [33]
+GEN-2 [34]
+
+2.8
+3.9
+3.7
+
+3.5
+2.7
+2.5
+
+3.6
+4.6
+4.8
+
+3.6
+3.1
+3.3
+
+LivePhoto
+w/o text re-weighting
+w/o intensity guidance
+
+3.6
+3.5
+3.4
+
+4.7
+3.3
+2.5
+
+3.7
+3.6
+3.4
+
+3.9
+3.8
+3.5
+
+Ani-I2V
+Talesofai
+
+Cimage (↑) Ctext (↑) Qcont (↑) Qmot (↑)
+
+Ours
+
+Method
+
+I2VGEN-XL
+
+Table 3. Results of user study. We let annotators rate from four
+perspectives: Image consistency (Cimage ) evaluates the capability
+to maintain the identity of the reference image. Text consistency (Ctext ) measures the adherence to the textual descriptions
+in directing motion. Content quality (Qcont ) focuses on the interframe coherence and resolutions. Motion quality (Qmot ) evaluates
+appropriateness of motions.
+
+Ref Image
+
+less commonly seen subjects. Additionally, it shows a lack
+of adherence to the provided text instructions. Pikalabs [33]
+and GEN-2 [34] produce high-quality videos. However,
+as a trade-off, the generated videos own limited motion
+ranges. Although they support text as supplementary, the
+text descriptions seldom work. The motions are generally
+estimated from the content of the reference image.
+In contrast, LivePhoto adeptly preserves the identity
+of the reference image and generates consistent motions
+with the text instructions. It performs admirably across
+various domains, encompassing animals, humans, cartoon
+characters, and natural sceneries. It not only animates
+specific actions (examples 1-4) but also conjures new effects
+from thin air (examples 5-6).
+We also compare LivePhoto with open-sourced project
+in Fig. 8. I2VGEN-XL [9] does not set the reference
+image as the first frame but generates videos with similar
+semantics. AnimateDiff-I2V [25] and Talsofai [41] are
+extensions of AnimateDiff [10]. However, the former
+produces quasi-static videos. The latter fails to keep the
+image identity unless using SD-generated images with the
+same prompt and corresponding LoRA [14].
+User studies. Metrics like DINO/CLIP scores have limitations in thoroughly evaluating the model, thus, we carry out
+user studies. We ask the annotators to rate the generated
+videos from 4 perspectives: Image consistency evaluates
+the identity-keeping ability of the reference image. Text
+consistency measures whether the motion follows the text
+descriptions. Content quality considers the general quality
+of videos like the smoothness, the resolution, etc. Motion
+quality assesses the reasonableness of generated motion,
+encompassing aspects such as speed and deformation.
+We construct a benchmark with five tracks: humans,
+animals, cartoon characters, still objects, and natural sceneries. We collect 10 reference images per track and manually
+write 2 prompts per image. Considering the variations
+that commonly exist in video generation, each method is
+required to predict 8 results. Thus, we get 800 samples for
+
+“Poop emoji, the camera moves around from left to right.”
+
+Figure 8. Comparisons with open-sourced projects. I2VGENXL [9], AnimateDiff-I2V [25], and Talesofai [41] also support animating an image with text. However, I2VGEN-XL only generates
+“relevant” content with the reference image. The produced videos
+of AnimateDiff-I2V rarely move. Talesofai could not keep the
+identity for real photos.
+
+each method. We first ask 4 annotators to pick the best ones
+out of 8 predictions according to the aforementioned four
+perspectives. Then, we ask 10 annotators to further rate the
+filtered samples. As the projects [9, 25, 41] demonstrates
+evidently inferior results, we only compare LivePhoto with
+VideoComposer [43], GEN-2 [34], and Pikalabs [33].
+Results in Tab. 3 demonstrate that GEN-2[34] and Pikalabs own slightly better image consistency because their
+generated video seldom moves. LivePhoto shows significantly better text consistency and motion quality compared
+with other works. We admit that GEN-2 and Pikalabs
+own superior smoothness and resolution. We infer that
+they might collect much better training data and leverage
+super-resolution networks as post-processing. However,
+as an academic method, LivePhoto shows distinguishing
+advantages over mature products in certain aspects. We
+have reasons to believe its potential for future applications.
+
+5. Limitations
+LivePhoto is implemented on SD-1.5 with 256 × 256 output
+considering the training cost. We believe that with higher
+resolution and stronger models like SD-XL [31], the overall
+performance could be further improved significantly.
+
+6. Conclusion
+We introduce LivePhoto, a novel framework for photo
+animation with text control. We propose a strong baseline
+that gathers the image content guidance from the given
+image and utilizes motion intensity as a supplementary
+to better capture the desired motions.
+Besides, we
+propose text re-weighting to accentuate the motion
+descriptions. The whole pipeline illustrates impressive
+performance for generalized domains and instructions.
+
+8
+
+--- Page 9 ---
+References
+
+Fashion image-to-video synthesis via stable diffusion.
+arXiv:2304.06025, 2023. 2
+[18] Bahjat Kawar, Shiran Zada, Oran Lang, Omer Tov, Huiwen
+Chang, Tali Dekel, Inbar Mosseri, and Michal Irani. Imagic:
+Text-based real image editing with diffusion models. In
+CVPR, 2023. 2
+[19] Levon Khachatryan, Andranik Movsisyan, Vahram Tadevosyan, Roberto Henschel, Zhangyang Wang, Shant
+Navasardyan, and Humphrey Shi. Text2video-zero: Textto-image diffusion models are zero-shot video generators.
+arXiv:2303.13439, 2023. 2, 4
+[20] Diederik P Kingma and Max Welling. Auto-encoding
+variational bayes. arXiv:1312.6114, 2013. 3
+[21] Zhengqi Li, Richard Tucker, Noah Snavely, and Aleksander
+Holynski. Generative image dynamics. arXiv:2309.07906,
+2023. 2
+[22] Jun Hao Liew, Hanshu Yan, Jianfeng Zhang, Zhongcong Xu,
+and Jiashi Feng. Magicedit: High-fidelity and temporally
+coherent video editing. arXiv:2308.14749, 2023. 2
+[23] Zhiheng Liu, Ruili Feng, Kai Zhu, Yifei Zhang, Kecheng
+Zheng, Yu Liu, Deli Zhao, Jingren Zhou, and Yang Cao.
+Cones: Concept neurons in diffusion models for customized
+generation. arXiv:2303.05125, 2023. 2
+[24] Zhiheng Liu, Yifei Zhang, Yujun Shen, Kecheng Zheng, Kai
+Zhu, Ruili Feng, Yu Liu, Deli Zhao, Jingren Zhou, and Yang
+Cao. Cones 2: Customizable image synthesis with multiple
+subjects. arXiv:2305.19327, 2023. 2
+[25] Tyler Luan. Animatediff-i2v. https://github.com/
+ykk648/AnimateDiff-I2V, 2023. 2, 4, 6, 8
+[26] Aniruddha Mahapatra and Kuldeep Kulkarni. Controllable
+animation of fluid elements in still images. In CVPR, 2022.
+2
+[27] Chenlin Meng, Yutong He, Yang Song, Jiaming Song, Jiajun
+Wu, Jun-Yan Zhu, and Stefano Ermon. Sdedit: Guided
+image synthesis and editing with stochastic differential equations. arXiv:2108.01073, 2021. 4
+[28] Chong Mou, Xintao Wang, Liangbin Xie, Jian Zhang,
+Zhongang Qi, Ying Shan, and Xiaohu Qie. T2i-adapter:
+Learning adapters to dig out more controllable ability for
+text-to-image diffusion models. arXiv:2302.08453, 2023. 2
+[29] Makoto Okabe, Ken Anjyo, Takeo Igarashi, and Hans-Peter
+Seidel. Animating pictures of fluid using video examples. In
+Computer Graphics Forum. Wiley Online Library, 2009. 2
+[30] Maxime Oquab, Timothée Darcet, Théo Moutakanni, Huy
+Vo, Marc Szafraniec, Vasil Khalidov, Pierre Fernandez,
+Daniel Haziza, Francisco Massa, Alaaeldin El-Nouby, et al.
+Dinov2: Learning robust visual features without supervision.
+arXiv:2304.07193, 2023. 4, 5
+[31] Dustin Podell, Zion English, Kyle Lacey, Andreas
+Blattmann, Tim Dockhorn, Jonas Müller, Joe Penna, and
+Robin Rombach. Sdxl: Improving latent diffusion models
+for high-resolution image synthesis. arXiv:2307.01952,
+2023. 8
+[32] Alec Radford, Jong Wook Kim, Chris Hallacy, Aditya
+Ramesh, Gabriel Goh, Sandhini Agarwal, Girish Sastry,
+Amanda Askell, Pamela Mishkin, Jack Clark, et al. Learning
+transferable visual models from natural language supervision. In Int. Conf. Mach. Learn., 2021. 4, 5
+
+[1] Max Bain, Arsha Nagrani, Gül Varol, and Andrew Zisserman. Frozen in time: A joint video and image encoder for
+end-to-end retrieval. In ICCV, 2021. 5
+[2] Andreas Blattmann, Robin Rombach, Huan Ling, Tim Dockhorn, Seung Wook Kim, Sanja Fidler, and Karsten Kreis.
+Align your latents: High-resolution video synthesis with
+latent diffusion models. In CVPR, 2023. 2, 4
+[3] Wenhao Chai, Xun Guo, Gaoang Wang, and Yan Lu.
+Stablevideo: Text-driven consistency-aware diffusion video
+editing. In ICCV, 2023. 2
+[4] Junsong Chen, Jincheng Yu, Chongjian Ge, Lewei Yao,
+Enze Xie, Yue Wu, Zhongdao Wang, James Kwok, Ping
+Luo, Huchuan Lu, et al. Pixart: Fast training of diffusion transformer for photorealistic text-to-image synthesis.
+arXiv:2310.00426, 2023. 2
+[5] Tsai-Shien Chen, Chieh Hubert Lin, Hung-Yu Tseng,
+Tsung-Yi Lin, and Ming-Hsuan Yang.
+Motionconditioned diffusion model for controllable video synthesis.
+arXiv:2304.14404, 2023. 2
+[6] Xi Chen, Lianghua Huang, Yu Liu, Yujun Shen, Deli Zhao,
+and Hengshuang Zhao. Anydoor: Zero-shot object-level
+image customization. arXiv:2307.09481, 2023. 2, 4
+[7] Chia-Chi Cheng, Hung-Yu Chen, and Wei-Chen Chiu. Time
+flies: Animating a still image with time-lapse video as
+reference. In CVPR, 2020. 2
+[8] Patrick Esser, Johnathan Chiu, Parmida Atighehchian,
+Jonathan Granskog, and Anastasis Germanidis. Structure
+and content-guided video synthesis with diffusion models.
+In ICCV, 2023. 2, 5
+[9] Alibaba group. I2vgen-xl. https://modelscope.cn/
+models/damo/Video- to- Video/summary, 2023.
+2, 6, 8
+[10] Yuwei Guo, Ceyuan Yang, Anyi Rao, Yaohui Wang, Yu
+Qiao, Dahua Lin, and Bo Dai. Animatediff: Animate your
+personalized text-to-image diffusion models without specific
+tuning. arXiv:2307.04725, 2023. 2, 3, 4, 5, 8
+[11] Jonathan Ho, Ajay Jain, and Pieter Abbeel. Denoising
+diffusion probabilistic models. NeurIPS, 2020. 2, 3
+[12] Jonathan Ho, Tim Salimans, Alexey Gritsenko, William
+Chan, Mohammad Norouzi, and David J Fleet. Video
+diffusion models. arXiv:2204.03458, 2022. 2
+[13] Aleksander Holynski, Brian L Curless, Steven M Seitz, and
+Richard Szeliski. Animating pictures with eulerian motion
+fields. In CVPR, 2021. 2
+[14] Edward J Hu, Yelong Shen, Phillip Wallis, Zeyuan AllenZhu, Yuanzhi Li, Shean Wang, Lu Wang, and Weizhu
+Chen. Lora: Low-rank adaptation of large language models.
+arXiv:2106.09685, 2021. 3, 8
+[15] Yaosi Hu, Chong Luo, and Zhenzhong Chen. Make it
+move: controllable image-to-video generation with text
+descriptions. In CVPR, 2022. 2
+[16] Wei-Cih Jhou and Wen-Huang Cheng. Animating still landscape photographs through cloud motion creation. TMM,
+2015. 2
+[17] Johanna Karras, Aleksander Holynski, Ting-Chun
+Wang, and Ira Kemelmacher-Shlizerman.
+Dreampose:
+
+9
+
+--- Page 10 ---
+[48] Jianfeng Zhang, Hanshu Yan, Zhongcong Xu, Jiashi Feng,
+and Jun Hao Liew. Magicavatar: Multimodal avatar generation and animation. arXiv:2308.14748, 2023. 2
+[49] Lvmin Zhang and Maneesh Agrawala.
+Adding
+conditional control to text-to-image diffusion models.
+arXiv:2302.05543, 2023. 2
+[50] Jian Zhao and Hui Zhang. Thin-plate spline motion model
+for image animation. In CVPR, 2022. 2
+[51] Ruiqi Zhao, Tianyi Wu, and Guodong Guo. Sparse to dense
+motion transfer for face image animation. In ICCV, 2021. 2
+
+[33] PikaLabs reseachers. Pikalabs: An innovative text-to-video
+platform. https://www.pika.art/, 2023.10. 2, 6, 7,
+8
+[34] Runway reseachers. Gen-2: The next step forward for
+generative ai. https://research.runwayml.com/
+gen2, 2023.10. 2, 6, 7, 8
+[35] Robin Rombach, Andreas Blattmann, Dominik Lorenz,
+Patrick Esser, and Björn Ommer. High-resolution image
+synthesis with latent diffusion models. In IEEE Conf.
+Comput. Vis. Pattern Recog., 2022. 2, 3, 4, 5
+[36] Nataniel Ruiz, Yuanzhen Li, Varun Jampani, Yael Pritch,
+Michael Rubinstein, and Kfir Aberman. Dreambooth: Fine
+tuning text-to-image diffusion models for subject-driven
+generation. In IEEE Conf. Comput. Vis. Pattern Recog.,
+2023. 2
+[37] Chitwan Saharia, William Chan, Saurabh Saxena, Lala
+Li, Jay Whang, Emily L Denton, Kamyar Ghasemipour,
+Raphael Gontijo Lopes, Burcu Karagol Ayan, Tim Salimans,
+et al. Photorealistic text-to-image diffusion models with deep
+language understanding. Adv. Neural Inform. Process. Syst.,
+2022. 2
+[38] Yoav Shalev and Lior Wolf. Image animation with perturbed
+masks. In CVPR, 2022. 2
+[39] Aliaksandr Siarohin, Stéphane Lathuilière, Sergey Tulyakov,
+Elisa Ricci, and Nicu Sebe. First order motion model for
+image animation. NeurIPS, 2019. 2
+[40] Uriel Singer, Adam Polyak, Thomas Hayes, Xi Yin, Jie An,
+Songyang Zhang, Qiyuan Hu, Harry Yang, Oron Ashual,
+Oran Gafni, et al. Make-a-video: Text-to-video generation
+without text-video data. arXiv:2209.14792, 2022. 2
+[41] talesofai. Animatediff talesofai. https://github.
+com/talesofai/AnimateDiff, 2023. 2, 4, 6, 8
+[42] Tan Wang, Linjie Li, Kevin Lin, Chung-Ching Lin,
+Zhengyuan Yang, Hanwang Zhang, Zicheng Liu, and Lijuan
+Wang. Disco: Disentangled control for referring human
+dance generation in real world. arXiv:2307.00040, 2023. 2
+[43] Xiang Wang, Hangjie Yuan, Shiwei Zhang, Dayou Chen,
+Jiuniu Wang, Yingya Zhang, Yujun Shen, Deli Zhao, and
+Jingren Zhou. Videocomposer: Compositional video synthesis with motion controllability. NeurIPS, 2023. 2, 5, 6, 7,
+8
+[44] Zhou Wang, Alan C Bovik, Hamid R Sheikh, and Eero P
+Simoncelli. Image quality assessment: from error visibility
+to structural similarity. TIP, 2004. 4
+[45] Jay Zhangjie Wu, Yixiao Ge, Xintao Wang, Stan Weixian
+Lei, Yuchao Gu, Yufei Shi, Wynne Hsu, Ying Shan, Xiaohu
+Qie, and Mike Zheng Shou. Tune-a-video: One-shot tuning
+of image diffusion models for text-to-video generation. In
+ICCV, 2023. 2, 4
+[46] Zeyue Xue, Guanglu Song, Qiushan Guo, Boxiao Liu,
+Zhuofan Zong, Yu Liu, and Ping Luo. Raphael: Textto-image generation via large mixture of diffusion paths.
+NeurIPS, 2023. 2
+[47] Shengming Yin, Chenfei Wu, Huan Yang, Jianfeng Wang,
+Xiaodong Wang, Minheng Ni, Zhengyuan Yang, Linjie
+Li, Shuguang Liu, Fan Yang, et al. Nuwa-xl: Diffusion over diffusion for extremely long video generation.
+arXiv:2303.12346, 2023. 2
+
+10

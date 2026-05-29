@@ -1,0 +1,170 @@
+﻿[
+    {
+        "source_name":  "img-001-004.jpg",
+        "path":  "figures/2024-sana-efficient-high-resolution-image-synthesis-with-linear-diffusion-transformer/page_001_01_img-001-004.jpg",
+        "width":  "3072",
+        "page":  "1",
+        "height":  "4096"
+    },
+    {
+        "source_name":  "img-001-003.jpg",
+        "path":  "figures/2024-sana-efficient-high-resolution-image-synthesis-with-linear-diffusion-transformer/page_001_02_img-001-003.jpg",
+        "width":  "1888",
+        "page":  "1",
+        "height":  "896"
+    },
+    {
+        "source_name":  "img-010-085.jpg",
+        "path":  "figures/2024-sana-efficient-high-resolution-image-synthesis-with-linear-diffusion-transformer/page_010_01_img-010-085.jpg",
+        "width":  "2880",
+        "page":  "10",
+        "height":  "2160"
+    },
+    {
+        "source_name":  "img-010-091.jpg",
+        "path":  "figures/2024-sana-efficient-high-resolution-image-synthesis-with-linear-diffusion-transformer/page_010_02_img-010-091.jpg",
+        "width":  "1024",
+        "page":  "10",
+        "height":  "1024"
+    },
+    {
+        "source_name":  "img-017-097.jpg",
+        "path":  "figures/2024-sana-efficient-high-resolution-image-synthesis-with-linear-diffusion-transformer/page_017_01_img-017-097.jpg",
+        "width":  "1024",
+        "page":  "17",
+        "height":  "1024"
+    },
+    {
+        "source_name":  "img-017-098.jpg",
+        "path":  "figures/2024-sana-efficient-high-resolution-image-synthesis-with-linear-diffusion-transformer/page_017_02_img-017-098.jpg",
+        "width":  "1024",
+        "page":  "17",
+        "height":  "1024"
+    },
+    {
+        "source_name":  "img-019-099.jpg",
+        "path":  "figures/2024-sana-efficient-high-resolution-image-synthesis-with-linear-diffusion-transformer/page_019_01_img-019-099.jpg",
+        "width":  "728",
+        "page":  "19",
+        "height":  "408"
+    },
+    {
+        "source_name":  "img-002-013.png",
+        "path":  "figures/2024-sana-efficient-high-resolution-image-synthesis-with-linear-diffusion-transformer/page_002_01_img-002-013.png",
+        "width":  "3316",
+        "page":  "2",
+        "height":  "840"
+    },
+    {
+        "source_name":  "img-002-011.png",
+        "path":  "figures/2024-sana-efficient-high-resolution-image-synthesis-with-linear-diffusion-transformer/page_002_02_img-002-011.png",
+        "width":  "2100",
+        "page":  "2",
+        "height":  "648"
+    },
+    {
+        "source_name":  "img-020-105.jpg",
+        "path":  "figures/2024-sana-efficient-high-resolution-image-synthesis-with-linear-diffusion-transformer/page_020_01_img-020-105.jpg",
+        "width":  "1021",
+        "page":  "20",
+        "height":  "938"
+    },
+    {
+        "source_name":  "img-020-102.jpg",
+        "path":  "figures/2024-sana-efficient-high-resolution-image-synthesis-with-linear-diffusion-transformer/page_020_02_img-020-102.jpg",
+        "width":  "1021",
+        "page":  "20",
+        "height":  "924"
+    },
+    {
+        "source_name":  "img-021-110.jpg",
+        "path":  "figures/2024-sana-efficient-high-resolution-image-synthesis-with-linear-diffusion-transformer/page_021_01_img-021-110.jpg",
+        "width":  "1024",
+        "page":  "21",
+        "height":  "1024"
+    },
+    {
+        "source_name":  "img-021-111.jpg",
+        "path":  "figures/2024-sana-efficient-high-resolution-image-synthesis-with-linear-diffusion-transformer/page_021_02_img-021-111.jpg",
+        "width":  "1024",
+        "page":  "21",
+        "height":  "1024"
+    },
+    {
+        "source_name":  "img-022-117.jpg",
+        "path":  "figures/2024-sana-efficient-high-resolution-image-synthesis-with-linear-diffusion-transformer/page_022_01_img-022-117.jpg",
+        "width":  "2048",
+        "page":  "22",
+        "height":  "2048"
+    },
+    {
+        "source_name":  "img-022-118.jpg",
+        "path":  "figures/2024-sana-efficient-high-resolution-image-synthesis-with-linear-diffusion-transformer/page_022_02_img-022-118.jpg",
+        "width":  "1024",
+        "page":  "22",
+        "height":  "1024"
+    },
+    {
+        "source_name":  "img-023-124.jpg",
+        "path":  "figures/2024-sana-efficient-high-resolution-image-synthesis-with-linear-diffusion-transformer/page_023_01_img-023-124.jpg",
+        "width":  "3168",
+        "page":  "23",
+        "height":  "4256"
+    },
+    {
+        "source_name":  "img-023-132.jpg",
+        "path":  "figures/2024-sana-efficient-high-resolution-image-synthesis-with-linear-diffusion-transformer/page_023_02_img-023-132.jpg",
+        "width":  "1312",
+        "page":  "23",
+        "height":  "832"
+    },
+    {
+        "source_name":  "img-004-017.jpg",
+        "path":  "figures/2024-sana-efficient-high-resolution-image-synthesis-with-linear-diffusion-transformer/page_004_01_img-004-017.jpg",
+        "width":  "6000",
+        "page":  "4",
+        "height":  "3000"
+    },
+    {
+        "source_name":  "img-004-015.jpg",
+        "path":  "figures/2024-sana-efficient-high-resolution-image-synthesis-with-linear-diffusion-transformer/page_004_02_img-004-015.jpg",
+        "width":  "6000",
+        "page":  "4",
+        "height":  "3000"
+    },
+    {
+        "source_name":  "img-005-030.png",
+        "path":  "figures/2024-sana-efficient-high-resolution-image-synthesis-with-linear-diffusion-transformer/page_005_01_img-005-030.png",
+        "width":  "324",
+        "page":  "5",
+        "height":  "320"
+    },
+    {
+        "source_name":  "img-005-029.png",
+        "path":  "figures/2024-sana-efficient-high-resolution-image-synthesis-with-linear-diffusion-transformer/page_005_02_img-005-029.png",
+        "width":  "324",
+        "page":  "5",
+        "height":  "320"
+    },
+    {
+        "source_name":  "img-006-032.jpg",
+        "path":  "figures/2024-sana-efficient-high-resolution-image-synthesis-with-linear-diffusion-transformer/page_006_01_img-006-032.jpg",
+        "width":  "1962",
+        "page":  "6",
+        "height":  "556"
+    },
+    {
+        "source_name":  "img-007-084.png",
+        "path":  "figures/2024-sana-efficient-high-resolution-image-synthesis-with-linear-diffusion-transformer/page_007_01_img-007-084.png",
+        "width":  "982",
+        "page":  "7",
+        "height":  "564"
+    },
+    {
+        "source_name":  "img-001-002.jpg",
+        "path":  "figures/2024-sana-efficient-high-resolution-image-synthesis-with-linear-diffusion-transformer/page_001_03_img-001-002.jpg",
+        "width":  "2598",
+        "page":  "1",
+        "height":  "538"
+    }
+]

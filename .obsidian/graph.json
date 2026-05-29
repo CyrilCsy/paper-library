@@ -1,0 +1,58 @@
+{
+  "collapse-filter": true,
+  "search": "-path:literature/index -path:literature/unread -path:literature/read -path:literature/high-priority -path:literature/notes -path:literature/dataview -path:literature/papers/index -path:literature/maps/overview -path:literature/maps/topic-bridges -path:literature/maps/research-frontier -path:literature/years -path:literature/venues -path:knowledge/index -path:figures -path:extracted_text -path:docs -path:scripts -path:README",
+  "showTags": false,
+  "showAttachments": false,
+  "hideUnresolved": true,
+  "showOrphans": true,
+  "collapse-color-groups": true,
+  "colorGroups": [
+    {
+      "query": "path:literature/papers",
+      "color": {
+        "a": 1,
+        "rgb": 5142951
+      }
+    },
+    {
+      "query": "path:literature/fields",
+      "color": {
+        "a": 1,
+        "rgb": 5873999
+      }
+    },
+    {
+      "query": "path:literature/topics",
+      "color": {
+        "a": 1,
+        "rgb": 15896107
+      }
+    },
+    {
+      "query": "path:notes",
+      "color": {
+        "a": 1,
+        "rgb": 11565729
+      }
+    },
+    {
+      "query": "path:knowledge",
+      "color": {
+        "a": 1,
+        "rgb": 14767961
+      }
+    }
+  ],
+  "collapse-display": false,
+  "showArrow": false,
+  "textFadeMultiplier": 0,
+  "nodeSizeMultiplier": 1.00622328218512,
+  "lineSizeMultiplier": 0.75,
+  "collapse-forces": false,
+  "centerStrength": 0.0985465508707195,
+  "repelStrength": 8.36430724924628,
+  "linkStrength": 0.182063627773028,
+  "linkDistance": 90,
+  "scale": 0.4824894437013855,
+  "close": false
+}

@@ -1,0 +1,170 @@
+﻿[
+    {
+        "source_name":  "img-015-145.jpg",
+        "path":  "figures/2025-openvid-1m-a-large-scale-high-quality-dataset-for-text-to-video-generation/page_015_01_img-015-145.jpg",
+        "width":  "1280",
+        "page":  "15",
+        "height":  "890"
+    },
+    {
+        "source_name":  "img-015-174.jpg",
+        "path":  "figures/2025-openvid-1m-a-large-scale-high-quality-dataset-for-text-to-video-generation/page_015_02_img-015-174.jpg",
+        "width":  "1049",
+        "page":  "15",
+        "height":  "1079"
+    },
+    {
+        "source_name":  "img-016-217.jpg",
+        "path":  "figures/2025-openvid-1m-a-large-scale-high-quality-dataset-for-text-to-video-generation/page_016_01_img-016-217.jpg",
+        "width":  "1920",
+        "page":  "16",
+        "height":  "1080"
+    },
+    {
+        "source_name":  "img-016-218.jpg",
+        "path":  "figures/2025-openvid-1m-a-large-scale-high-quality-dataset-for-text-to-video-generation/page_016_02_img-016-218.jpg",
+        "width":  "1920",
+        "page":  "16",
+        "height":  "1080"
+    },
+    {
+        "source_name":  "img-017-240.jpg",
+        "path":  "figures/2025-openvid-1m-a-large-scale-high-quality-dataset-for-text-to-video-generation/page_017_01_img-017-240.jpg",
+        "width":  "3423",
+        "page":  "17",
+        "height":  "3600"
+    },
+    {
+        "source_name":  "img-017-239.jpg",
+        "path":  "figures/2025-openvid-1m-a-large-scale-high-quality-dataset-for-text-to-video-generation/page_017_02_img-017-239.jpg",
+        "width":  "2484",
+        "page":  "17",
+        "height":  "2741"
+    },
+    {
+        "source_name":  "img-018-248.jpg",
+        "path":  "figures/2025-openvid-1m-a-large-scale-high-quality-dataset-for-text-to-video-generation/page_018_01_img-018-248.jpg",
+        "width":  "1088",
+        "page":  "18",
+        "height":  "612"
+    },
+    {
+        "source_name":  "img-018-247.jpg",
+        "path":  "figures/2025-openvid-1m-a-large-scale-high-quality-dataset-for-text-to-video-generation/page_018_02_img-018-247.jpg",
+        "width":  "1088",
+        "page":  "18",
+        "height":  "612"
+    },
+    {
+        "source_name":  "img-019-268.jpg",
+        "path":  "figures/2025-openvid-1m-a-large-scale-high-quality-dataset-for-text-to-video-generation/page_019_01_img-019-268.jpg",
+        "width":  "1088",
+        "page":  "19",
+        "height":  "612"
+    },
+    {
+        "source_name":  "img-019-267.jpg",
+        "path":  "figures/2025-openvid-1m-a-large-scale-high-quality-dataset-for-text-to-video-generation/page_019_02_img-019-267.jpg",
+        "width":  "1088",
+        "page":  "19",
+        "height":  "612"
+    },
+    {
+        "source_name":  "img-002-009.jpg",
+        "path":  "figures/2025-openvid-1m-a-large-scale-high-quality-dataset-for-text-to-video-generation/page_002_01_img-002-009.jpg",
+        "width":  "1280",
+        "page":  "2",
+        "height":  "720"
+    },
+    {
+        "source_name":  "img-002-008.jpg",
+        "path":  "figures/2025-openvid-1m-a-large-scale-high-quality-dataset-for-text-to-video-generation/page_002_02_img-002-008.jpg",
+        "width":  "1280",
+        "page":  "2",
+        "height":  "720"
+    },
+    {
+        "source_name":  "img-020-288.jpg",
+        "path":  "figures/2025-openvid-1m-a-large-scale-high-quality-dataset-for-text-to-video-generation/page_020_01_img-020-288.jpg",
+        "width":  "1088",
+        "page":  "20",
+        "height":  "612"
+    },
+    {
+        "source_name":  "img-020-287.jpg",
+        "path":  "figures/2025-openvid-1m-a-large-scale-high-quality-dataset-for-text-to-video-generation/page_020_02_img-020-287.jpg",
+        "width":  "1088",
+        "page":  "20",
+        "height":  "612"
+    },
+    {
+        "source_name":  "img-004-024.jpg",
+        "path":  "figures/2025-openvid-1m-a-large-scale-high-quality-dataset-for-text-to-video-generation/page_004_01_img-004-024.jpg",
+        "width":  "2806",
+        "page":  "4",
+        "height":  "1843"
+    },
+    {
+        "source_name":  "img-004-025.jpg",
+        "path":  "figures/2025-openvid-1m-a-large-scale-high-quality-dataset-for-text-to-video-generation/page_004_02_img-004-025.jpg",
+        "width":  "2118",
+        "page":  "4",
+        "height":  "1843"
+    },
+    {
+        "source_name":  "img-007-077.png",
+        "path":  "figures/2025-openvid-1m-a-large-scale-high-quality-dataset-for-text-to-video-generation/page_007_01_img-007-077.png",
+        "width":  "2445",
+        "page":  "7",
+        "height":  "552"
+    },
+    {
+        "source_name":  "img-007-076.png",
+        "path":  "figures/2025-openvid-1m-a-large-scale-high-quality-dataset-for-text-to-video-generation/page_007_02_img-007-076.png",
+        "width":  "2445",
+        "page":  "7",
+        "height":  "552"
+    },
+    {
+        "source_name":  "img-009-103.jpg",
+        "path":  "figures/2025-openvid-1m-a-large-scale-high-quality-dataset-for-text-to-video-generation/page_009_01_img-009-103.jpg",
+        "width":  "1088",
+        "page":  "9",
+        "height":  "612"
+    },
+    {
+        "source_name":  "img-009-104.jpg",
+        "path":  "figures/2025-openvid-1m-a-large-scale-high-quality-dataset-for-text-to-video-generation/page_009_02_img-009-104.jpg",
+        "width":  "1088",
+        "page":  "9",
+        "height":  "612"
+    },
+    {
+        "source_name":  "img-017-241.jpg",
+        "path":  "figures/2025-openvid-1m-a-large-scale-high-quality-dataset-for-text-to-video-generation/page_017_03_img-017-241.jpg",
+        "width":  "2484",
+        "page":  "17",
+        "height":  "2741"
+    },
+    {
+        "source_name":  "img-016-221.jpg",
+        "path":  "figures/2025-openvid-1m-a-large-scale-high-quality-dataset-for-text-to-video-generation/page_016_03_img-016-221.jpg",
+        "width":  "1920",
+        "page":  "16",
+        "height":  "1080"
+    },
+    {
+        "source_name":  "img-016-222.jpg",
+        "path":  "figures/2025-openvid-1m-a-large-scale-high-quality-dataset-for-text-to-video-generation/page_016_04_img-016-222.jpg",
+        "width":  "1920",
+        "page":  "16",
+        "height":  "1080"
+    },
+    {
+        "source_name":  "img-016-216.jpg",
+        "path":  "figures/2025-openvid-1m-a-large-scale-high-quality-dataset-for-text-to-video-generation/page_016_05_img-016-216.jpg",
+        "width":  "1920",
+        "page":  "16",
+        "height":  "1080"
+    }
+]

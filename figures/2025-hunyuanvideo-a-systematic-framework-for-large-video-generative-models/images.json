@@ -1,0 +1,177 @@
+﻿[
+    {
+        "source_name":  "img-001-002.jpg",
+        "path":  "figures/2025-hunyuanvideo-a-systematic-framework-for-large-video-generative-models/page_001_01_img-001-002.jpg",
+        "width":  "960",
+        "page":  "1",
+        "height":  "960"
+    },
+    {
+        "source_name":  "img-001-003.jpg",
+        "path":  "figures/2025-hunyuanvideo-a-systematic-framework-for-large-video-generative-models/page_001_02_img-001-003.jpg",
+        "width":  "1280",
+        "page":  "1",
+        "height":  "720"
+    },
+    {
+        "source_name":  "img-012-128.jpg",
+        "path":  "figures/2025-hunyuanvideo-a-systematic-framework-for-large-video-generative-models/page_012_01_img-012-128.jpg",
+        "width":  "928",
+        "page":  "12",
+        "height":  "512"
+    },
+    {
+        "source_name":  "img-012-127.jpg",
+        "path":  "figures/2025-hunyuanvideo-a-systematic-framework-for-large-video-generative-models/page_012_02_img-012-127.jpg",
+        "width":  "928",
+        "page":  "12",
+        "height":  "512"
+    },
+    {
+        "source_name":  "img-014-133.png",
+        "path":  "figures/2025-hunyuanvideo-a-systematic-framework-for-large-video-generative-models/page_014_01_img-014-133.png",
+        "width":  "1224",
+        "page":  "14",
+        "height":  "180"
+    },
+    {
+        "source_name":  "img-014-132.png",
+        "path":  "figures/2025-hunyuanvideo-a-systematic-framework-for-large-video-generative-models/page_014_02_img-014-132.png",
+        "width":  "1224",
+        "page":  "14",
+        "height":  "180"
+    },
+    {
+        "source_name":  "img-015-136.png",
+        "path":  "figures/2025-hunyuanvideo-a-systematic-framework-for-large-video-generative-models/page_015_01_img-015-136.png",
+        "width":  "1224",
+        "page":  "15",
+        "height":  "732"
+    },
+    {
+        "source_name":  "img-015-137.png",
+        "path":  "figures/2025-hunyuanvideo-a-systematic-framework-for-large-video-generative-models/page_015_02_img-015-137.png",
+        "width":  "1224",
+        "page":  "15",
+        "height":  "732"
+    },
+    {
+        "source_name":  "img-016-141.jpg",
+        "path":  "figures/2025-hunyuanvideo-a-systematic-framework-for-large-video-generative-models/page_016_01_img-016-141.jpg",
+        "width":  "3234",
+        "page":  "16",
+        "height":  "912"
+    },
+    {
+        "source_name":  "img-016-142.jpg",
+        "path":  "figures/2025-hunyuanvideo-a-systematic-framework-for-large-video-generative-models/page_016_02_img-016-142.jpg",
+        "width":  "3232",
+        "page":  "16",
+        "height":  "910"
+    },
+    {
+        "source_name":  "img-017-144.png",
+        "path":  "figures/2025-hunyuanvideo-a-systematic-framework-for-large-video-generative-models/page_017_01_img-017-144.png",
+        "width":  "1224",
+        "page":  "17",
+        "height":  "552"
+    },
+    {
+        "source_name":  "img-017-143.png",
+        "path":  "figures/2025-hunyuanvideo-a-systematic-framework-for-large-video-generative-models/page_017_02_img-017-143.png",
+        "width":  "1224",
+        "page":  "17",
+        "height":  "552"
+    },
+    {
+        "source_name":  "img-018-148.png",
+        "path":  "figures/2025-hunyuanvideo-a-systematic-framework-for-large-video-generative-models/page_018_01_img-018-148.png",
+        "width":  "1224",
+        "page":  "18",
+        "height":  "356"
+    },
+    {
+        "source_name":  "img-018-147.png",
+        "path":  "figures/2025-hunyuanvideo-a-systematic-framework-for-large-video-generative-models/page_018_02_img-018-147.png",
+        "width":  "1224",
+        "page":  "18",
+        "height":  "356"
+    },
+    {
+        "source_name":  "img-019-149.png",
+        "path":  "figures/2025-hunyuanvideo-a-systematic-framework-for-large-video-generative-models/page_019_01_img-019-149.png",
+        "width":  "3427",
+        "page":  "19",
+        "height":  "1869"
+    },
+    {
+        "source_name":  "img-002-005.png",
+        "path":  "figures/2025-hunyuanvideo-a-systematic-framework-for-large-video-generative-models/page_002_01_img-002-005.png",
+        "width":  "1000",
+        "page":  "2",
+        "height":  "600"
+    },
+    {
+        "source_name":  "img-002-004.png",
+        "path":  "figures/2025-hunyuanvideo-a-systematic-framework-for-large-video-generative-models/page_002_02_img-002-004.png",
+        "width":  "1000",
+        "page":  "2",
+        "height":  "600"
+    },
+    {
+        "source_name":  "img-020-151.png",
+        "path":  "figures/2025-hunyuanvideo-a-systematic-framework-for-large-video-generative-models/page_020_01_img-020-151.png",
+        "width":  "1948",
+        "page":  "20",
+        "height":  "2169"
+    },
+    {
+        "source_name":  "img-020-150.png",
+        "path":  "figures/2025-hunyuanvideo-a-systematic-framework-for-large-video-generative-models/page_020_02_img-020-150.png",
+        "width":  "1948",
+        "page":  "20",
+        "height":  "2169"
+    },
+    {
+        "source_name":  "img-021-154.png",
+        "path":  "figures/2025-hunyuanvideo-a-systematic-framework-for-large-video-generative-models/page_021_01_img-021-154.png",
+        "width":  "4079",
+        "page":  "21",
+        "height":  "2035"
+    },
+    {
+        "source_name":  "img-021-153.png",
+        "path":  "figures/2025-hunyuanvideo-a-systematic-framework-for-large-video-generative-models/page_021_02_img-021-153.png",
+        "width":  "4079",
+        "page":  "21",
+        "height":  "2035"
+    },
+    {
+        "source_name":  "img-023-173.jpg",
+        "path":  "figures/2025-hunyuanvideo-a-systematic-framework-for-large-video-generative-models/page_023_01_img-023-173.jpg",
+        "width":  "1870",
+        "page":  "23",
+        "height":  "572"
+    },
+    {
+        "source_name":  "img-023-172.jpg",
+        "path":  "figures/2025-hunyuanvideo-a-systematic-framework-for-large-video-generative-models/page_023_02_img-023-172.jpg",
+        "width":  "1870",
+        "page":  "23",
+        "height":  "468"
+    },
+    {
+        "source_name":  "img-024-175.jpg",
+        "path":  "figures/2025-hunyuanvideo-a-systematic-framework-for-large-video-generative-models/page_024_01_img-024-175.jpg",
+        "width":  "1299",
+        "page":  "24",
+        "height":  "530"
+    },
+    {
+        "source_name":  "img-024-174.jpg",
+        "path":  "figures/2025-hunyuanvideo-a-systematic-framework-for-large-video-generative-models/page_024_02_img-024-174.jpg",
+        "width":  "1299",
+        "page":  "24",
+        "height":  "530"
+    }
+]

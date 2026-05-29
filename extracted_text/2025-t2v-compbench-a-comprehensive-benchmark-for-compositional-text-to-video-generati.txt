@@ -1,0 +1,1139 @@
+--- Page 1 ---
+T2V-CompBench: A Comprehensive Benchmark for
+Compositional Text-to-video Generation
+Kaiyue Sun1 Kaiyi Huang1 Xian Liu2 Yue Wu3 Zihan Xu1 Zhenguo Li3 Xihui Liu1*
+1The University of Hong Kong 2The Chinese University of Hong Kong 3Huawei Noah’s Ark Lab
+Project Page Evaluation Code Leaderboard
+ColorShapeTextureHuman Attr changeCombinedLeftRightAboveBelowin front ofbehindHorizontalVerticalCommonUncommonPhysical
+Social
+Single objectMulti objects
+Consistent attribute binding
+Dynamic attribute binding
+Spatial relationships
+Motion binding
+Action binding
+Object interactions
+Generative numeracyDetection-based evaluation metrics
+MLLM-based evaluation metrics
+Tracking-based evaluation metrics
+The video shows...
+Describe the video.
+score:3, explanation: this video...
+Evaluate the alignment with text.
+Background motionForeground motion
+Object locations
+Object depths (3D relationships)
+d1d2score
+score
+(b) Evaluation Metrics(c) Benchmarking T2V Models(a) Prompt Suite
+Figure 1. Overview of T2V-CompBench. We propose T2V -CompBench, a comprehensive compositional text-to-video generation bench-
+mark that consists of seven categories: consistent attribute binding, dynamic attribute binding, spatial relationships, motion binding,
+action binding, object interactions, and generative numeracy . We propose three types of evaluation metrics: MLLM-based, Detection-
+based, and Tracking-based metrics. We benchmark various text-to-video generation models.
+Abstract
+Text-to-video (T2V) generative models have advanced sig-
+niﬁcantly, yet their ability to compose different objects, at-
+tributes, actions, and motions into a video remains unex-
+plored. Previous text-to-video benchmarks also neglect this
+important ability for evaluation. In this work, we conduct
+the ﬁrst systematic study on compositional text-to-video
+generation. We propose T2V-CompBench, the ﬁrst bench-
+mark tailored for compositional text-to-video generation.
+T2V-CompBench encompasses diverse aspects of compo-
+sitionality, including consistent attribute binding, dynamic
+attribute binding, spatial relationships, motion binding, ac-
+tion binding, object interactions, and generative numer-
+acy. We further carefully design evaluation metrics of mul-
+timodal large language model (MLLM)-based, detection-
+based, and tracking-based metrics, which can better re-
+ﬂect the compositional text-to-video generation quality of
+*Corresponding author
+seven proposed categories with 1400 text prompts. The ef-
+fectiveness of the proposed metrics is veriﬁed by correla-
+tion with human evaluations. We also benchmark various
+text-to-video generative models and conduct in-depth anal-
+ysis across different models and various compositional cat-
+egories. We ﬁnd that compositional text-to-video generation
+is highly challenging for current models, and we hope our
+attempt could shed light on future research in this direction.
+1. Introduction
+Text-to-video (T2V) generation has made signiﬁcant
+progress in recent years [ 2, 3, 14, 17, 18, 23, 43, 60, 65,
+66, 72, 73, 84]. However, generating videos that accurately
+depict multiple objects, attributes, and motions in complex
+and dynamic scenes based on ﬁne-grained text prompts re-
+mains a challenging task. In this work, we aim to conduct a
+systematic study on compositional T2V generation.
+This CVPR paper is the Open Access version, provided by the Computer Vision Foundation.
+Except for this watermark, it is identical to the accepted version;
+the final published version of the proceedings is available on IEEE Xplore.
+8406
+
+--- Page 2 ---
+Compositional text-to-image (T2I) generation, which
+aims to compose multiple objects, attributes, and their re-
+lationships into complex scenes, has been widely studied
+in previous methods [ 5, 11, 37]. Benchmarks for compo-
+sitional T2I generation [ 20] have been accepted as an im-
+portant evaluation dimension for T2I foundation models [ 1,
+7, 10]. However, most works on T2V generation focus on
+generating videos with simple text prompts, neglecting the
+signiﬁcance of compositional T2V generation. Moreover,
+existing video generation benchmarks [22, 40, 41] primarily
+evaluate video quality, motion quality, and text-video align-
+ment with single-object text prompts, and benchmarks for
+compositional T2V generation have not been systematically
+and extensively investigated in previous literature.
+To this end, we propose T2V -CompBench, a comprehen-
+sive benchmark designed for compositional text-to-video
+generation. This benchmark emphasizes compositionality
+through multiple objects with attributes, quantities, actions,
+interactions, and spatio-temporal dynamics. We design a
+prompt suite composed of seven categories, where each cat-
+egory consists of 200 text prompts for video generation.
+When constructing the prompts, we emphasize temporal dy-
+namics and guarantee that each prompt contains at least one
+active verb. The seven categories are as follows and ex-
+amples are illustrated in Figure 2: 1) Consistent attribute
+binding. This category includes prompts featuring two ob-
+jects, each with a distinct attribute. The attributes associ-
+ated with each object are consistent throughout the video.
+2) Dynamic attribute binding. Prompts in this category
+focus on dynamic attribute binding for objects, where the at-
+tributes change over time. 3) Spatial relationships. In this
+category, each prompt mentions two objects and speciﬁes
+the spatial relationship between them. 4) Motion binding.
+Each prompt in this category includes one or two objects
+and a moving direction is speciﬁed for each object. 5) Ac-
+tion binding. Prompts in this category describe two objects,
+each with a distinct action. 6) Object interactions. This
+category tests the models’ abilities to understand and gener-
+ate dynamic interactions between multiple objects, includ-
+ing physical interactions and social interactions. 7) Gener-
+ative numeracy. The text prompts in this category include
+one or two objects with quantities ranging from one to eight.
+Another challenge lies in the evaluation of composi-
+tional T2V generation. Commonly used metrics, such as In-
+ception Score [ 59], Fr ´echet Inception Distance (FID) [ 16],
+Fr´echet Video Distance (FVD) [ 64], and CLIPScore [ 15],
+cannot fully reﬂect the compositionality of T2V generation
+models. Evaluating compositionality of T2V models re-
+quires a ﬁne-grained understanding of not only objects and
+attributes in each frame but also the dynamics and motions
+across frames. It is orders of magnitude more complex than
+evaluating T2I models.
+To address this challenge, we take temporal dynam-
+ics across frames into consideration and design different
+metrics to evaluate different categories in the benchmark.
+Speciﬁcally, we design multimodal large language model
+(MLLM)-based metrics, including image-LLM and video-
+LLM, to evaluate consistent attribute binding, dynamic at-
+tribute binding, action binding, and object interactions. We
+devise detection-based metrics to evaluate spatial relation-
+ships and generative numeracy. We propose tracking-based
+metrics to evaluate motion binding. The effectiveness of
+our proposed metrics is validated by computing the corre-
+lation with human evaluations. We evaluate various T2V
+generation models on T2V -CompBench and analyze their
+performances on different compositional categories.
+The contributions of our paper are three-fold. 1) To our
+best knowledge, we are the ﬁrst to propose a benchmark for
+compositional text-to-video generation, featuring seven cat-
+egories with 1400 text prompts. 2) We propose comprehen-
+sive evaluation metrics for the seven categories and verify
+their effectiveness through correlation with human evalua-
+tions. 3) We benchmark various T2V models and provide a
+systematic study with insightful analysis, which will inspire
+future research in this direction.
+2. Related Work
+2.1. Text-to-video Generation.
+Recently, diffusion models have gained signiﬁcant attention
+in the ﬁeld of text-to-video generation, building on the suc-
+cess of text-to-image models. Existing text-to-video dif-
+fusion models can be roughly categorized into two types,
+namely the diffusion unet-based [ 3, 14, 17, 23, 43, 60, 66,
+84] and the Diffusion Transformer (DiT)-based [ 19, 34, 44,
+62, 80]. In this paper, we evaluate a list of text-to-video
+diffusion models, including ofﬁcially open-sourced mod-
+els and commercial models. This comprehensive evalua-
+tion ensures the diversity of T2V approaches and provides
+insights into their capabilities.
+2.2. Compositional Text-to-image Generation.
+Recent studies have delved into compositionality in text-to-
+image generation [5, 8, 11, 12, 20, 21, 25, 31–33, 37, 39, 45,
+50, 51, 55, 67, 70, 74, 78]. T2I-CompBench [ 20] proposed
+the ﬁrst comprehensive benchmark to evaluate composition-
+ality in text-to-image models, focusing on attributes bind-
+ing, relationships, and complex compositions. While these
+evaluations are tailored exclusively to the image domain,
+video generation requires a deeper consideration of spatio-
+temporal dynamics. Our work pioneers the development of
+benchmarking compositional text-to-video generation.
+2.3. Benchmarks for Text-to-video Generation.
+Previous methods evaluate T2V models from the perspec-
+tives of video quality and text-video alignment. For video
+8407
+
+--- Page 3 ---
+Consistent Attribute Binding
+Example Prompt
+A blue car drives past a white picket fence on a sunny day.
+Generated Video by T2V Models
+MLLM-based metric: Grid-LLaVA
+Dynamic Attribute Binding
+Example Prompt
+A timelapse of a leaf transitioning from green to bright red as autumn progresses.
+Generated Video by T2V Models
+MLLM-based metric: D-LLaVA
+Spatial Relationships
+Example Prompt
+A toddler walking on the left of a dog in a park.
+Generated Video by T2V Models
+Detection-based metric: G-Dino
+Motion Binding
+Example Prompt
+A robot walking from right to left across the moon with a car driving left to right in the background.
+Generated Video by T2V Models
+Tracking-based metric: DOT
+Action Binding
+Example Prompt
+A penguin waddles on the ice, a camel treks by.
+Generated Video by T2V Models
+MLLM-based metric: Grid-LLaVA
+Object Interactions
+Example Prompt
+Two cars collide at an intersection.
+Generated Video by T2V Models
+MLLM-based metric: Grid-LLaVA
+Generative Numeracy
+Example Prompt
+Seven oranges roll on the counter near three cups.
+Generated Video by T2V Models
+Detection-based metric: G-Dino
+Category Information
+Prompt:“A penguin waddles on the ice, a camel treks by.”
+{"object 1":"a penguin","action 1":"a penguin waddles on the ice","object 2":"a camel","action 2":"a camel treks by"}
+Meta data
+Obj. number = 2Action verbs = 2Common/uncommon object-activity pairs
+Human verification
+Nouns: ["dog", "cat"…]. Verbs: ["walk", "run"…]
+Generate prompts featuring two objects, each with a natural active verb. Select the two sets of object nouns and verbs from the lists provide above.
+Figure 2. Prompt generation process and illustrations of the seven compositional categories.
+quality, the commonly used metrics, such as Inception
+Score (IS) [ 59] and Fr ´echet Video Distance (FVD) [ 64] are
+adopted to evaluate video diversity and ﬁdelity. For text-
+video alignment, CLIPScore [ 15] is proposed to measure
+the similarity of the text prompt and the frames, using the
+pre-trained CLIP model [ 54]. However, these metrics are
+not suitable for complex compositional prompts.
+Recent T2V benchmarks design text prompts and met-
+rics to evaluate the video quality and text-video alignment
+in open domains. VBench [ 22] and EvalCrafter [ 40] pro-
+pose comprehensive benchmarks to evaluate T2V models
+from various perspectives. FETV [ 41] categorizes prompts
+based on major content, controllable attributes, and prompt
+complexity. ChronoMagic-Bench [82] evaluates T2V mod-
+els’ ability in generating time-lapse videos. However, most
+prompts provided in these benchmarks focus on single-
+object rather than composition of multiple objects. Al-
+though some of them involves evaluation dimensions that
+include multiple objects, their prompts, such as “a bird and
+a cat” in multiple objects dimension of VBench [22], do not
+reﬂect the dynamics in videos. ChronoMagic-Bench [ 82]
+emphasizes the generation of natural metamorphic time-
+lapse videos, while excluding unnatural attribute-change
+videos, which are also essential for evaluating the design
+and creative capabilities of T2V models. A comprehensive
+deﬁnition of compositionality in text-to-video generation is
+currently lacking in the literature. Therefore, we introduce
+the ﬁrst benchmark for evaluating compositional text-to-
+video generation, with tailored evaluation metrics that we
+validate through extensive human correlation studies.
+3. Benchmark Construction
+3.1. Problem Deﬁnition and Categorization
+Compositional T2V generation has not been comprehen-
+sively explored in prior research. Therefore, we ﬁrst clarify
+the problem deﬁnition and categorization. Previous litera-
+ture on compositional T2I generation [ 5, 11, 20, 21] typi-
+cally focuses on attribute binding, object relationships and
+numeracy. However, in the context of compositional T2V ,
+we need to consider the composition in both spatial and
+temporal dimensions. In spatial dimension, we follow the
+framework established in compositional T2I and deﬁne cat-
+egories of consistent attribute binding, spatial relationships,
+and numeracy. These categories require the generated video
+frames consistently align with the text prompts. In tempo-
+ral dimension, we introduce categories of dynamic attribute
+binding, motion binding, action binding, and object inter-
+actions. These categories speciﬁcally address whether the
+temporal dynamics of the video follow the text prompts.
+3.2. Prompt Categories
+Consistent Attribute Binding . We deﬁne four attribute
+types including color, shape, texture and human-related at-
+tributes. Each prompt has two objects, two attributes, and
+at least one active verb, with each attribute associates with a
+speciﬁc object. Among all the prompts, 20% are challeng-
+ing and uncommon cases that aim to test the model’s ability
+to generalize to unseen combinations, such as “Blue apple
+bouncing near a pink tree”.
+Dynamic Attribute Binding . This category focuses on
+how the attributes of objects change over time. For exam-
+ple, “Green avocado darkens to black as the tomato beside
+it ripens to a deep red”. We deﬁne four aspects inspired
+by TempCompass [42]: color & light change, shape & size
+change, texture change, and combined change. 80% of the
+prompts describe common attribute changes in real world,
+while the remaining 20% are less common or artiﬁcial.
+Spatial Relationships . This category requires the model
+to generate two objects with speciﬁed spatial relationships
+across the video. We deﬁne six types of spatial relation-
+ships: “on the left of”, “on the right of”, “above”, “below”,
+8408
+
+--- Page 4 ---
+020406080100120140160180200
+Consist-attrDynamic-attrSpatialMotionActionInteractionNumeracy
+图表标题
+系列1系列2系列3系列4系列5系列6系列7
+Color: 100
+Shape: 40
+Texture: 40Human: 20
+Color: 70
+Shape: 50
+Texture: 30
+Combined: 50
+Left: 34
+Right: 34
+Above: 33
+Below: 33
+In front: 33
+Behind: 33
+1-obj left: 40
+1-obj right: 40
+1-obj up: 40
+1-obj down: 40
+2-obj left & right: 202-obj up & down: 20Common: 160
+Uncommon: 40
+Physical: 100
+Social: 100
+=2: 30
+=3: 30
+=4: 30
+=5: 30
+2-obj: 50
+>6: 20
+=1: 10
+Figure 3. Illustration of prompt categories. We show the number
+of prompts for the seven categories and their respective subgroups.
+“in front of”, and “behind”. We construct contrastive “left”
+and “right” prompts by inverting the spatial relationships.
+Motion Binding . Prompts in this category contain one or
+two objects with speciﬁed moving directions. We deﬁne
+four types of moving directions: “leftwards”, “rightwards”,
+“upwards” and “downwards”. Each object in the prompt
+moves in one of the directions.
+Action Binding. This category tests the models’ abilities to
+bind actions to corresponding objects when there are multi-
+ple objects and multiple actions described. Two objects are
+involved in the prompt, each engaged in an activity. This
+category contains 80% common prompts and 20% uncom-
+mon prompts, which can be further divided into uncommon
+object coexistence and uncommon object-activity pairs.
+Object Interactions. This category tests the models’ abil-
+ities to understand and generate dynamic interactions, in-
+cluding physical interactions causing motion change or state
+change and social interactions between live entities.
+Generative Numeracy. To analyze the models’ abilities to
+generate correct number of objects, we construct prompts
+in quantity groups. In each group, the same noun is paired
+with different quantities, such as “Three/Four/Five dogs
+run through a ﬁeld”. We also construct prompts with two
+objects like “Three/Four cows graze in the pasture, and
+one/two sheep wanders/wander nearby”.
+We prepare 200 prompts for each of the seven categories.
+Figure 3 displays the prompt subgroups along with the num-
+ber of prompts associated with each subgroup.
+3.3. Prompt Suite Generation
+V ocabulary Construction. To ensure our prompt suite
+matches the real users’ desires, we analyze 1.67 million
+unique T2V prompts collected by VidProM [ 68] from Pika
+Discord channels. We use WordNet [ 46] to identify the
+metaclasses of nouns and verbs, and their distributions are
+visualized in Figure 4. Firstly, as our goal is to benchmark
+T2V models ability to compose multiple concepts, we fo-
+cus on entry-level objects that occur with high frequency.
+Secondly, to facilitate evaluation, we select “thing” cate-
+gories, i.e. individual objects that can be easily labeled with
+bounding boxes like “car” and “dog”, rather than “stuff”
+categories, i.e. objects without clear boundaries such as
+“sky”. Based on these principles, we analyze real user
+prompts to identify high-frequency nouns that belong to
+speciﬁc metaclasses, such as person, artifacts (e.g., con-
+veyance and device), animals, plants, and food. We iden-
+tify high-frequency verbs and attributes in a similar way. To
+account for the inherent dynamics of videos, we pair ob-
+jects with vibrant active verbs, like those in the metaclasses
+of “move”, “travel”, and “act”, while avoiding static ac-
+tions like “think”, “see” or “rest”. Attributes are also drawn
+from relevant metaclasses. In total, we collected 260 ob-
+ject nouns, 200 active verbs, and 80 attributes. The prompt
+suite is generated using these words that reﬂect the interests
+of real users. For more details about word selection, please
+refer to Appendix A.1.
+(a) Meta types of nouns (b) Meta types of verbs
+Figure 4. Word distributions of real-user prompts. We show the
+types of nouns and verbs of real-user prompts from VidProM [ 68].
+Prompt Generation. Since we evaluate compositional
+T2V generation, the prompts must follow speciﬁed require-
+ments. As a result, sourcing from existing dataset cap-
+tions is challenging. Additionally, using a ﬁxed template
+for automatic prompt generation is not ideal, since real user
+prompts are free-form and diverse. Therefore, we have
+opted to use GPT-4 [ 48] to generate the prompts. The
+200 prompts in each category are generated by prompting
+GPT-4 [ 48] with the collected high-frequency words and
+the speciﬁc requirements for the category. Although not all
+prompt categories are designed to evaluate actions and mo-
+tions, we ensure all prompts in our benchmark contain at
+least one active verb, to prevent the T2V model from gen-
+erating static videos. GPT-4 [ 48] returns both prompts and
+the parsed meta information for the prompts that facilitates
+evaluation. All the generated prompts are veriﬁed by hu-
+mans, and improper prompts are ﬁltered out. Please refer
+to Appendix A.2 for more details about prompt generation.
+Please refer to Appendix A.3 for prompt suite statistics.
+4. Evaluation Metrics
+We observe that the evaluation metrics for compositional
+T2I generation [ 20, 21, 75] cannot be directly adopted for
+8409
+
+--- Page 5 ---
+evaluating compositional T2V generation, due to the large
+number of frames and complex spatio-temporal dynamics
+in videos. Most T2V models generate short videos in 2-5
+seconds. For a fair comparison, we evenly extract 6 frames
+for MLLM-based evaluation, and 16 frames for detection-
+based evaluation, and sample the videos to a frame rate of
+8 frames per second (FPS) for tracking-based evaluation.
+Figure 1(b) illustrates the three types of evaluation metrics.
+4.1. MLLM-based Evaluation Metrics
+Multimodal Large Language Models (MLLMs) have shown
+great capabilities in understanding complex contents in im-
+ages and videos [36, 48, 76, 85]. Inspired by their effective-
+ness in video understanding, we exploit MLLMs as evalua-
+tors for compositional text-to-video generation.
+Video LLM-based metrics for consistent attribute bind-
+ing, action binding, and object interactions. To han-
+dle the complex spatio-temporal information in videos,
+we investigate video LLMs such as Image Grid [ 24] and
+PLLaV A [76], which extends LLaV A [36] from single im-
+age input to multi-frame input. We empirically ﬁnd that
+Image Grid performs better than PLLaV A in our composi-
+tional categories. Speciﬁcally, Image Grid uniformly sam-
+ples 6 frames from the video to form an image grid as the
+input to LLaV A [ 36]. Additionally, we boost the ability
+of video LLMs and avoid hallucinations by the chain-of-
+thought mechanism [71] along with disentangled questions,
+where we ﬁrst ask the MLLM to describe the video content,
+and then request it to grade each aspect of the text-video
+alignment. We denote this metric as Grid-LLaVA.
+• To evaluate consistent attribute binding, we use GPT-
+4[ 48] to parse the prompts into disentangled phrases
+(e.g., “A blue car drives past a white picket fence on a
+sunny day” is parsed into “a blue car” and “a white picket
+fence”), and then ask the video LLM to assign a matching
+grade for each disentangled phrase in relation to the Im-
+age Grid. The grades for both phrases are combined and
+averaged to produce a ﬁnal numerical score.
+• For action binding, we use GPT-4 [ 48] to extract objects
+and their actions. For example, given the prompt “A dog
+runs through a ﬁeld while a cat climbs a tree”, we extract
+the phrases “a dog”, “a dog runs through a ﬁeld”, “a cat”,
+and “a cat climbs a tree”. We then ask the video LLM to
+check the presence of objects and evaluate the alignment
+between each object-action pair and the Image Grid.
+• For object interactions, we prompt the video LLM to
+check the presence of objects and then assess the qual-
+ity of the interaction based on the text. This evaluation
+includes examining dynamics of objects, the overall de-
+velopment and outcome of the interaction process.
+Image LLM-based metrics for dynamic attribute bind-
+ing. Evaluating dynamic attribute binding, such as the
+prompt “Bright green leaf wilts to brown” is challenging as
+it requires a deep understanding of dynamic changes across
+frames. We ﬁnd that current video LLMs perform poorly in
+this area, so we develop a frame-by-frame evaluation met-
+ric based on an Image LLM such as LLaV A [36]. We utilize
+GPT-4 [48] to parse the initial state (“bright green leaf”) and
+the ﬁnal state (“brown leaf”). We then prompt LLaV A [ 36]
+to score the alignment between each frame and each of the
+two states. Our scoring function is designed to encourage
+the ﬁrst frame to align with the initial state, the last frame to
+align with the ﬁnal state, and the middle frames to be in be-
+tween. We denote this metric as D-LLaVA. For more details
+about using MLLMs as evaluation metrics, please refer to
+Appendix C.2.
+4.2. Detection-based Evaluation Metrics
+Most vision-language models face difﬁculties with spatial
+and numeracy-related understandings. So we introduce the
+object detection model GroundingDINO ( G-Dino)[ 38] to
+detect objects for each frame, ﬁlter out duplicate bounding
+boxes with high intersection-over-union (IoU), and then de-
+ﬁne rule-based metrics based on the object detection results.
+2D Spatial Relationships. For 2D spatial relationships
+including “left”, “right”, “above”, and “below”, we de-
+ﬁne rule-based metrics for each frame similar to T2I-
+CompBench [20]. Speciﬁcally, for each pair of objects, we
+denote their centers as (x1,y 1) and (x2,y 2), respectively.
+The ﬁrst object is on the left of the second object if x1 <x 2,
+and |x1 x2| > |y1 y2|. The rule is similar for other
+2D spatial relationships. If there is more than one pair of
+objects in a frame, we select the most probable one based
+on their IoU and conﬁdence scores. The per-frame score is
+(1 IoU) if there is an object pair that satisﬁes the relation-
+ship, or 0 if no object pair satisﬁes the relationship. The
+video-level score is the average of per-frame scores.
+3D Spatial Relationships. 3D spatial relationships (“in
+front of”, “behind”) cannot be identiﬁed by purely 2D
+bounding boxes. With the 2D boxes detected by Ground-
+ingDINO [38], we further leverage Segment Anything [ 26]
+to predict masks of the speciﬁed objects and then leverage
+Depth Anything [ 77] to predict depth maps. The depth of
+an object is deﬁned as the average depth values of the pix-
+els inside the object mask. We deﬁne per-frame score based
+on the IoU and relative depth between two objects, and the
+video-level score is the average of per-frame scores.
+Generative Numeracy. To evaluate generative numeracy,
+we count the number of objects detected for each object
+class. If the detected quantity matches the number in text
+prompt, we assign a score of 1 for that object class. Oth-
+erwise, we assign a score of 0. The frame-level score is
+calculated as the average score of all object classes, and the
+video-level score is the average of all frames.
+8410
+
+--- Page 6 ---
+4.3. Tracking-based Evaluation Metrics
+The evaluation metric for motion binding aims to identify
+the moving direction of objects in videos. However, in
+many cases, object motions are entangled with camera mo-
+tions, making it difﬁcult to determine the true direction of
+an object’s movement. In videos, the actual moving direc-
+tion of an object is the relative moving direction between
+the foreground object and the background. Therefore, we
+introduce a tracking-based method to determine the mov-
+ing directions of the foreground and background separately.
+Speciﬁcally, we use GroundingSAM [ 56] to obtain masks
+for the foreground objects and the background. Then, we
+apply DOT [ 47] to track points in both the foreground and
+background throughout the video. We compute the average
+motion vectors for the points in both the foreground and
+background, and the difference between these two vectors
+gives us the actual moving direction of the object. The ﬁnal
+score reﬂects whether this actual moving direction aligns
+with the motion described in the text prompts. We denote
+this metric as DOT.
+5. Experiments
+5.1. Evaluated Text-to-video Models
+We evaluate the performance of 23 T2V models on T2V -
+CompBench, including 17 open-source models and 6 com-
+mercial models. For more details of the evaluated models,
+please refer to Appendix B.1.
+To organize the T2V models, we categorize them into
+ﬁve groups: 1) DiT-based models: Latte [ 44], Open-Sora
+1.1 and 1.2 [ 19], Open-Sora-Plan v1.0.0 and v1.3.0 [ 34],
+CogVideoX-5B [ 80] and Mochi [ 62]. Models with the
+same foundation model: 2) ModelScope [ 66], Zero-
+Scope [61], and L VD [33]; 3) AnimateDiff [13] and Magic-
+Time [81]; 4) Videocrafter2 [6], VideoTetris [63], Vico [79],
+and T2V -Turbo-V2 [30].1 5) Commercial models: Pika-
+1.0 [ 52], Gen-2 [ 57], Gen-3 [ 58], Dreamina 1.2 [ 4],
+PixV erse-V3 [53], and Kling-1.0 [ 27].
+We follow the ofﬁcial default implementations of these
+T2V models in evaluation, please refer to Appendix B.2.
+5.2. Evaluation Metrics
+Conventional Metrics. We compare our proposed metrics
+with ﬁve metrics widely used in previous studies: 1) CLIP-
+Score [15] (denoted as CLIP) calculates the cosine similar-
+ity between CLIP text and image embeddings. 2) BLIP-
+CLIP [ 5] (denoted as B-CLIP) applies BLIP [ 28] to gen-
+erate captions for images, and then calculates the text-text
+cosine similarity between the CLIP embeddings of captions
+and input prompts. 3) BLIP-BLEU [ 40] (denoted as B-
+BLEU) employs BLIP2 [ 29] for caption generation, then
+1Show-1 [83] and videocrafter2 [6] are concurrent diffusion unet-based
+models, so we place them together.
+calculates the BLEU [ 49] similarity between the captions
+and input prompts. Here, we use the same implementation
+as EvalCrafter [40], which averages ﬁve captions generated
+by BLIP2 [ 29]. 4) BLIP-VQA [ 20] (denoted as B-VQA)
+leverages the visual question answering (VQA) ability of
+BLIP2 [ 28] to evaluate the text-image alignment, focusing
+speciﬁcally on attribute binding. The video-level scores of
+these metrics are calculated by averaging across all frames.
+We also include 5) ViCLIP score [22], which measures text-
+video alignment by calculating the similarity between text
+and video features extracted by ViCLIP model [ 69].
+In addition, VPEval [ 9] introduces detection-based met-
+rics using GroundingDINO [ 38] to evaluate spatial re-
+lationships in T2I generation. VideoDirectorGPT [ 35]
+adapts VPEval [ 9] to evaluate object movement direction
+in videos by obtaining the object locations in the ﬁrst and
+last frames. Therefore, we include the detection-based met-
+rics from VPEval [ 9]: 6) VPEval-S, and from VideoDirec-
+torGPT [35]: 7) M-GDino, as compared metrics to evaluate
+the spatial relationships and motion binding in our bench-
+mark. Similarly, VPEval-S is adapted for T2V evaluation
+by averaging the scores over all frames.
+Our Proposed Metrics. As introduced in Section 4, the
+image LLM-based metric D-LLaVA is designed to evalu-
+ate dynamic attribute binding. The detection-based met-
+ric G-Dino is designed for spatial relationships and numer-
+acy. The tracking-based metric DOT is designed for motion
+binding. Additionally, we test the video LLM-based met-
+rics Grid-LLaVA and PLLaVA for all categories. We also
+test the image LLM-based metric LLaVA, which evaluates
+the text-video alignment on a frame basis for all categories
+except dynamic attribute binding and motion binding.
+In next section, we identify the best metric for each cat-
+egory by analyzing the correlation between results given by
+these metrics and human annotators.
+5.3. Human Evaluation Correlation Analysis
+In this section, we conduct human evaluations and compute
+the correlation between scores from automatic metrics and
+humans to identify the best metric for each category.
+Human Evaluation. For the human evaluation of each cat-
+egory, we randomly select 15 prompts out of 200 prompts
+and use 6 T2V models to generate a total of 90 videos. Ad-
+ditionally, we include 10 ground truth videos for dynamic
+attribute binding and 11 for object interactions. The total
+number of videos for human evaluation is 651. We em-
+ploy the platform of Amazon Mechanical Turk, where we
+ask three annotators to score the text-video alignment for
+each video. We then average across the three scores for
+each text-video pair and calculate the correlation between
+these human scores and the automatic evaluation scores
+with Kendall’s ⌧ and Spearman’s ⇢. For more details about
+human evaluation, please refer Appendix E.
+8411
+
+--- Page 7 ---
+Metric Consist-attr Dynamic-attr Spatial Motion Action Interaction Numeracy
+⌧(") ⇢(") ⌧(") ⇢(") ⌧(") ⇢(") ⌧(") ⇢(") ⌧(") ⇢(") ⌧(") ⇢(") ⌧(") ⇢(")
+conventional metrics
+CLIP 0.3667 0.48590.00960.01401 0.2395 0.3343 0.1381 0.1818 0.2796 0.3799 0.1187 0.1587 0.0560 0.0821
+B-CLIP 0.2609 0.3562 0.2100 0.2917 0.1247 0.16470.05820.0889 0.0915 0.1246 0.1455 0.2103 0.0694 0.0829
+B-BLEU 0.2030 0.2777 0.0854 0.1041 0.1006 0.13960.14500.1978 0.2505 0.3577 0.1040 0.1479 0.1275 0.1770
+B-VQA 0.5194 0.6964
+ViCLIP 0.4520 0.6116 0.0079 0.0074 0.2257 0.3222 0.0834 0.1144 0.2481 0.3361 0.2308 0.3229 0.1036 0.1421
+MLLM-based metrics
+PLLaV A 0.2715 0.3105 0.1845 0.22010.12520.1509 0.0401 0.0498 0.4326 0.50660.22330.2607 0.2253 0.3142
+LLaV A 0.6373 0.7461 0.4258 0.5332 0.5272 0.6714 0.4213 0.5358 0.3212 0.4540
+Grid-LLaV A (ours) 0.6636 0.78930.1435 0.1678 0.4815 0.5763 0.1349 0.16190.5969 0.7353 0.4557 0.59250.2266 0.2809
+D-LLaV A (ours) 0.4362 0.5061
+detection-based metrics
+VPEval-S 0.3137 0.3853
+M-GDino 0.2059 0.2306
+G-Dino (ours) 0.5769 0.7057 0.4063 0.5378
+tracking-based metric
+DOT (ours) 0.4523 0.5366
+Table 1. The correlation between automatic evaluations and human evaluations. Our proposed evaluation metrics show enhanced
+performance in Kendall’s ⌧ and Spearman’s ⇢.
+Comparisons across Evaluation Metrics. The correla-
+tion results are presented in Table 1. These results validate
+the effectiveness of our proposed metrics, which are high-
+lighted in bold. Speciﬁcally, Grid-LLaV A excels in con-
+sistent attribute binding, action binding and object interac-
+tions, D-LLaV A is the best for dynamic attribute binding,
+G-Dino is the top metric for spatial relationships and gen-
+erative numeracy, and DOT is the most reliable for motion
+binding. Although Grid-LLaV A is the top metric for three
+categories, its performance is marginally inferior to those
+best metrics in other categories. LLaV A performs reason-
+ably well across all the categories it evaluates, which reveals
+its abilities in capturing attributes, spatial layout, numeracy
+and object relationships. It falls short compared to Grid-
+LLaV A in action binding and object interactions. This is be-
+cause Grid-LLaV A has the advantage of analyzing multiple
+frames simultaneously, which allows it to account for tem-
+poral changes rather than relying solely on a static frame.
+Please refer to Appendix C.1 for limitations of existing met-
+rics and robustness of our proposed metrics.
+5.4. Quantitative Evaluation
+The performance of the models in T2V -CompBench evalu-
+ated by our proposed metrics is shown in Table 2. A com-
+parison of different models reveals the following ﬁndings:
+#1: Evolution of T2V Models. Earlier models prioritize
+single-frame visual quality, while later models focus more
+on inter-frame dynamics and motion quality. For exam-
+ple, VideoCrafter2 [6] uses synthesized high-quality images
+to improve aesthetics and object composition, resulting in
+strong performance both for itself and for models adapted
+from it in consistent attribute binding, action binding, and
+object interaction. On the other hand, later models such as
+CogVideoX-5B [80] and T2V -Turbo-V2 [30] use either spe-
+cial architecture for large motion generation or motion guid-
+ance from training datasets, so they perform better in cate-
+gories requiring temporal dynamics such as motion binding.
+#2: Adapted Models. Models adapted from
+VideoCrafter2 [ 6], including VideoTetris [ 63], Vico [ 79],
+and T2V -Turbo-V2 [ 30], improves in most categories.
+MagicTime [ 81] shows a signiﬁcant improvement in
+dynamic attribute binding compared to AnimateDiff [ 13].
+L VD [33] demonstrates enhancements in almost all cate-
+gories compared to ModelScope [ 66]. Its design, which
+leverages LLM-guided layout planning, allows it to achieve
+high accuracy in understanding spatial relationships and
+motion directions. However, its performance in other
+categories like dynamic attributes and numeracy is still
+restricted by its base model.
+5.5. Qualitative Evaluation
+The challenging cases for the seven compositional cate-
+gories are illustrated in Figure 28 and 29, with the difﬁculty
+level decreasing from top to bottom rows. Figure 28 shows
+example videos from open-source models, while Figure 29
+shows those from commercial models. In our evaluation of
+various categories, we identify the following insights:
+#1: Dynamic Attribute Binding is the most challenging
+category. As shown in row #1 of Figure 28 and 29, the
+evaluated T2V models tend to focus on certain keywords
+in the prompts, but overlook the required transitions in at-
+tributes. Consequently, they usually generate ﬁxed objects
+or attributes that do not have any change through the video.
+#2: T2V models struggle with generating correct spa-
+tial relationships, motion directions, and quantities. The
+second most challenging categories include spatial relation-
+ships, motion binding, and numeracy (rows #4, #3, and #2
+in Figure 28 and 29). In spatial relationships, most T2V
+models struggle to differentiate between locality terms such
+as “left” and “right”, resulting in random spatial layouts in
+the generated videos. The issue is even more pronounced
+in motion binding, where models can hardly ever under-
+8412
+
+--- Page 8 ---
+Model Release Consist-attr Dynamic-attr Spatial Motion Action Interaction Numeracy
+Metric yy-mm Grid-LLaV A D-LLaV A G-Dino DOT Grid-LLaV A Grid-LLaV A G-Dino
+diffusion unet-based
+ModelScope [66] 23-03 0.5148 0.0161 0.4118 0.2408 0.3639 0.4613 0.1986
+ZeroScope [61] 23-06 0.4011 0.0091 0.4287 0.2454 0.3661 0.4196 0.2408
+L VD [33] 23-09 0.5439 0.0171 0.5405 0.2457 0.3802 0.4502 0.2008
+AnimateDiff [13] 23-07 0.4325 0.0097 0.3920 0.2227 0.2844 0.3970 0.1767
+MagicTime [81] 24-04 - 0.0151 - - - - -
+Show-1 [83] 23-09 0.5670 0.0115 0.4544 0.2291 0.3881 0.6244 0.3086
+VideoCrafter2 [6] 24-01 0.6182 0.0103 0.4838 0.2259 0.5030 0.6365 0.3330
+VideoTetris [63] 24-06 0.6211 0.0104 0.4832 0.2249 0.4939 0.6578 0.3467
+Vico [79] 24-06 0.5887 0.0107 0.4974 0.2219 0.5111 0.5957 0.3230
+T2V -Turbo-V2 [30] 24-10 0.6723 0.0127 0.5025 0.2556 0.6087 0.6439 0.3261
+DiT-based
+Latte [44] 24-01 0.4713 0.0080 0.4340 0.2155 0.4146 0.4146 0.2320
+Open-Sora 1.1 [19] 24-04 0.5414 0.0109 0.5406 0.2261 0.5037 0.5565 0.2259
+Open-Sora 1.2 [19] 24-06 0.5639 0.0189 0.5063 0.2468 0.4833 0.5039 0.3719
+Open-Sora-Plan v1.0.0 [34] 24-04 0.4246 0.0086 0.4520 0.2148 0.4009 0.4150 0.2331
+Open-Sora-Plan v1.3.0 [34] 24-10 0.6076 0.0119 0.5162 0.2377 0.4524 0.4483 0.2952
+CogVideoX-5B [80] 24-08 0.6164 0.0219 0.5172 0.2658 0.5333 0.6069 0.3706
+Mochi [62] 24-10 0.5973 0.0246 0.5480 0.2334 0.4759 0.5381 0.2718
+commercial
+Pika-1.0 [52] 23-11 0.5536 0.0128 0.4650 0.2234 0.4250 0.5198 0.3870
+Gen-2 [57] 23-02 0.5795 0.0109 0.5126 0.2173 0.4413 0.6144 0.3039
+Gen-3 [58] 24-06 0.5980 0.0687 0.5194 0.2754 0.5233 0.5906 0.2306
+Dreamina 1.2 [4] 24-06 0.6913 0.0051 0.5773 0.2361 0.5924 0.6824 0.4380
+PixV erse-V3 [53] 24-10 0.7060 0.0624 0.59790.2867 0.8722 0.8309 0.6066
+Kling-1.0 [27] 24-07 0.6931 0.0098 0.5690 0.2562 0.5787 0.7128 0.4413
+Table 2. T2V-CompBench evaluation results using proposed metrics. Scores are normalized between 0 and 1. A higher score indicates
+better performance. Bold signiﬁes the highest score within each category. Blue highlights the top score among diffusion unet-based
+models. Y ellow highlights the top score among DiT-based models. Red highlights the top score among commercial models.
+stand moving directions, such as “sail to the left” or “ﬂying
+right towards”. Most T2V models not only fail to move in
+the correct directions but also have difﬁculties generating
+signiﬁcant movement for objects. This suggests that future
+work should focus more on improving temporal dynamics
+and motion control. Achieving this will require specialized
+datasets with detailed captions, as well as the development
+of tailored motion modules to enable controllable motion in
+videos. In addition, generating videos with correct number
+of objects requires accurate counting. While the T2V mod-
+els perform well with the quantities fewer than three, they
+often fail to accurately generate larger quantities of objects.
+#3: While Object Interactions, Action Binding, and
+Consistent Attribute Binding are generally easier to
+handle, T2V models still encounter challenging scenar-
+ios. Text-to-video examples from object interactions, ac-
+tion binding, and consistent attribute binding are shown in
+rows #5-7 in Figure 28 and Figure 29. In object interac-
+tions, some T2V models tend to produce static videos that
+do not depict the full interaction process. Regarding action
+binding, models may ﬁnd it difﬁcult to generate correct ac-
+tions. For instance, given the prompt “A dog runs through
+a ﬁeld while a cat climbs a tree”, the models might incor-
+rectly show both animals running instead of representing
+their respective actions, or they may only depict one animal
+while ignoring the other. In terms of consistent attribute
+binding, models sometimes fail to accurately associate at-
+tributes with the correct objects or overlook certain object
+entirely. For additional analysis of the evaluation results,
+please refer to Appendix D.
+6. Conclusion
+We conduct the ﬁrst systematic study on compositionality in
+text-to-video generation. We propose T2V -CompBench, a
+comprehensive benchmark for compositional text-to-video
+generation, with 1400 prompts in seven categories. We fur-
+ther design a suite of evaluation metrics for the seven cate-
+gories, all of them are validated by correlations with human
+evaluation. Finally, we benchmark various T2V models and
+provide insightful analysis and ﬁndings based on the results.
+Compositional text-to-video generation is highly challeng-
+ing for current models, and we hope our work will inspire
+future works to improve the compositionality of text-to-
+video models. For limitations and social impacts of our
+work, please refer to Appendix G and F.
+8413
+
+--- Page 9 ---
+Acknowledgement
+This work is partially supported by the National Na-
+ture Science Foundation of China (No. 62402406).
+References
+[1] James Betker, Gabriel Goh, Li Jing, Tim Brooks, Jianfeng
+Wang, Linjie Li, Long Ouyang, Juntang Zhuang, Joyce Lee,
+Y ufei Guo, Wesam Manassra, Prafulla Dhariwal, Casey Chu,
+Y unxin Jiao, and Aditya Ramesh. Improving image genera-
+tion with better captions. https://cdn.openai.com/
+papers/dall-e-3.pdf , 2023. 2
+[2] Andreas Blattmann, Tim Dockhorn, Sumith Kulal, Daniel
+Mendelevitch, Maciej Kilian, Dominik Lorenz, Y am Levi,
+Zion English, Vikram V oleti, Adam Letts, V arun Jampani,
+and Robin Rombach. Stable video diffusion: Scaling la-
+tent video diffusion models to large datasets. arXiv preprint
+arXiv:2311.15127, 2023. 1
+[3] Andreas Blattmann, Robin Rombach, Huan Ling, Tim Dock-
+horn, Seung Wook Kim, Sanja Fidler, and Karsten Kreis.
+Align your latents: High-resolution video synthesis with la-
+tent diffusion models. In CVPR, 2023. 1, 2
+[4] Capcut. Dreamina. https://dreamina.capcut.
+com/ai-tool/home, 2024. 6, 8, 16, 19
+[5] Hila Chefer, Y uval Alaluf, Y ael Vinker, Lior Wolf, and
+Daniel Cohen-Or. Attend-and-excite: Attention-based se-
+mantic guidance for text-to-image diffusion models. In ACM
+Trans. Graph., 2023. 2, 3, 6
+[6] Haoxin Chen, Y ong Zhang, Xiaodong Cun, Menghan Xia,
+Xintao Wang, Chao Weng, and Ying Shan. Videocrafter2:
+Overcoming data limitations for high-quality video diffusion
+models. arXiv preprint arXiv:2401.09047, 2024. 6, 7, 8, 15,
+16, 19, 20
+[7] Junsong Chen, Jincheng Y u, Chongjian Ge, Lewei Y ao, Enze
+Xie, Y ue Wu, Zhongdao Wang, James Kwok, Ping Luo,
+Huchuan Lu, et al. Pixart- alpha: Fast training of diffu-
+sion transformer for photorealistic text-to-image synthesis.
+In ICLR, 2024. 2
+[8] Minghao Chen, Iro Laina, and Andrea V edaldi. Training-
+free layout control with cross-attention guidance. In WACV,
+2024. 2
+[9] Jaemin Cho, Abhay Zala, and Mohit Bansal. Visual pro-
+gramming for text-to-image generation and evaluation. In
+NeurIPS, 2023. 6
+[10] Patrick Esser, Sumith Kulal, Andreas Blattmann, Rahim
+Entezari, Jonas M ¨uller, Harry Saini, Y am Levi, Dominik
+Lorenz, Axel Sauer, Frederic Boesel, Dustin Podell, Tim
+Dockhorn, Zion English, Kyle Lacey, Alex Goodwin, Y an-
+nik Marek, and Robin Rombach. Scaling rectiﬁed ﬂow trans-
+formers for high-resolution image synthesis. In ICML, 2024.
+2
+[11] Weixi Feng, Xuehai He, Tsu-Jui Fu, V arun Jampani, Arjun
+Akula, Pradyumna Narayana, Sugato Basu, Xin Eric Wang,
+and William Y ang Wang. Training-free structured diffu-
+sion guidance for compositional text-to-image synthesis. In
+ICLR, 2023. 2, 3
+[12] Hanan Gani, Shariq Farooq Bhat, Muzammal Naseer,
+Salman Khan, and Peter Wonka. Llm blueprint: Enabling
+text-to-image generation with complex and detailed prompts.
+In ICLR, 2024. 2
+[13] Y uwei Guo, Ceyuan Y ang, Anyi Rao, Y aohui Wang, Y u
+Qiao, Dahua Lin, and Bo Dai. Animatediff: Animate your
+personalized text-to-image diffusion models without speciﬁc
+tuning. In ICLR, 2024. 6, 7, 8, 14, 15, 16, 19
+[14] Yingqing He, Tianyu Y ang, Y ong Zhang, Ying Shan, and
+Qifeng Chen. Latent video diffusion models for high-ﬁdelity
+long video generation. arXiv preprint arXiv:2211.13221 ,
+2022. 1, 2
+[15] Jack Hessel, Ari Holtzman, Maxwell Forbes, Ronan Le Bras,
+and Y ejin Choi. CLIPScore: a reference-free evaluation met-
+ric for image captioning. In EMNLP, 2021. 2, 3, 6
+[16] Martin Heusel, Hubert Ramsauer, Thomas Unterthiner,
+Bernhard Nessler, and Sepp Hochreiter. Gans trained by a
+two time-scale update rule converge to a local nash equilib-
+rium. In NeurIPS, 2017. 2
+[17] Jonathan Ho, William Chan, Chitwan Saharia, Jay Whang,
+Ruiqi Gao, Alexey Gritsenko, Diederik P Kingma, Ben
+Poole, Mohammad Norouzi, David J Fleet, et al. Imagen
+video: High deﬁnition video generation with diffusion mod-
+els. arXiv preprint arXiv:2210.02303, 2022. 1, 2
+[18] Wenyi Hong, Ming Ding, Wendi Zheng, Xinghan Liu, and
+Jie Tang. Cogvideo: Large-scale pretraining for text-to-video
+generation via transformers. In ICLR, 2023. 1
+[19] hpcaitech. Open-sora: Democratizing efﬁcient video pro-
+duction for all, 2024. 2, 6, 8, 15, 16, 19, 21
+[20] Kaiyi Huang, Kaiyue Sun, Enze Xie, Zhenguo Li, and Xi-
+hui Liu. T2i-compbench: A comprehensive benchmark
+for open-world compositional text-to-image generation. In
+NeurIPS, 2023. 2, 3, 4, 5, 6
+[21] Kaiyi Huang, Chengqi Duan, Kaiyue Sun, Enze Xie, Zhen-
+guo Li, and Xihui Liu. T2i-compbench++: An enhanced and
+comprehensive benchmark for compositional text-to-image
+generation. In TPAMI, 2025. 2, 3, 4
+[22] Ziqi Huang, Yinan He, Jiashuo Y u, Fan Zhang, Chenyang Si,
+Y uming Jiang, Y uanhan Zhang, Tianxing Wu, Qingyang Jin,
+Nattapol Chanpaisit, Y aohui Wang, Xinyuan Chen, Limin
+Wang, Dahua Lin, Y u Qiao, and Ziwei Liu. VBench: Com-
+prehensive benchmark suite for video generative models. In
+CVPR, 2024. 2, 3, 6
+[23] Levon Khachatryan, Andranik Movsisyan, V ahram Tade-
+vosyan, Roberto Henschel, Zhangyang Wang, Shant
+Navasardyan, and Humphrey Shi. Text2video-zero: Text-
+to-image diffusion models are zero-shot video generators. In
+ICCV, 2023. 1, 2
+[24] Wonkyun Kim, Changin Choi, Wonseok Lee, and Won-
+jong Rhee. An image grid can be worth a video: Zero-
+shot video question answering using a vlm. arXiv preprint
+arXiv:2403.18406, 2024. 5
+[25] Y unji Kim, Jiyoung Lee, Jin-Hwa Kim, Jung-Woo Ha, and
+Jun-Y an Zhu. Dense text-to-image generation with attention
+modulation. In ICCV, 2023. 2
+[26] Alexander Kirillov, Eric Mintun, Nikhila Ravi, Hanzi Mao,
+Chloe Rolland, Laura Gustafson, Tete Xiao, Spencer White-
+head, Alexander C. Berg, Wan-Y en Lo, Piotr Doll ´ar, and
+8414
+
+--- Page 10 ---
+Ross Girshick. Segment anything. arXiv:2304.02643, 2023.
+5
+[27] Kuaishou. Kling. https://kling.kuaishou.com/ ,
+2024. 6, 8, 16, 19, 23
+[28] Junnan Li, Dongxu Li, Caiming Xiong, and Steven Hoi.
+Blip: Bootstrapping language-image pre-training for uniﬁed
+vision-language understanding and generation. In ICML,
+2022. 6
+[29] Junnan Li, Dongxu Li, Silvio Savarese, and Steven Hoi.
+Blip-2: Bootstrapping language-image pre-training with
+frozen image encoders and large language models. In ICML,
+2023. 6
+[30] Jiachen Li, Qian Long, Jian Zheng, Xiaofeng Gao, Robinson
+Piramuthu, Wenhu Chen, and William Y ang Wang. T2v-
+turbo-v2: Enhancing video generation model post-training
+through data, reward, and conditional guidance design. arXiv
+preprint arXiv:2410.05677, 2024. 6, 7, 8, 15, 16, 18, 19, 23
+[31] Y uheng Li, Haotian Liu, Qingyang Wu, Fangzhou Mu, Jian-
+wei Y ang, Jianfeng Gao, Chunyuan Li, and Y ong Jae Lee.
+Gligen: Open-set grounded text-to-image generation. In
+ICCV, 2023. 2
+[32] Zhiheng Li, Martin Renqiang Min, Kai Li, and Chenliang
+Xu. Stylet2i: Toward compositional and high-ﬁdelity text-
+to-image synthesis. In CVPR, 2022.
+[33] Long Lian, Baifeng Shi, Adam Y ala, Trevor Darrell, and
+Boyi Li. Llm-grounded video diffusion models. In ICLR,
+2023. 2, 6, 7, 8, 15, 16, 18, 19, 20, 23
+[34] Bin Lin, Y unyang Ge, Xinhua Cheng, Zongjian Li, Bin Zhu,
+Shaodong Wang, Xianyi He, Y ang Y e, Shenghai Y uan, Li-
+uhan Chen, et al. Open-sora plan: Open-source large video
+generation model. arXiv preprint arXiv:2412.00131 , 2024.
+2, 6, 8, 15, 16, 19, 20
+[35] Han Lin, Abhay Zala, Jaemin Cho, and Mohit Bansal.
+Videodirectorgpt: Consistent multi-scene video generation
+via llm-guided planning. In COLM, 2024. 6
+[36] Haotian Liu, Chunyuan Li, Y uheng Li, and Y ong Jae Lee.
+Improved baselines with visual instruction tuning. In CVPR,
+2024. 5, 17
+[37] Nan Liu, Shuang Li, Yilun Du, Antonio Torralba, and
+Joshua B Tenenbaum. Compositional visual generation with
+composable diffusion models. In ECCV, 2022. 2
+[38] Shilong Liu, Zhaoyang Zeng, Tianhe Ren, Feng Li, Hao
+Zhang, Jie Y ang, Qing Jiang, Chunyuan Li, Jianwei Y ang,
+Hang Su, Jun Zhu, and Lei Zhang. Grounding dino: Marry-
+ing dino with grounded pre-training for open-set object de-
+tection. In ECCV, 2024. 5, 6
+[39] Xuantong Liu, Tianyang Hu, Wenjia Wang, Kenji
+Kawaguchi, and Y uan Y ao. Referee can play: An alterna-
+tive approach to conditional generation via model inversion.
+In ICML, 2024. 2
+[40] Y aofang Liu, Xiaodong Cun, Xuebo Liu, Xintao Wang, Y ong
+Zhang, Haoxin Chen, Y ang Liu, Tieyong Zeng, Raymond
+Chan, and Ying Shan. Evalcrafter: Benchmarking and eval-
+uating large video generation models. In CVPR, 2024. 2, 3,
+6
+[41] Y uanxin Liu, Lei Li, Shuhuai Ren, Rundong Gao, Shicheng
+Li, Sishuo Chen, Xu Sun, and Lu Hou. Fetv: A bench-
+mark for ﬁne-grained evaluation of open-domain text-to-
+video generation. In NeurIPS, 2024. 2, 3
+[42] Y uanxin Liu, Shicheng Li, Yi Liu, Y uxiang Wang, Shuhuai
+Ren, Lei Li, Sishuo Chen, Xu Sun, and Lu Hou. Temp-
+compass: Do video llms really understand videos? In ACL
+Findings, 2024. 3, 24
+[43] Zhengxiong Luo, Dayou Chen, Yingya Zhang, Y an Huang,
+Liang Wang, Y ujun Shen, Deli Zhao, Jingren Zhou, and Tie-
+niu Tan. Videofusion: Decomposed diffusion models for
+high-quality video generation. In CVPR, 2023. 1, 2
+[44] Xin Ma, Y aohui Wang, Gengyun Jia, Xinyuan Chen, Zi-
+wei Liu, Y uan-Fang Li, Cunjian Chen, and Y u Qiao. Latte:
+Latent diffusion transformer for video generation. arXiv
+preprint arXiv:2401.03048, 2024. 2, 6, 8, 15, 16, 19
+[45] Tuna Han Salih Meral, Enis Simsar, Federico Tombari, and
+Pinar Y anardag. Conform: Contrast is all you need for high-
+ﬁdelity text-to-image diffusion models. In CVPR, 2024. 2
+[46] George A Miller. Wordnet: a lexical database for english.
+Communications of the ACM , 38(11):39–41, 1995. 4, 12, 13
+[47] Guillaume Le Moing, Jean Ponce, and Cordelia Schmid.
+Dense optical tracking: Connecting the dots. In CVPR, 2024.
+6
+[48] OpenAI. GPT-4 technical report. arXiv preprint
+arXiv:2303.08774, 2024. 4, 5, 22
+[49] Kishore Papineni, Salim Roukos, Todd Ward, and Wei-Jing
+Zhu. Bleu: a method for automatic evaluation of machine
+translation. In ACL, 2002. 6
+[50] Dong Huk Park, Samaneh Azadi, Xihui Liu, Trevor Darrell,
+and Anna Rohrbach. Benchmark for compositional text-to-
+image synthesis. In NeurIPS, 2021. 2
+[51] Maitreya Patel, Changhoon Kim, Sheng Cheng, Chitta Baral,
+and Y ezhou Y ang. Eclipse: A resource-efﬁcient text-to-
+image prior for image generations. In CVPR, 2024. 2
+[52] Pika. Pika. https://www.pika.art , 2024. 6, 8, 16,
+19
+[53] PixV erse. Pixverse. https://app.pixverse.ai ,
+2024. 6, 8, 16, 18, 19, 20, 21, 23
+[54] Alec Radford, Jong Wook Kim, Chris Hallacy, Aditya
+Ramesh, Gabriel Goh, Sandhini Agarwal, Girish Sastry,
+Amanda Askell, Pamela Mishkin, Jack Clark, et al. Learn-
+ing transferable visual models from natural language super-
+vision. In ICML, 2021. 3
+[55] Royi Rassin, Eran Hirsch, Daniel Glickman, Shauli Rav-
+fogel, Y oav Goldberg, and Gal Chechik. Linguistic bind-
+ing in diffusion models: Enhancing attribute correspondence
+through attention map alignment. In NeurIPS, 2024. 2
+[56] Tianhe Ren, Shilong Liu, Ailing Zeng, Jing Lin, Kun-
+chang Li, He Cao, Jiayu Chen, Xinyu Huang, Y ukang Chen,
+Feng Y an, Zhaoyang Zeng, Hao Zhang, Feng Li, Jie Y ang,
+Hongyang Li, Qing Jiang, and Lei Zhang. Grounded sam:
+Assembling open-world models for diverse visual tasks.
+arXiv preprint arXiv:2401.14159, 2024. 6
+[57] Runway. Gen-2: Generate novel videos with text, images
+or video clips. https://research.runwayml.com/
+gen2, 2024. 6, 8, 16, 19
+[58] Runway. Introducing gen-3 alpha: A new frontier for
+video generation. https://runwayml.com/blog/
+8415
+
+--- Page 11 ---
+introducing-gen-3-alpha/ , 2024. 6, 8, 16, 19, 20,
+23
+[59] Tim Salimans, Ian Goodfellow, Wojciech Zaremba, Vicki
+Cheung, Alec Radford, and Xi Chen. Improved techniques
+for training gans. In NeurIPS, 2016. 2, 3
+[60] Uriel Singer, Adam Polyak, Thomas Hayes, Xi Yin, Jie An,
+Songyang Zhang, Qiyuan Hu, Harry Y ang, Oron Ashual,
+Oran Gafni, et al. Make-a-video: Text-to-video generation
+without text-video data. arXiv preprint arXiv:2209.14792 ,
+2022. 1, 2
+[61] Spencer Sterling. Zeroscope. https://huggingface.
+co/cerspense/zeroscope_v2_576w, 2023. 6, 8, 15,
+16, 19
+[62] Genmo Team. Mochi 1. https: // github. com/
+genmoai/models, 2024. 2, 6, 8, 15, 16, 18, 19, 20
+[63] Y e Tian, Ling Y ang, Haotian Y ang, Y uan Gao, Y ufan Deng,
+Jingmin Chen, Xintao Wang, Zhaochen Y u, Xin Tao, Pengfei
+Wan, Di Zhang, and Bin Cui. Videotetris: Towards compo-
+sitional text-to-video generation. In NeurIPS, 2024. 6, 7, 8,
+15, 16, 19, 20
+[64] Thomas Unterthiner, Sjoerd van Steenkiste, Karol Kurach,
+Rapha¨el Marinier, Marcin Michalski, and Sylvain Gelly. To-
+wards accurate generative models of video: A new metric &
+challenges. arXiv preprint arXiv:1812.01717, 2018. 2, 3
+[65] Ruben Villegas, Mohammad Babaeizadeh, Pieter-Jan Kin-
+dermans, Hernan Moraldo, Han Zhang, Mohammad Taghi
+Saffar, Santiago Castro, Julius Kunze, and Dumitru Erhan.
+Phenaki: V ariable length video generation from open domain
+textual descriptions. In International Conference on Learn-
+ing Representations, 2022. 1
+[66] Jiuniu Wang, Hangjie Y uan, Dayou Chen, Yingya Zhang,
+Xiang Wang, and Shiwei Zhang. Modelscope text-to-video
+technical report. arXiv preprint arXiv:2308.06571, 2023. 1,
+2, 6, 7, 8, 14, 15, 16, 18, 19, 21
+[67] Ruichen Wang, Zekang Chen, Chen Chen, Jian Ma, Haonan
+Lu, and Xiaodong Lin. Compositional text-to-image synthe-
+sis with attention map control of diffusion models. arXiv
+preprint arXiv:2305.13921, 2023. 2
+[68] Wenhao Wang and Yi Y ang. Vidprom: A million-scale real
+prompt-gallery dataset for text-to-video diffusion models. In
+NeurIPS, 2024. 4, 12
+[69] Yi Wang, Yinan He, Yizhuo Li, Kunchang Li, Jiashuo Y u,
+Xin Ma, Xinhao Li, Guo Chen, Xinyuan Chen, Y aohui
+Wang, Conghui He, Ping Luo, Ziwei Liu, Y ali Wang, Limin
+Wang, and Y u Qiao. Internvid: A large-scale video-text
+dataset for multimodal understanding and generation. In
+ICLR, 2023. 6
+[70] Zhenyu Wang, Enze Xie, Aoxue Li, Zhongdao Wang, Xihui
+Liu, and Zhenguo Li. Divide and conquer: Language mod-
+els can plan and self-correct for compositional text-to-image
+generation. arXiv preprint arXiv:2401.15688, 2024. 2
+[71] Jason Wei, Xuezhi Wang, Dale Schuurmans, Maarten
+Bosma, Fei Xia, Ed Chi, Quoc V Le, Denny Zhou, et al.
+Chain-of-thought prompting elicits reasoning in large lan-
+guage models. In NeurIPS, 2022. 5, 16
+[72] Chenfei Wu, Lun Huang, Qianxi Zhang, Binyang Li, Lei Ji,
+Fan Y ang, Guillermo Sapiro, and Nan Duan. Godiva: Gen-
+erating open-domain videos from natural descriptions. arXiv
+preprint arXiv:2104.14806, 2021. 1
+[73] Chenfei Wu, Jian Liang, Lei Ji, Fan Y ang, Y uejian Fang,
+Daxin Jiang, and Nan Duan. N ¨uwa: Visual synthesis pre-
+training for neural visual world creation. In European con-
+ference on computer vision , pages 720–736. Springer, 2022.
+1
+[74] Qiucheng Wu, Y ujian Liu, Handong Zhao, Trung Bui, Zhe
+Lin, Y ang Zhang, and Shiyu Chang. Harnessing the spatial-
+temporal attention of diffusion models for high-ﬁdelity text-
+to-image synthesis. In ICCV, 2023. 2
+[75] Xindi Wu, Dingli Y u, Y angsibo Huang, Olga Russakovsky,
+and Sanjeev Arora. Conceptmix: A compositional im-
+age generation benchmark with controllable difﬁculty. In
+NeurIPS, 2024. 4
+[76] Lin Xu, Yilin Zhao, Daquan Zhou, Zhijie Lin, See Kiong Ng,
+and Jiashi Feng. Pllava: Parameter-free llava extension from
+images to videos for video dense captioning. arXiv preprint
+arXiv:2404.16994, 2024. 5
+[77] Lihe Y ang, Bingyi Kang, Zilong Huang, Xiaogang Xu, Jiashi
+Feng, and Hengshuang Zhao. Depth anything: Unleashing
+the power of large-scale unlabeled data. In CVPR, 2024. 5
+[78] Ling Y ang, Zhaochen Y u, Chenlin Meng, Minkai Xu, Ste-
+fano Ermon, and Bin Cui. Mastering text-to-image diffu-
+sion: Recaptioning, planning, and generating with multi-
+modal llms. In ICML, 2024. 2
+[79] Xingyi Y ang and Xinchao Wang. Compositional
+video generation as ﬂow equalization. arXiv preprint
+arXiv:2407.06182, 2024. 6, 7, 8, 15, 16, 18, 19
+[80] Zhuoyi Y ang, Jiayan Teng, Wendi Zheng, Ming Ding, Shiyu
+Huang, Jiazheng Xu, Y uanming Y ang, Wenyi Hong, Xiao-
+han Zhang, Guanyu Feng, et al. Cogvideox: Text-to-video
+diffusion models with an expert transformer. arXiv preprint
+arXiv:2408.06072, 2024. 2, 6, 7, 8, 15, 16, 19, 20, 23
+[81] Shenghai Y uan, Jinfa Huang, Y ujun Shi, Y ongqi Xu, Ruijie
+Zhu, Bin Lin, Xinhua Cheng, Li Y uan, and Jiebo Luo. Mag-
+ictime: Time-lapse video generation models as metamorphic
+simulators. arXiv preprint arXiv:2404.05014, 2024. 6, 7, 8,
+15, 16
+[82] Shenghai Y uan, Jinfa Huang, Y ongqi Xu, Y aoyang Liu,
+Shaofeng Zhang, Y ujun Shi, Ruijie Zhu, Xinhua Cheng,
+Jiebo Luo, and Li Y uan. Chronomagic-bench: A benchmark
+for metamorphic evaluation of text-to-time-lapse video gen-
+eration. 2024. 3
+[83] David Junhao Zhang, Jay Zhangjie Wu, Jia-Wei Liu, Rui
+Zhao, Lingmin Ran, Y uchao Gu, Difei Gao, and Mike Zheng
+Shou. Show-1: Marrying pixel and latent diffusion models
+for text-to-video generation. IJCV, pages 1–15, 2024. 6, 8,
+15, 16, 19
+[84] Daquan Zhou, Weimin Wang, Hanshu Y an, Weiwei Lv,
+Yizhe Zhu, and Jiashi Feng. Magicvideo: Efﬁcient video
+generation with latent diffusion models. arXiv preprint
+arXiv:2211.11018, 2022. 1, 2
+[85] Deyao Zhu, Jun Chen, Xiaoqian Shen, Xiang Li, and Mo-
+hamed Elhoseiny. Minigpt-4: Enhancing vision-language
+understanding with advanced large language models. arXiv
+preprint arXiv:2304.10592, 2023. 5
+8416

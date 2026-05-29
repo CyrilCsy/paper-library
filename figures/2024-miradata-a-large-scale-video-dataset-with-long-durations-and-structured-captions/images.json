@@ -1,0 +1,170 @@
+﻿[
+    {
+        "source_name":  "img-001-126.jpg",
+        "path":  "figures/2024-miradata-a-large-scale-video-dataset-with-long-durations-and-structured-captions/page_001_01_img-001-126.jpg",
+        "width":  "1276",
+        "page":  "1",
+        "height":  "715"
+    },
+    {
+        "source_name":  "img-001-127.png",
+        "path":  "figures/2024-miradata-a-large-scale-video-dataset-with-long-durations-and-structured-captions/page_001_02_img-001-127.png",
+        "width":  "1276",
+        "page":  "1",
+        "height":  "715"
+    },
+    {
+        "source_name":  "img-004-129.png",
+        "path":  "figures/2024-miradata-a-large-scale-video-dataset-with-long-durations-and-structured-captions/page_004_01_img-004-129.png",
+        "width":  "1082",
+        "page":  "4",
+        "height":  "457"
+    },
+    {
+        "source_name":  "img-004-128.png",
+        "path":  "figures/2024-miradata-a-large-scale-video-dataset-with-long-durations-and-structured-captions/page_004_02_img-004-128.png",
+        "width":  "1082",
+        "page":  "4",
+        "height":  "457"
+    },
+    {
+        "source_name":  "img-007-133.jpg",
+        "path":  "figures/2024-miradata-a-large-scale-video-dataset-with-long-durations-and-structured-captions/page_007_01_img-007-133.jpg",
+        "width":  "1920",
+        "page":  "7",
+        "height":  "330"
+    },
+    {
+        "source_name":  "img-008-145.jpg",
+        "path":  "figures/2024-miradata-a-large-scale-video-dataset-with-long-durations-and-structured-captions/page_008_01_img-008-145.jpg",
+        "width":  "206",
+        "page":  "8",
+        "height":  "128"
+    },
+    {
+        "source_name":  "img-008-146.jpg",
+        "path":  "figures/2024-miradata-a-large-scale-video-dataset-with-long-durations-and-structured-captions/page_008_02_img-008-146.jpg",
+        "width":  "206",
+        "page":  "8",
+        "height":  "128"
+    },
+    {
+        "source_name":  "img-001-001.png",
+        "path":  "figures/2024-miradata-a-large-scale-video-dataset-with-long-durations-and-structured-captions/page_001_03_img-001-001.png",
+        "width":  "1432",
+        "page":  "1",
+        "height":  "637"
+    },
+    {
+        "source_name":  "img-001-000.png",
+        "path":  "figures/2024-miradata-a-large-scale-video-dataset-with-long-durations-and-structured-captions/page_001_04_img-001-000.png",
+        "width":  "1432",
+        "page":  "1",
+        "height":  "637"
+    },
+    {
+        "source_name":  "img-001-124.jpg",
+        "path":  "figures/2024-miradata-a-large-scale-video-dataset-with-long-durations-and-structured-captions/page_001_05_img-001-124.jpg",
+        "width":  "1275",
+        "page":  "1",
+        "height":  "715"
+    },
+    {
+        "source_name":  "img-001-125.png",
+        "path":  "figures/2024-miradata-a-large-scale-video-dataset-with-long-durations-and-structured-captions/page_001_06_img-001-125.png",
+        "width":  "1275",
+        "page":  "1",
+        "height":  "715"
+    },
+    {
+        "source_name":  "img-001-123.png",
+        "path":  "figures/2024-miradata-a-large-scale-video-dataset-with-long-durations-and-structured-captions/page_001_07_img-001-123.png",
+        "width":  "1276",
+        "page":  "1",
+        "height":  "714"
+    },
+    {
+        "source_name":  "img-001-122.jpg",
+        "path":  "figures/2024-miradata-a-large-scale-video-dataset-with-long-durations-and-structured-captions/page_001_08_img-001-122.jpg",
+        "width":  "1276",
+        "page":  "1",
+        "height":  "714"
+    },
+    {
+        "source_name":  "img-001-113.png",
+        "path":  "figures/2024-miradata-a-large-scale-video-dataset-with-long-durations-and-structured-captions/page_001_09_img-001-113.png",
+        "width":  "1270",
+        "page":  "1",
+        "height":  "715"
+    },
+    {
+        "source_name":  "img-001-112.jpg",
+        "path":  "figures/2024-miradata-a-large-scale-video-dataset-with-long-durations-and-structured-captions/page_001_10_img-001-112.jpg",
+        "width":  "1270",
+        "page":  "1",
+        "height":  "715"
+    },
+    {
+        "source_name":  "img-001-108.jpg",
+        "path":  "figures/2024-miradata-a-large-scale-video-dataset-with-long-durations-and-structured-captions/page_001_11_img-001-108.jpg",
+        "width":  "1270",
+        "page":  "1",
+        "height":  "712"
+    },
+    {
+        "source_name":  "img-001-109.png",
+        "path":  "figures/2024-miradata-a-large-scale-video-dataset-with-long-durations-and-structured-captions/page_001_12_img-001-109.png",
+        "width":  "1270",
+        "page":  "1",
+        "height":  "712"
+    },
+    {
+        "source_name":  "img-001-110.jpg",
+        "path":  "figures/2024-miradata-a-large-scale-video-dataset-with-long-durations-and-structured-captions/page_001_13_img-001-110.jpg",
+        "width":  "1267",
+        "page":  "1",
+        "height":  "708"
+    },
+    {
+        "source_name":  "img-001-111.png",
+        "path":  "figures/2024-miradata-a-large-scale-video-dataset-with-long-durations-and-structured-captions/page_001_14_img-001-111.png",
+        "width":  "1267",
+        "page":  "1",
+        "height":  "708"
+    },
+    {
+        "source_name":  "img-001-107.png",
+        "path":  "figures/2024-miradata-a-large-scale-video-dataset-with-long-durations-and-structured-captions/page_001_15_img-001-107.png",
+        "width":  "1260",
+        "page":  "1",
+        "height":  "703"
+    },
+    {
+        "source_name":  "img-001-106.jpg",
+        "path":  "figures/2024-miradata-a-large-scale-video-dataset-with-long-durations-and-structured-captions/page_001_16_img-001-106.jpg",
+        "width":  "1260",
+        "page":  "1",
+        "height":  "703"
+    },
+    {
+        "source_name":  "img-001-006.jpg",
+        "path":  "figures/2024-miradata-a-large-scale-video-dataset-with-long-durations-and-structured-captions/page_001_17_img-001-006.jpg",
+        "width":  "988",
+        "page":  "1",
+        "height":  "557"
+    },
+    {
+        "source_name":  "img-001-029.png",
+        "path":  "figures/2024-miradata-a-large-scale-video-dataset-with-long-durations-and-structured-captions/page_001_18_img-001-029.png",
+        "width":  "988",
+        "page":  "1",
+        "height":  "557"
+    },
+    {
+        "source_name":  "img-001-028.jpg",
+        "path":  "figures/2024-miradata-a-large-scale-video-dataset-with-long-durations-and-structured-captions/page_001_19_img-001-028.jpg",
+        "width":  "988",
+        "page":  "1",
+        "height":  "557"
+    }
+]

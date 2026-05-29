@@ -1,0 +1,177 @@
+﻿[
+    {
+        "source_name":  "img-010-110.jpg",
+        "path":  "figures/2024-mevg-multi-event-video-generation-with-text-to-video-models/page_010_01_img-010-110.jpg",
+        "width":  "512",
+        "page":  "10",
+        "height":  "512"
+    },
+    {
+        "source_name":  "img-010-111.jpg",
+        "path":  "figures/2024-mevg-multi-event-video-generation-with-text-to-video-models/page_010_02_img-010-111.jpg",
+        "width":  "512",
+        "page":  "10",
+        "height":  "512"
+    },
+    {
+        "source_name":  "img-011-154.jpg",
+        "path":  "figures/2024-mevg-multi-event-video-generation-with-text-to-video-models/page_011_01_img-011-154.jpg",
+        "width":  "256",
+        "page":  "11",
+        "height":  "256"
+    },
+    {
+        "source_name":  "img-011-155.jpg",
+        "path":  "figures/2024-mevg-multi-event-video-generation-with-text-to-video-models/page_011_02_img-011-155.jpg",
+        "width":  "256",
+        "page":  "11",
+        "height":  "256"
+    },
+    {
+        "source_name":  "img-013-193.jpg",
+        "path":  "figures/2024-mevg-multi-event-video-generation-with-text-to-video-models/page_013_01_img-013-193.jpg",
+        "width":  "256",
+        "page":  "13",
+        "height":  "256"
+    },
+    {
+        "source_name":  "img-013-192.jpg",
+        "path":  "figures/2024-mevg-multi-event-video-generation-with-text-to-video-models/page_013_02_img-013-192.jpg",
+        "width":  "256",
+        "page":  "13",
+        "height":  "256"
+    },
+    {
+        "source_name":  "img-014-211.png",
+        "path":  "figures/2024-mevg-multi-event-video-generation-with-text-to-video-models/page_014_01_img-014-211.png",
+        "width":  "1198",
+        "page":  "14",
+        "height":  "825"
+    },
+    {
+        "source_name":  "img-014-210.png",
+        "path":  "figures/2024-mevg-multi-event-video-generation-with-text-to-video-models/page_014_02_img-014-210.png",
+        "width":  "1198",
+        "page":  "14",
+        "height":  "825"
+    },
+    {
+        "source_name":  "img-002-011.jpg",
+        "path":  "figures/2024-mevg-multi-event-video-generation-with-text-to-video-models/page_002_01_img-002-011.jpg",
+        "width":  "256",
+        "page":  "2",
+        "height":  "256"
+    },
+    {
+        "source_name":  "img-002-012.jpg",
+        "path":  "figures/2024-mevg-multi-event-video-generation-with-text-to-video-models/page_002_02_img-002-012.jpg",
+        "width":  "256",
+        "page":  "2",
+        "height":  "256"
+    },
+    {
+        "source_name":  "img-021-255.png",
+        "path":  "figures/2024-mevg-multi-event-video-generation-with-text-to-video-models/page_021_01_img-021-255.png",
+        "width":  "640",
+        "page":  "21",
+        "height":  "480"
+    },
+    {
+        "source_name":  "img-027-322.jpg",
+        "path":  "figures/2024-mevg-multi-event-video-generation-with-text-to-video-models/page_027_01_img-027-322.jpg",
+        "width":  "256",
+        "page":  "27",
+        "height":  "256"
+    },
+    {
+        "source_name":  "img-027-323.jpg",
+        "path":  "figures/2024-mevg-multi-event-video-generation-with-text-to-video-models/page_027_02_img-027-323.jpg",
+        "width":  "256",
+        "page":  "27",
+        "height":  "256"
+    },
+    {
+        "source_name":  "img-028-422.jpg",
+        "path":  "figures/2024-mevg-multi-event-video-generation-with-text-to-video-models/page_028_01_img-028-422.jpg",
+        "width":  "256",
+        "page":  "28",
+        "height":  "256"
+    },
+    {
+        "source_name":  "img-028-423.jpg",
+        "path":  "figures/2024-mevg-multi-event-video-generation-with-text-to-video-models/page_028_02_img-028-423.jpg",
+        "width":  "256",
+        "page":  "28",
+        "height":  "256"
+    },
+    {
+        "source_name":  "img-029-477.jpg",
+        "path":  "figures/2024-mevg-multi-event-video-generation-with-text-to-video-models/page_029_01_img-029-477.jpg",
+        "width":  "256",
+        "page":  "29",
+        "height":  "256"
+    },
+    {
+        "source_name":  "img-029-476.jpg",
+        "path":  "figures/2024-mevg-multi-event-video-generation-with-text-to-video-models/page_029_02_img-029-476.jpg",
+        "width":  "256",
+        "page":  "29",
+        "height":  "256"
+    },
+    {
+        "source_name":  "img-030-509.jpg",
+        "path":  "figures/2024-mevg-multi-event-video-generation-with-text-to-video-models/page_030_01_img-030-509.jpg",
+        "width":  "256",
+        "page":  "30",
+        "height":  "256"
+    },
+    {
+        "source_name":  "img-030-508.jpg",
+        "path":  "figures/2024-mevg-multi-event-video-generation-with-text-to-video-models/page_030_02_img-030-508.jpg",
+        "width":  "256",
+        "page":  "30",
+        "height":  "256"
+    },
+    {
+        "source_name":  "img-031-541.jpg",
+        "path":  "figures/2024-mevg-multi-event-video-generation-with-text-to-video-models/page_031_01_img-031-541.jpg",
+        "width":  "256",
+        "page":  "31",
+        "height":  "256"
+    },
+    {
+        "source_name":  "img-031-540.jpg",
+        "path":  "figures/2024-mevg-multi-event-video-generation-with-text-to-video-models/page_031_02_img-031-540.jpg",
+        "width":  "256",
+        "page":  "31",
+        "height":  "256"
+    },
+    {
+        "source_name":  "img-032-567.jpg",
+        "path":  "figures/2024-mevg-multi-event-video-generation-with-text-to-video-models/page_032_01_img-032-567.jpg",
+        "width":  "1024",
+        "page":  "32",
+        "height":  "576"
+    },
+    {
+        "source_name":  "img-032-568.jpg",
+        "path":  "figures/2024-mevg-multi-event-video-generation-with-text-to-video-models/page_032_02_img-032-568.jpg",
+        "width":  "1024",
+        "page":  "32",
+        "height":  "576"
+    },
+    {
+        "source_name":  "img-033-597.jpg",
+        "path":  "figures/2024-mevg-multi-event-video-generation-with-text-to-video-models/page_033_01_img-033-597.jpg",
+        "width":  "1024",
+        "page":  "33",
+        "height":  "576"
+    },
+    {
+        "source_name":  "img-033-596.jpg",
+        "path":  "figures/2024-mevg-multi-event-video-generation-with-text-to-video-models/page_033_02_img-033-596.jpg",
+        "width":  "1024",
+        "page":  "33",
+        "height":  "576"
+    }
+]
